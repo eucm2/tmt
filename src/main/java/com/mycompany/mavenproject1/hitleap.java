@@ -329,14 +329,15 @@ public class hitleap extends javax.swing.JInternalFrame {
     private void activarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activarActionPerformed
         reiniciarCronometro();
     }//GEN-LAST:event_activarActionPerformed
-
+    //REINICIA CRONMETRO CADA 24HORAS PARA QUE LA HORA DEL DIA SE LIMPIE
     public void reiniciarCronometro() {
         if (activar.isSelected()) {
+            boolean modoPrueba = true;
+            
             final int reiniciarAlasHoras = 23;
             final int reiniciarAlasMinutos = 59;
             final int reiniciarAlasSegundos = 59;
 
-            boolean modoPrueba = true;
             int minuto = Calendar.getInstance().get(Calendar.MINUTE);
             int hora = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
             int ano = Calendar.getInstance().get(Calendar.YEAR);
@@ -348,7 +349,7 @@ public class hitleap extends javax.swing.JInternalFrame {
             try {
 
                 if (modoPrueba == false) {
-                    //GENERAMOS LA HORA DE INICIO DE EJECUCION
+                    //GENERAMOS LA HORA DE INICIO DE EJECUCION OSEA CADA 24 HORAS
                     horaReiniciar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + reiniciarAlasHoras + ":" + reiniciarAlasMinutos + ":" + reiniciarAlasSegundos);
                 }
                 if (modoPrueba == true) {
@@ -371,7 +372,7 @@ public class hitleap extends javax.swing.JInternalFrame {
                     //SI YA ESTAMOS EN EL MINUTO 0 EJECUTAMOS LA PUBLICACION
                     if (segundosFaltanParaReiniciar >= 0 && segundosFaltanParaReiniciar <= 10) {
                         cronometroParaEjecutar();
-                        c.pausa(1000 * 35);
+                        c.pausa(1000 * 335);
                         timerReiniciar.cancel();
                         timerReiniciar.purge();
                         reiniciarCronometro();
@@ -389,7 +390,7 @@ public class hitleap extends javax.swing.JInternalFrame {
     Calendar calHoraIni = Calendar.getInstance();
     Calendar calHoraFin = Calendar.getInstance();
     Calendar[] calHorasEjecutar = new Calendar[25];
-
+    //CALCULA EL TIEMPO ENTRE UNA EJECUCION Y OTRA
     public void cronometroParaEjecutar() {
 
         //SI MODO PRUEB ES TRUE EN LUGAR DE HACER EL CICLO CADA HORA LO HACE CADA MINUTO PARA VER COMO FUNCIONA EN TIEMPO REAL
