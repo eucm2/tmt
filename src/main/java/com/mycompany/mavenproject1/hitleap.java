@@ -332,7 +332,7 @@ public class hitleap extends javax.swing.JInternalFrame {
     //REINICIA CRONMETRO CADA 24HORAS PARA QUE LA HORA DEL DIA SE LIMPIE
     public void reiniciarCronometro() {
         if (activar.isSelected()) {
-            boolean modoPrueba = true;
+            boolean modoPrueba = false;
             
             final int reiniciarAlasHoras = 23;
             final int reiniciarAlasMinutos = 59;
@@ -347,10 +347,10 @@ public class hitleap extends javax.swing.JInternalFrame {
             Date horaReiniciar = null;
             DateFormat formatoFechaHora = new SimpleDateFormat("yyyy/MM/dd kk:mm:ss");
             try {
-
                 if (modoPrueba == false) {
                     //GENERAMOS LA HORA DE INICIO DE EJECUCION OSEA CADA 24 HORAS
                     horaReiniciar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + reiniciarAlasHoras + ":" + reiniciarAlasMinutos + ":" + reiniciarAlasSegundos);
+                    cronometroParaEjecutar();
                 }
                 if (modoPrueba == true) {
                     horaReiniciar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + hora + ":" + minuto + ":59");
@@ -371,10 +371,12 @@ public class hitleap extends javax.swing.JInternalFrame {
                     lblHoraReiniciar.setText("Segundos que faltan para reiniciar=" + segundosFaltanParaReiniciar);
                     //SI YA ESTAMOS EN EL MINUTO 0 EJECUTAMOS LA PUBLICACION
                     if (segundosFaltanParaReiniciar >= 0 && segundosFaltanParaReiniciar <= 10) {
+                        //COMENZAMOS LA CUENTA REGRESIVA PARA EJECUTAR EL PUBLICAR VIDEOS
                         cronometroParaEjecutar();
                         c.pausa(1000 * 335);
                         timerReiniciar.cancel();
                         timerReiniciar.purge();
+                        //REINICIAMOS ESTE MISMO CRONOMETRO CADA 24 HORAS PARA QUE SE ACTUALICE LA HORA Y EL DIA A EJECUTAR
                         reiniciarCronometro();
                     }
 
@@ -394,7 +396,7 @@ public class hitleap extends javax.swing.JInternalFrame {
     public void cronometroParaEjecutar() {
 
         //SI MODO PRUEB ES TRUE EN LUGAR DE HACER EL CICLO CADA HORA LO HACE CADA MINUTO PARA VER COMO FUNCIONA EN TIEMPO REAL
-        boolean modoPrueba = true;
+        boolean modoPrueba = false;
         int minuto = Calendar.getInstance().get(Calendar.MINUTE);
         int hora = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         int ano = Calendar.getInstance().get(Calendar.YEAR);
