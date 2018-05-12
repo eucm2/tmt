@@ -21,6 +21,7 @@ public class pruebaNavegador extends javax.swing.JInternalFrame {
     Connection connection = null;
     Statement statement = null;
     String path_drive = "";
+    String escribirCon="";
     cControl c = new cControl();
 
     //VARIABLE QUE DETECTA SI SE CAMBIO EL TEXTO Y HACE UN UPDATE
@@ -48,7 +49,8 @@ public class pruebaNavegador extends javax.swing.JInternalFrame {
                     + "rapido,"
                     + "medio,"
                     + "lento,"
-                    + "mlento "
+                    + "mlento, "
+                    + "escribirCon "
                     + "FROM configuracion";
 
             ResultSet rs = statement.executeQuery(query);
@@ -57,6 +59,7 @@ public class pruebaNavegador extends javax.swing.JInternalFrame {
             medio = Long.parseLong(rs.getString("medio"));
             lento = Long.parseLong(rs.getString("lento"));
             mlento = Long.parseLong(rs.getString("mlento"));
+            escribirCon = rs.getString("escribirCon");
 
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -109,7 +112,7 @@ public class pruebaNavegador extends javax.swing.JInternalFrame {
 
     private void btnEscribeTextoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEscribeTextoActionPerformed
         c.inicializarWebdriver(path_drive);
-        c.buscaGoogle(textoEscribir.getText());
+        c.buscaGoogle(textoEscribir.getText(),escribirCon);
     }//GEN-LAST:event_btnEscribeTextoActionPerformed
 
     private void textoEscribirKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textoEscribirKeyPressed

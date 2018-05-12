@@ -42,7 +42,6 @@ import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 public class cControl {
-
     long rapido = 500;
     long medio = 1000;
     long lento = 2000;
@@ -55,7 +54,13 @@ public class cControl {
     Statement statement = null;
     String path_drive = "";
     Object[] options = {"Continuar", "Detener"};
-
+    String escribirCon="";
+    public void cControl(String escribirCon1){
+        escribirCon=escribirCon1;
+    }
+    public void cControl(){
+        escribirCon="sendkeys";
+    }
     public void inicializarWebdriver(String path_drive) {
         try {
             //CREA UNA BD (SI NO EXISTE) EN DONDE SE ENCUENTRE LA APLICACION
@@ -625,8 +630,8 @@ public class cControl {
         driver.get("https://hitleap.com/authentication");
         pausa(medio);
         if (user.length() > 0 && password.length() > 0) {
-            driver.findElement(By.name("identifier")).sendKeys(user);
-            driver.findElement(By.name("password")).sendKeys(password);
+            escribeTexto(driver.findElement(By.name("identifier")),user);
+            escribeTexto(driver.findElement(By.name("password")),password);
             pausa(rapido);
             driver.findElement(By.name("password")).sendKeys(Keys.ENTER);
         } else {
@@ -635,6 +640,20 @@ public class cControl {
         }
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, e.toString());
+        }
+    }
+    public void escribeTexto(WebElement elementoWeb,String texto){
+        if(escribirCon.equals("sendkeys")){
+            elementoWeb.sendKeys(texto);
+        }
+        else if(escribirCon.equals("javascript")){
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            js.executeScript("arguments[0].value='"+texto+"';", elementoWeb);
+        }
+    }
+    public void escribeTexto(WebElement elementoWeb,Keys tecla){
+        if(escribirCon.equals("sendkeys") || escribirCon.equals("sendkeys")){
+            elementoWeb.sendKeys(tecla);
         }
     }
     //PONEMOS LOS VIDEOS LE LOS SLOTS DE HITLEAP
@@ -688,7 +707,7 @@ public class cControl {
         } catch (InterruptedException ex) {
         }
     }
-    public void buscaGoogle(String texto) {
+    public void buscaGoogle(String texto,String escribirCon) {
         try{
             driver.get("https://www.google.com");
             pausa(medio);
@@ -699,5 +718,6 @@ public class cControl {
             JOptionPane.showMessageDialog(null, e.toString());
         }
     }
+
 
 }

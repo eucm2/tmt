@@ -42,6 +42,7 @@ public class hitleap extends javax.swing.JInternalFrame {
     Connection connection = null;
     Statement statement = null;
     String path_drive = "";
+    String escribirCon = "";
     cControl c = new cControl();
 
     //VARIABLE QUE DETECTA SI SE CAMBIO EL TEXTO Y HACE UN UPDATE
@@ -76,11 +77,13 @@ public class hitleap extends javax.swing.JInternalFrame {
                     + "hora_fin, "
                     + "hora_fin_variacion, "
                     + "cada_horas, "
-                    + "dias_semana "
+                    + "dias_semana, "
+                    + "escribirCon "
                     + "FROM configuracion";
 
             ResultSet rs = statement.executeQuery(query);
             path_drive = rs.getString("path_drive");
+            escribirCon = rs.getString("escribirCon");
             rapido = Long.parseLong(rs.getString("rapido"));
             medio = Long.parseLong(rs.getString("medio"));
             lento = Long.parseLong(rs.getString("lento"));
@@ -91,7 +94,8 @@ public class hitleap extends javax.swing.JInternalFrame {
             hora_fin_variacion = Integer.parseInt(rs.getString("hora_fin_variacion"));
             cada_horas = Integer.parseInt(rs.getString("cada_horas"));
             dias_semana = rs.getString("dias_semana");
-
+            //ABRIMOS EL CONTRUCTOR Y CAMBIAMOS EL TIPO DE ENVIO DE TEXTO, POR SENKEY O POR JAVASCRIPT
+            c.cControl(escribirCon);
             //CARGAMOS LOS DATOS DE CONFIGURACION COMO LA VELOCIDAD ENTRE ECCIONES Y LA URL DEL PATH DRIVER
             String queryAccesos = "SELECT "
                     + "id, "
