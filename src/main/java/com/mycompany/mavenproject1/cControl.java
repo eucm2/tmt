@@ -684,7 +684,8 @@ public class cControl {
             driver.findElement(By.className("add-list")).click();
             pausa(rapido);
             //ESCRIBIMOS LAS 3 URL'S
-            driver.findElement(By.id("address_list")).sendKeys(listaPub);
+            escribeTexto(driver.findElement(By.name("address_list")),listaPub);
+            //driver.findElement(By.id("address_list")).sendKeys(listaPub);
             pausa(rapido);
             //CERRAMOS LA LISTA DE VINCULOS
             driver.findElement(By.name("button")).click();

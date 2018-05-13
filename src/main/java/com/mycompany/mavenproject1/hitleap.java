@@ -272,7 +272,7 @@ public class hitleap extends javax.swing.JInternalFrame {
             ResultSet rsPub = statement.executeQuery(queryPub);
             //CICLO QUE LLENA TODO EL MODELO
             while (rsPub.next()) {
-                listaPub = listaPub + rsPub.getString("url") + Keys.ENTER;
+                listaPub = listaPub + rsPub.getString("url") + "\\r/";
                 listaPubMail = listaPubMail + rsPub.getString("url") + " </br> \n ";
                 ListIds = ListIds + "'" + rsPub.getString("id") + "'" + ",";
             }
