@@ -1,5 +1,10 @@
 package com.mycompany.mavenproject1;
 
+import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
+import java.io.FileInputStream;
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -15,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Properties;
 import javax.swing.JOptionPane;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -24,6 +30,10 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.internet.MimeMessage;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.HtmlEmail;
+import org.eclipse.jetty.websocket.api.Session;
 
 //INICIO CLASE
 public class hitleap extends javax.swing.JInternalFrame {
@@ -43,8 +53,9 @@ public class hitleap extends javax.swing.JInternalFrame {
     Statement statement = null;
     String path_drive = "";
     String escribirCon = "";
+    int modo_prueba=0;
     cControl c = new cControl();
-
+    boolean modoPrueba = true;
     //VARIABLE QUE DETECTA SI SE CAMBIO EL TEXTO Y HACE UN UPDATE
     private Connection connect() {
         Connection conn = null;
@@ -78,7 +89,8 @@ public class hitleap extends javax.swing.JInternalFrame {
                     + "hora_fin_variacion, "
                     + "cada_horas, "
                     + "dias_semana, "
-                    + "escribirCon "
+                    + "escribirCon, "
+                    + "modo_prueba "
                     + "FROM configuracion";
 
             ResultSet rs = statement.executeQuery(query);
@@ -94,6 +106,12 @@ public class hitleap extends javax.swing.JInternalFrame {
             hora_fin_variacion = Integer.parseInt(rs.getString("hora_fin_variacion"));
             cada_horas = Integer.parseInt(rs.getString("cada_horas"));
             dias_semana = rs.getString("dias_semana");
+            modo_prueba = Integer.parseInt(rs.getString("modo_prueba"));
+            if(modo_prueba==1){
+                modoPrueba = true;
+            }else{
+                modoPrueba = false;
+            }
             //ABRIMOS EL CONTRUCTOR Y CAMBIAMOS EL TIPO DE ENVIO DE TEXTO, POR SENKEY O POR JAVASCRIPT
             c.cControl(escribirCon);
             //CARGAMOS LOS DATOS DE CONFIGURACION COMO LA VELOCIDAD ENTRE ECCIONES Y LA URL DEL PATH DRIVER
@@ -243,6 +261,7 @@ public class hitleap extends javax.swing.JInternalFrame {
     public void crearPublicaciones() {
 
         String listaPub = "";
+        String listaPubMail = "";
         String ListIds = "";
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:tmt.db");
@@ -254,6 +273,7 @@ public class hitleap extends javax.swing.JInternalFrame {
             //CICLO QUE LLENA TODO EL MODELO
             while (rsPub.next()) {
                 listaPub = listaPub + rsPub.getString("url") + Keys.ENTER;
+                listaPubMail = listaPubMail + rsPub.getString("url") + " </br> \n ";
                 ListIds = ListIds + "'" + rsPub.getString("id") + "'" + ",";
             }
             listaPub = listaPub.substring(0, listaPub.length() - 1);
@@ -278,9 +298,12 @@ public class hitleap extends javax.swing.JInternalFrame {
         boolean resultado = c.registraVideos(listaPub);
         //SI ESOS VIDEOS SE AGREGARON EXITOSAMENTE ACTUALIZAMOS EN LA BD ESOS VIDEOS
         if (resultado == true) {
+            mandaMail("eucm2g@gmail.com","Videos publicados","tmt","Se publicaron estos videos </br>"+listaPubMail+" ");
+            //QUERY QUE ACTUALIZA MARCA COMO PUBLICADO EL VIDEO QUE SE ACABA DE PUBLICAR EN HITLEAP
             String sqlListaPub = " update publicaciones set pub_hitleap='1' where id IN (" + ListIds + "); ";
             try (Connection conn = this.connect();
-                    PreparedStatement pstmt = conn.prepareStatement(sqlListaPub)) {
+                //ACTUALIZAMOS TODOS LOS VIDEOS QUE SE PUBLICARON
+                PreparedStatement pstmt = conn.prepareStatement(sqlListaPub)) {
                 //EJECUTAMOS EL COMANDO
                 pstmt.executeUpdate();
             } catch (SQLException e) {
@@ -329,11 +352,14 @@ public class hitleap extends javax.swing.JInternalFrame {
     private void activarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activarActionPerformed
         reiniciarCronometro();
     }//GEN-LAST:event_activarActionPerformed
+
+    
+    
+
+
     //REINICIA CRONMETRO CADA 24HORAS PARA QUE LA HORA DEL DIA SE LIMPIE
     public void reiniciarCronometro() {
         if (activar.isSelected()) {
-            boolean modoPrueba = false;
-            
             final int reiniciarAlasHoras = 23;
             final int reiniciarAlasMinutos = 59;
             final int reiniciarAlasSegundos = 59;
@@ -392,11 +418,15 @@ public class hitleap extends javax.swing.JInternalFrame {
     Calendar calHoraIni = Calendar.getInstance();
     Calendar calHoraFin = Calendar.getInstance();
     Calendar[] calHorasEjecutar = new Calendar[25];
+
     //CALCULA EL TIEMPO ENTRE UNA EJECUCION Y OTRA
     public void cronometroParaEjecutar() {
-
         //SI MODO PRUEB ES TRUE EN LUGAR DE HACER EL CICLO CADA HORA LO HACE CADA MINUTO PARA VER COMO FUNCIONA EN TIEMPO REAL
-        boolean modoPrueba = false;
+        if(modo_prueba==1){
+            modoPrueba = true;
+        }else{
+            modoPrueba = false;
+        }
         int minuto = Calendar.getInstance().get(Calendar.MINUTE);
         int hora = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         int ano = Calendar.getInstance().get(Calendar.YEAR);
@@ -507,6 +537,47 @@ public class hitleap extends javax.swing.JInternalFrame {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public void mandaMail(String correoRecibe,String asunto,String deNombre,String mensaje){
+        String HOST_NAME = "smtp.gmail.com";
+        int PORT = 465;
+        String TEXT_PLAIN = "text/plain";
+
+        String correoEnvia="eugenio@onefocusdigital.com";
+        String password="Demo4231#@64";
+        
+        HtmlEmail email = new HtmlEmail();
+        email.setHostName(HOST_NAME);
+        email.setSmtpPort(PORT);
+        email.setSSLOnConnect(true);
+ 
+        email.setAuthentication(correoEnvia, password);
+ 
+        email.setSubject(asunto);
+        try {
+            email.setFrom(correoEnvia, deNombre, String.valueOf(StandardCharsets.UTF_8));
+        } catch (EmailException ex) {
+            Logger.getLogger(hitleap.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            email.addTo(correoRecibe);
+        } catch (EmailException ex) {
+            Logger.getLogger(hitleap.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            email.setHtmlMsg(mensaje);
+        } catch (EmailException ex) {
+            Logger.getLogger(hitleap.class.getName()).log(Level.SEVERE, null, ex);
+        }
+ 
+        try {
+            email.send();
+        } catch (EmailException ex) {
+            Logger.getLogger(hitleap.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

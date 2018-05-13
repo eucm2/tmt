@@ -628,11 +628,11 @@ public class cControl {
     public void accedeHL(String user, String password) {
         try{
         driver.get("https://hitleap.com/authentication");
-        pausa(medio);
+        pausa(lento);
         if (user.length() > 0 && password.length() > 0) {
             escribeTexto(driver.findElement(By.name("identifier")),user);
             escribeTexto(driver.findElement(By.name("password")),password);
-            pausa(rapido);
+            pausa(medio);
             driver.findElement(By.name("password")).sendKeys(Keys.ENTER);
         } else {
             //PEDIMOS AL USUARIO QUE PONGA SU USUARIO Y CONTRASEÑA PARA PODER CONTINUAR
