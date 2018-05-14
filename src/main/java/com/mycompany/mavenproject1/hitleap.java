@@ -99,13 +99,11 @@ public class hitleap extends javax.swing.JInternalFrame {
                 //MOSTRAMOS UN LABEL QUE AVISE QUE EL MODO PRUEBA ESTA ACTIVO
                 lblModo.setText("Modo prueba activo");
                 lblModo.setBackground(Color.green);
-                lblVerNumeroPublicadas.setVisible(true);
             }
             //SI EL MODO PRUEBA ESTA DESACTIVO (FUNCIONA DE FORMA NORMAL)
             else{
                 lblModo.setText("Modo prueba descativo");
                 lblModo.setBackground(Color.red);
-                lblVerNumeroPublicadas.setVisible(false);
             }
             //ABRIMOS EL CONTRUCTOR Y CAMBIAMOS EL TIPO DE ENVIO DE TEXTO, POR SENKEY O POR JAVASCRIPT
             c.cControl(escribirCon);
@@ -169,7 +167,6 @@ public class hitleap extends javax.swing.JInternalFrame {
         lblHoraReiniciar = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         lblModo = new javax.swing.JLabel();
-        lblVerNumeroPublicadas = new javax.swing.JLabel();
 
         setTitle("Kingdomlikes");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -258,9 +255,6 @@ public class hitleap extends javax.swing.JInternalFrame {
         lblModo.setText("modo");
         lblModo.setOpaque(true);
         getContentPane().add(lblModo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, -1, -1));
-
-        lblVerNumeroPublicadas.setText("lblVerNumeroPublicadas");
-        getContentPane().add(lblVerNumeroPublicadas, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 380, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -461,12 +455,12 @@ public class hitleap extends javax.swing.JInternalFrame {
         horaIni.setText(calHoraIni.get(Calendar.HOUR_OF_DAY) + ":" + calHoraIni.get(Calendar.MINUTE) + ":" + calHoraIni.get(Calendar.SECOND));
         horaFin.setText(calHoraFin.get(Calendar.HOUR_OF_DAY) + ":" + calHoraFin.get(Calendar.MINUTE) + ":" + calHoraFin.get(Calendar.SECOND));
         //INICIALIZAMOS EL MODELO DE LA TABLA
-        DefaultTableModel model = (DefaultTableModel) listaHorarios.getModel();
+        DefaultTableModel modelTablaConHorarios = (DefaultTableModel) listaHorarios.getModel();
         //CONTAMOS LA CANTIDAD DE REGISTROS QUE TIENE LA TLABLA
-        int rowCount = model.getRowCount();
+        int rowCount = modelTablaConHorarios.getRowCount();
         //BORRAMOS TODOS LOS REGISTROS DE LA TABLA
         for (int i = rowCount - 1; i >= 0; i--) {
-            model.removeRow(i);
+            modelTablaConHorarios.removeRow(i);
         }
         //CONTADOR DE HORAS QUE PASAN ENTRE EL INICIO Y EL FINAL
         int contadorHoras = 0;
@@ -491,7 +485,7 @@ public class hitleap extends javax.swing.JInternalFrame {
                 Logger.getLogger(hitleap.class.getName()).log(Level.SEVERE, null, ex);
             }
             //ESCRIBIMOS EN LA TABLA LAS HORAS EN LAS QUE SE VA EJECUTAR
-            model.addRow(new Object[]{"" + (contadorHoras + 1), calHorasEjecutar[contadorHoras].get(Calendar.YEAR) + " " + calHorasEjecutar[contadorHoras].get(Calendar.MONTH) + " " + calHorasEjecutar[contadorHoras].get(Calendar.DAY_OF_MONTH) + " " + calHorasEjecutar[contadorHoras].get(Calendar.HOUR_OF_DAY) + ":" + calHorasEjecutar[contadorHoras].get(Calendar.MINUTE) + ":" + calHorasEjecutar[contadorHoras].get(Calendar.SECOND)});
+            modelTablaConHorarios.addRow(new Object[]{"" + (contadorHoras + 1), calHorasEjecutar[contadorHoras].get(Calendar.YEAR) + "-" + calHorasEjecutar[contadorHoras].get(Calendar.MONTH) + "-" + calHorasEjecutar[contadorHoras].get(Calendar.DAY_OF_MONTH) + " " + calHorasEjecutar[contadorHoras].get(Calendar.HOUR_OF_DAY) + ":" + calHorasEjecutar[contadorHoras].get(Calendar.MINUTE) + ":" + calHorasEjecutar[contadorHoras].get(Calendar.SECOND)});
             contadorHoras = contadorHoras + 1;
         }
         //CREAMOS ESTA VARIABLE PARA PODER METERLA DENDRO DEL RELOJ
@@ -530,7 +524,6 @@ public class hitleap extends javax.swing.JInternalFrame {
                         temporalizador.cancel();
                         temporalizador.purge();
                         crearPublicaciones();
-                        //lblVerNumeroPublicadas
                         c.pausa(1000 * 35);
                     }
                 }
@@ -616,7 +609,6 @@ public class hitleap extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblHoraReiniciar;
     private javax.swing.JLabel lblModo;
-    private javax.swing.JLabel lblVerNumeroPublicadas;
     private javax.swing.JTable listaHorarios;
     private javax.swing.JPasswordField passwordKL;
     private javax.swing.JLabel tiempoFaltaEjecutar;
