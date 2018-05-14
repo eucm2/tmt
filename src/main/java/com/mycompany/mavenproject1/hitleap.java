@@ -527,7 +527,12 @@ public class hitleap extends javax.swing.JInternalFrame {
                         temporalizador.cancel();
                         temporalizador.purge();
                         crearPublicaciones();
+                        //ESPERAMOS 35 SEGUNDOS DESPUES DE HABER PUBLICADO LOS VIDEOS PARA DAR TIEMPO AL CRONOMETRO DE REINICIO A QUE TRABAJE
                         c.pausa(1000 * 35);
+                        //SI NO ES MODO PRUEBA SE EJECUTA DE NUEVO EL CONOMETRO PARA EJECUTAR
+                        if(modo_prueba==0){
+                            cronometroParaEjecutar();
+                        }
                     }
                 }
             }
