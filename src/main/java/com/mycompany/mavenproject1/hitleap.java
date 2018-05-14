@@ -259,10 +259,14 @@ public class hitleap extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public void crearPublicaciones() {
-
-        String listaPub = "";
-        String listaPubMail = "";
+        //LISTA DE URL DE PUBLICACIONES
+        String listaUrlPub = "";
+        //LISTA DE LOS IDS DE PUBLICACIONES A ACTUALIZAR
         String ListIds = "";
+        //LISTA DE PUBLICACIONES A ENVIAR VIA MAIL
+        String listaPubMail = "";
+        //CUENTA EL NUMERO DE PUBLICACIONES
+        int contPublicaciones=0;
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:tmt.db");
             statement = connection.createStatement();
@@ -270,13 +274,21 @@ public class hitleap extends javax.swing.JInternalFrame {
             //CARGAMOS LOS DATOS DE CONFIGURACION COMO LA VELOCIDAD ENTRE ECCIONES Y LA URL DEL PATH DRIVER
             String queryPub = "SELECT id,url FROM publicaciones where pub_hitleap='0' LIMIT '3'; ";
             ResultSet rsPub = statement.executeQuery(queryPub);
-            //CICLO QUE LLENA TODO EL MODELO
+            //CICLO QUE LLENA 3 PUBLICACIONES A METER EN HITLEAP
             while (rsPub.next()) {
-                listaPub = listaPub + rsPub.getString("url") + "\\r/";
-                listaPubMail = listaPubMail + rsPub.getString("url") + " </br> \n ";
+                listaUrlPub = listaUrlPub + rsPub.getString("url") + "\\r/";
                 ListIds = ListIds + "'" + rsPub.getString("id") + "'" + ",";
+                listaPubMail = listaPubMail + rsPub.getString("url") + " </br> \n ";
+                contPublicaciones++;
             }
-            listaPub = listaPub.substring(0, listaPub.length() - 1);
+            //SI YA NO HAY PUBLICACIONES
+            if(contPublicaciones==0){
+                //MANDAMOS UNA NOTIFICACION POR CORREO
+                mandaMail("eucm2g@gmail.com","Ya no hay publicaciones para poner en hitleap","tmt","Ya no hay publicaciones para poner en hitleap");
+                return;
+            }
+            //QUITAMOS LA ULTIMA LETRA (QUE ES UN RETURNCAR Y UN ,)
+            listaUrlPub = listaUrlPub.substring(0, listaUrlPub.length() - 1);
             ListIds = ListIds.substring(0, ListIds.length() - 1);
         } catch (SQLException e) {
             System.err.println(e.getMessage());
@@ -295,7 +307,7 @@ public class hitleap extends javax.swing.JInternalFrame {
         //COLOCAMOS LOS ACCESOS
         c.accedeHL(userKL.getText(), passwordKL.getText());
         //AGREGAMOS LOS VIDEOS A A HITLEAP
-        boolean resultado = c.registraVideos(listaPub);
+        boolean resultado = c.registraVideos(listaUrlPub);
         //SI ESOS VIDEOS SE AGREGARON EXITOSAMENTE ACTUALIZAMOS EN LA BD ESOS VIDEOS
         if (resultado == true) {
             mandaMail("eucm2g@gmail.com","Videos publicados","tmt","Se publicaron estos videos </br>"+listaPubMail+" ");
@@ -457,14 +469,16 @@ public class hitleap extends javax.swing.JInternalFrame {
         int contadorHoras = 0;
         Date horaEjecutar = null;
         //BUCLE QUE LLENA LA TABLA CON LAS HORAS ENTRE EL INICIO Y EL FINAL
-        for (int i = hora_ini_res; i <= hora_fin_res; i = i + cada_horas) {
+        for (int cadaXcantidadHoras = hora_ini_res; cadaXcantidadHoras <= hora_fin_res; cadaXcantidadHoras = cadaXcantidadHoras + cada_horas) {
             try {
+                //SI NO ES MODO PRUEBA HACEMOS QUE SE EJECUTEN 
                 if (modoPrueba == false) {
                     //GENERAMOS LA HORA DE INICIO DE EJECUCION
-                    horaEjecutar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + i + ":" + calHoraIni.get(Calendar.MINUTE) + ":59");
+                    horaEjecutar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + cadaXcantidadHoras + ":" + calHoraIni.get(Calendar.MINUTE) + ":59");
                 }
+                //SI ES MODO PRUEBA COLOCAMOS LA FECHAS PARA QUE SE EJECUTEN CADA 2 MINUTOS
                 if (modoPrueba == true) {
-                    horaEjecutar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + hora + ":" + (minuto + i) + ":59");
+                    horaEjecutar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + hora + ":" + (minuto + cadaXcantidadHoras) + ":59");
                 }
                 //INICIALIZAMOS EL CALENDARIO
                 calHorasEjecutar[contadorHoras] = Calendar.getInstance();
@@ -480,10 +494,8 @@ public class hitleap extends javax.swing.JInternalFrame {
         //CREAMOS ESTA VARIABLE PARA PODER METERLA DENDRO DEL RELOJ
         final int contadorHorasFinal = contadorHoras;
         //INICIALIZAMOS EL TEMPORALIZADOR
-        final Timer timer = new Timer();
-        //SI EL CHECK ESTA ACTIVO INICIA EL TEMPORALIZADOR
-
-        TimerTask task = new TimerTask() {
+        final Timer temporalizador = new Timer();
+        TimerTask tarea = new TimerTask() {
             @Override
             //INICIA EL TEMPORALIZADOR
             public void run() {
@@ -518,7 +530,7 @@ public class hitleap extends javax.swing.JInternalFrame {
                 }
             }
         };
-        timer.scheduleAtFixedRate(task, 1000, 1000);
+        temporalizador.scheduleAtFixedRate(tarea, 1000, 1000);
 
     }
 
