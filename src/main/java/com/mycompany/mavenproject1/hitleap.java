@@ -323,6 +323,9 @@ public class hitleap extends javax.swing.JInternalFrame {
                 System.out.println(e.getMessage());
             }
         }
+        else{
+            mandaMail("eucm2g@gmail.com","Videos NO publicados","tmt fallo","NO se publicaron estos videos </br>"+listaPubMail+" ");
+        }
         c.pausa(mlento);
         c.cerrarNavegador();
 
