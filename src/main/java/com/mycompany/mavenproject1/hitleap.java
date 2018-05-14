@@ -445,6 +445,8 @@ public class hitleap extends javax.swing.JInternalFrame {
         int ano = Calendar.getInstance().get(Calendar.YEAR);
         int mes = Calendar.getInstance().get(Calendar.MONTH) + 1;
         int dia = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        //CUENTA EL NUMERO DE VES QUE SE PUBLICA PARA EVITAR QUE SE PUBLIQUE MAS DE 2 VECES
+        int intNumeroPublicadas=0;
         DateFormat formatoFechaHora = new SimpleDateFormat("yyyy/MM/dd kk:mm:ss");
         //ASIGNAMOS LA CANTIDAD DE HORAS QUE VA A VARIAR LA HORA DE INICIO Y FIN
         int hora_ini_variacion_res = (int) (Math.random() * (hora_ini_variacion * 2)) - hora_ini_variacion;
@@ -478,7 +480,7 @@ public class hitleap extends javax.swing.JInternalFrame {
                     horaEjecutar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + cadaXcantidadHoras + ":" + calHoraIni.get(Calendar.MINUTE) + ":59");
                 }
                 //SI ES MODO PRUEBA COLOCAMOS LA FECHAS PARA QUE SE EJECUTEN CADA 2 MINUTOS
-                if (modo_prueba == 0) {
+                if (modo_prueba == 1) {
                     horaEjecutar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + hora + ":" + (minuto + cadaXcantidadHoras) + ":59");
                 }
                 //INICIALIZAMOS EL CALENDARIO
@@ -528,6 +530,7 @@ public class hitleap extends javax.swing.JInternalFrame {
                         temporalizador.cancel();
                         temporalizador.purge();
                         crearPublicaciones();
+                        //lblVerNumeroPublicadas
                         c.pausa(1000 * 35);
                     }
                 }
