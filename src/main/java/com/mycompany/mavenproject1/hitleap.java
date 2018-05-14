@@ -42,6 +42,7 @@ public class hitleap extends javax.swing.JInternalFrame {
     String path_drive = "";
     String escribirCon = "";
     int modo_prueba=0;
+    int tiempo_x2=0;
     cControl c = new cControl();
     //VARIABLE QUE DETECTA SI SE CAMBIO EL TEXTO Y HACE UN UPDATE
     private Connection connect() {
@@ -77,7 +78,8 @@ public class hitleap extends javax.swing.JInternalFrame {
                     + "cada_horas, "
                     + "dias_semana, "
                     + "escribirCon, "
-                    + "modo_prueba "
+                    + "modo_prueba, "
+                    + "tiempo_x2 "
                     + "FROM configuracion";
 
             ResultSet rs = statement.executeQuery(query);
@@ -94,6 +96,7 @@ public class hitleap extends javax.swing.JInternalFrame {
             cada_horas = Integer.parseInt(rs.getString("cada_horas"));
             dias_semana = rs.getString("dias_semana");
             modo_prueba = Integer.parseInt(rs.getString("modo_prueba"));
+            tiempo_x2 = Integer.parseInt(rs.getString("tiempo_x2"));
             //SI EL MODO PRUEBA ESTA ACTIVO (SE EJECUTAN PUBLICACIONES CADA 2 MINUTOS)
             if(modo_prueba==1){
                 //MOSTRAMOS UN LABEL QUE AVISE QUE EL MODO PRUEBA ESTA ACTIVO
@@ -105,6 +108,7 @@ public class hitleap extends javax.swing.JInternalFrame {
                 lblModo.setText("Modo prueba descativo");
                 lblModo.setBackground(Color.red);
             }
+            
             //ABRIMOS EL CONTRUCTOR Y CAMBIAMOS EL TIPO DE ENVIO DE TEXTO, POR SENKEY O POR JAVASCRIPT
             c.cControl(escribirCon);
             //CARGAMOS LOS DATOS DE CONFIGURACION COMO LA VELOCIDAD ENTRE ECCIONES Y LA URL DEL PATH DRIVER
@@ -410,6 +414,10 @@ public class hitleap extends javax.swing.JInternalFrame {
                     //INIZIALIZAMOS EL CALENDARIO CON LA HORA ACTUAL
                     final Calendar calHoraActualReiniciar = Calendar.getInstance();
                     long segundosFaltanParaReiniciar = (calHorasReiniciar.getTimeInMillis() - calHoraActualReiniciar.getTimeInMillis()) / (1000);
+                    //SI ESTA ACTIVO EL TIEMPO POR 2 EN LA BD HACEMOS QUE EL TIEMPO DE REINICIO SEA DE LA MITAD
+                    if(tiempo_x2==1){
+                        segundosFaltanParaReiniciar=segundosFaltanParaReiniciar/2;
+                    }
                     lblHoraReiniciar.setText("Segundos que faltan para reiniciar=" + segundosFaltanParaReiniciar);
                     //SI YA ESTAMOS EN EL MINUTO 0 EJECUTAMOS LA PUBLICACION
                     if (segundosFaltanParaReiniciar >= 0 && segundosFaltanParaReiniciar <= 10) {
@@ -516,6 +524,10 @@ public class hitleap extends javax.swing.JInternalFrame {
                 for (int j = 0; j < contadorHorasFinal; j++) {
                     //SACAMOS LOS SEGUNDOS QUE FALTAN PARA EJECUTAR
                     long segundosFaltanParaEjecutar = (calHorasEjecutar[j].getTimeInMillis() - calHoraActual.getTimeInMillis()) / (1000);
+                    //SI ESTA ACTIVA EN LA BD EN TEIMPO POR 2 EL TIEMPO QUE SE EJECUTAN LOS COCESOS SE DIVIDE ENTRE 2
+                    if(tiempo_x2==1){
+                        segundosFaltanParaEjecutar=segundosFaltanParaEjecutar/2;
+                    }
                     if (segundosFaltanParaEjecutar > 0 && flagSoloElPrimero == false) {
                         //MOSTRAMOS EN LABEL EL TIEMPO QUE FALTA PARA EJECUTARSE EL SIGUIENTE
                         tiempoFaltaEjecutar.setText("" + segundosFaltanParaEjecutar);
