@@ -1,9 +1,6 @@
 package com.mycompany.mavenproject1;
 
-import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
-import java.io.FileInputStream;
-import java.net.Authenticator;
-import java.net.PasswordAuthentication;
+import java.awt.Color;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,25 +12,16 @@ import java.sql.PreparedStatement;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Properties;
 import javax.swing.JOptionPane;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.Clock;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.mail.internet.MimeMessage;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
-import org.eclipse.jetty.websocket.api.Session;
 
 //INICIO CLASE
 public class hitleap extends javax.swing.JInternalFrame {
@@ -55,7 +43,6 @@ public class hitleap extends javax.swing.JInternalFrame {
     String escribirCon = "";
     int modo_prueba=0;
     cControl c = new cControl();
-    boolean modoPrueba = true;
     //VARIABLE QUE DETECTA SI SE CAMBIO EL TEXTO Y HACE UN UPDATE
     private Connection connect() {
         Connection conn = null;
@@ -107,10 +94,18 @@ public class hitleap extends javax.swing.JInternalFrame {
             cada_horas = Integer.parseInt(rs.getString("cada_horas"));
             dias_semana = rs.getString("dias_semana");
             modo_prueba = Integer.parseInt(rs.getString("modo_prueba"));
+            //SI EL MODO PRUEBA ESTA ACTIVO (SE EJECUTAN PUBLICACIONES CADA 2 MINUTOS)
             if(modo_prueba==1){
-                modoPrueba = true;
-            }else{
-                modoPrueba = false;
+                //MOSTRAMOS UN LABEL QUE AVISE QUE EL MODO PRUEBA ESTA ACTIVO
+                lblModo.setText("Modo prueba activo");
+                lblModo.setBackground(Color.green);
+                lblVerNumeroPublicadas.setVisible(true);
+            }
+            //SI EL MODO PRUEBA ESTA DESACTIVO (FUNCIONA DE FORMA NORMAL)
+            else{
+                lblModo.setText("Modo prueba descativo");
+                lblModo.setBackground(Color.red);
+                lblVerNumeroPublicadas.setVisible(false);
             }
             //ABRIMOS EL CONTRUCTOR Y CAMBIAMOS EL TIPO DE ENVIO DE TEXTO, POR SENKEY O POR JAVASCRIPT
             c.cControl(escribirCon);
@@ -172,6 +167,9 @@ public class hitleap extends javax.swing.JInternalFrame {
         jLabel21 = new javax.swing.JLabel();
         tiempoFaltaEjecutar = new javax.swing.JLabel();
         lblHoraReiniciar = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        lblModo = new javax.swing.JLabel();
+        lblVerNumeroPublicadas = new javax.swing.JLabel();
 
         setTitle("Kingdomlikes");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -183,21 +181,21 @@ public class hitleap extends javax.swing.JInternalFrame {
                 btnGanarPuntosActionPerformed(evt);
             }
         });
-        getContentPane().add(btnGanarPuntos, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 80, -1, -1));
+        getContentPane().add(btnGanarPuntos, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 160, -1, -1));
 
         jLabel14.setText("User KL");
-        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, -1, -1));
 
         userKL.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 userKLKeyPressed(evt);
             }
         });
-        getContentPane().add(userKL, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 290, -1));
+        getContentPane().add(userKL, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 290, -1));
 
         horaActual.setText("Hora actual");
-        getContentPane().add(horaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 130, -1, -1));
-        getContentPane().add(passwordKL, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 30, 300, -1));
+        getContentPane().add(horaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 150, -1, -1));
+        getContentPane().add(passwordKL, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 60, 300, -1));
 
         guardar.setText("Guardar");
         guardar.addActionListener(new java.awt.event.ActionListener() {
@@ -205,7 +203,7 @@ public class hitleap extends javax.swing.JInternalFrame {
                 guardarActionPerformed(evt);
             }
         });
-        getContentPane().add(guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 20, -1, -1));
+        getContentPane().add(guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 60, -1, -1));
 
         activar.setText("Activar");
         activar.addActionListener(new java.awt.event.ActionListener() {
@@ -213,22 +211,22 @@ public class hitleap extends javax.swing.JInternalFrame {
                 activarActionPerformed(evt);
             }
         });
-        getContentPane().add(activar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 90, -1, -1));
+        getContentPane().add(activar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, -1, -1));
 
         jLabel15.setText("Hora actual.......................................");
-        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, -1, -1));
+        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, -1, -1));
 
         horaIni.setText("Hora Inicial");
-        getContentPane().add(horaIni, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 160, -1, -1));
+        getContentPane().add(horaIni, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 180, -1, -1));
 
         jLabel17.setText("Hora Inicial......................................");
-        getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, -1, -1));
+        getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, -1, -1));
 
         jLabel20.setText("Hora Final.......................................");
-        getContentPane().add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, -1, -1));
+        getContentPane().add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, -1, -1));
 
         horaFin.setText("Hora Final");
-        getContentPane().add(horaFin, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 190, -1, -1));
+        getContentPane().add(horaFin, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 210, -1, -1));
 
         listaHorarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -241,19 +239,28 @@ public class hitleap extends javax.swing.JInternalFrame {
         listaHorarios.setName("listaHorarios"); // NOI18N
         jScrollPane1.setViewportView(listaHorarios);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, 400, 180));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, 400, 180));
 
         jLabel16.setText("Password KL");
-        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 10, -1, -1));
+        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 40, -1, -1));
 
         jLabel21.setText("Segundos que faltan para ejeuitar");
-        getContentPane().add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, -1, -1));
+        getContentPane().add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, -1, -1));
 
         tiempoFaltaEjecutar.setText("Tiempo a ajecutar");
-        getContentPane().add(tiempoFaltaEjecutar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 220, -1, -1));
+        getContentPane().add(tiempoFaltaEjecutar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 240, -1, -1));
 
         lblHoraReiniciar.setText("horaReiniciar");
-        getContentPane().add(lblHoraReiniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 90, 360, -1));
+        getContentPane().add(lblHoraReiniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, 360, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 550, -1, -1));
+
+        lblModo.setBackground(new java.awt.Color(102, 102, 255));
+        lblModo.setText("modo");
+        lblModo.setOpaque(true);
+        getContentPane().add(lblModo, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, -1, -1));
+
+        lblVerNumeroPublicadas.setText("lblVerNumeroPublicadas");
+        getContentPane().add(lblVerNumeroPublicadas, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 380, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -385,12 +392,12 @@ public class hitleap extends javax.swing.JInternalFrame {
             Date horaReiniciar = null;
             DateFormat formatoFechaHora = new SimpleDateFormat("yyyy/MM/dd kk:mm:ss");
             try {
-                if (modoPrueba == false) {
+                if (modo_prueba == 0) {
                     //GENERAMOS LA HORA DE INICIO DE EJECUCION OSEA CADA 24 HORAS
                     horaReiniciar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + reiniciarAlasHoras + ":" + reiniciarAlasMinutos + ":" + reiniciarAlasSegundos);
                     cronometroParaEjecutar();
                 }
-                if (modoPrueba == true) {
+                if (modo_prueba == 1) {
                     horaReiniciar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + hora + ":" + minuto + ":59");
                 }
             } catch (ParseException ex) {
@@ -433,12 +440,6 @@ public class hitleap extends javax.swing.JInternalFrame {
 
     //CALCULA EL TIEMPO ENTRE UNA EJECUCION Y OTRA
     public void cronometroParaEjecutar() {
-        //SI MODO PRUEB ES TRUE EN LUGAR DE HACER EL CICLO CADA HORA LO HACE CADA MINUTO PARA VER COMO FUNCIONA EN TIEMPO REAL
-        if(modo_prueba==1){
-            modoPrueba = true;
-        }else{
-            modoPrueba = false;
-        }
         int minuto = Calendar.getInstance().get(Calendar.MINUTE);
         int hora = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         int ano = Calendar.getInstance().get(Calendar.YEAR);
@@ -472,12 +473,12 @@ public class hitleap extends javax.swing.JInternalFrame {
         for (int cadaXcantidadHoras = hora_ini_res; cadaXcantidadHoras <= hora_fin_res; cadaXcantidadHoras = cadaXcantidadHoras + cada_horas) {
             try {
                 //SI NO ES MODO PRUEBA HACEMOS QUE SE EJECUTEN 
-                if (modoPrueba == false) {
+                if (modo_prueba == 0) {
                     //GENERAMOS LA HORA DE INICIO DE EJECUCION
                     horaEjecutar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + cadaXcantidadHoras + ":" + calHoraIni.get(Calendar.MINUTE) + ":59");
                 }
                 //SI ES MODO PRUEBA COLOCAMOS LA FECHAS PARA QUE SE EJECUTEN CADA 2 MINUTOS
-                if (modoPrueba == true) {
+                if (modo_prueba == 0) {
                     horaEjecutar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + hora + ":" + (minuto + cadaXcantidadHoras) + ":59");
                 }
                 //INICIALIZAMOS EL CALENDARIO
@@ -524,6 +525,8 @@ public class hitleap extends javax.swing.JInternalFrame {
                     }
                     //SI YA ESTAMOS EN EL MINUTO 0 EJECUTAMOS LA PUBLICACION
                     if (segundosFaltanParaEjecutar >= 0 && segundosFaltanParaEjecutar <= 10) {
+                        temporalizador.cancel();
+                        temporalizador.purge();
                         crearPublicaciones();
                         c.pausa(1000 * 35);
                     }
@@ -604,10 +607,13 @@ public class hitleap extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblHoraReiniciar;
+    private javax.swing.JLabel lblModo;
+    private javax.swing.JLabel lblVerNumeroPublicadas;
     private javax.swing.JTable listaHorarios;
     private javax.swing.JPasswordField passwordKL;
     private javax.swing.JLabel tiempoFaltaEjecutar;
