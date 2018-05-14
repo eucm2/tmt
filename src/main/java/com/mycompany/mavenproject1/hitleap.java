@@ -100,12 +100,12 @@ public class hitleap extends javax.swing.JInternalFrame {
             //SI EL MODO PRUEBA ESTA ACTIVO (SE EJECUTAN PUBLICACIONES CADA 2 MINUTOS)
             if(modo_prueba==1){
                 //MOSTRAMOS UN LABEL QUE AVISE QUE EL MODO PRUEBA ESTA ACTIVO
-                lblModo.setText("Modo prueba activo");
+                lblModo.setText("Modo prueba activo tiempo por 2 =" + tiempo_x2 );
                 lblModo.setBackground(Color.green);
             }
             //SI EL MODO PRUEBA ESTA DESACTIVO (FUNCIONA DE FORMA NORMAL)
             else{
-                lblModo.setText("Modo prueba descativo");
+                lblModo.setText("Modo prueba descativo  tiempo por 2 =" + tiempo_x2);
                 lblModo.setBackground(Color.red);
             }
             
