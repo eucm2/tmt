@@ -27,18 +27,45 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         guardar = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        pathDrive = new javax.swing.JTextField();
-        seleccionarImagen = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jTabbedPane4 = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        rapido = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
+        rapido = new javax.swing.JTextField();
         lento = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         medio = new javax.swing.JTextField();
-        mlento = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
+        mlento = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        pathDrive = new javax.swing.JTextField();
+        seleccionarImagen = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        max_king = new javax.swing.JTextField();
+        min_king = new javax.swing.JTextField();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        hora_fin_variacion = new javax.swing.JTextField();
+        hora_ini = new javax.swing.JTextField();
+        hora_ini_variacion = new javax.swing.JTextField();
+        hora_fin = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
+        cada_horas = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        tiempo_x2 = new javax.swing.JCheckBox();
+        modo_prueba = new javax.swing.JCheckBox();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        dias_semana = new javax.swing.JList<>();
+        jLabel16 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        escribirCon = new javax.swing.JList<>();
 
         setTitle("Configuracion General");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -49,11 +76,35 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
                 guardarActionPerformed(evt);
             }
         });
-        getContentPane().add(guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 250, -1, -1));
+        getContentPane().add(guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 400, -1, -1));
+
+        jLabel2.setText("jLabel2");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 580, -1, -1));
+
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel3.setText("Rapido");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, -1, -1));
+
+        jLabel5.setText("Lento");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, -1, -1));
+        jPanel1.add(rapido, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 130, 140, -1));
+        jPanel1.add(lento, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 170, 140, -1));
+
+        jLabel4.setText("Medio");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 130, -1, -1));
+        jPanel1.add(medio, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 130, 140, -1));
+
+        jLabel6.setText("Muy lento");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 170, -1, -1));
+        jPanel1.add(mlento, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 170, 140, -1));
 
         jLabel1.setText("Velocidad en milisegundos");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, -1));
-        getContentPane().add(pathDrive, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 510, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, -1, -1));
+
+        jLabel7.setText("Path drive chromedrive");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+        jPanel1.add(pathDrive, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 510, -1));
 
         seleccionarImagen.setText("Seleccionar chromedriver");
         seleccionarImagen.addActionListener(new java.awt.event.ActionListener() {
@@ -61,26 +112,77 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
                 seleccionarImagenActionPerformed(evt);
             }
         });
-        getContentPane().add(seleccionarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 90, -1, -1));
+        jPanel1.add(seleccionarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 70, -1, -1));
 
-        jLabel3.setText("Rapido");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, -1));
-        getContentPane().add(rapido, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 180, 140, -1));
+        jTabbedPane4.addTab("General", jPanel1);
 
-        jLabel5.setText("Lento");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
-        getContentPane().add(lento, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 220, 140, -1));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel4.setText("Medio");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 180, -1, -1));
-        getContentPane().add(medio, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 180, 140, -1));
-        getContentPane().add(mlento, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 220, 140, -1));
+        jLabel8.setText("Maximo");
+        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
 
-        jLabel6.setText("Muy lento");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 220, -1, -1));
+        jLabel9.setText("Minimo");
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
+        jPanel2.add(max_king, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 70, 140, -1));
+        jPanel2.add(min_king, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 30, 140, -1));
 
-        jLabel7.setText("Path drive chromedrive");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, -1, -1));
+        jTabbedPane4.addTab("Kingdomlikes", jPanel2);
+
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel10.setText("Dias de la semana");
+        jPanel3.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 110, -1, -1));
+
+        jLabel11.setText("Hora final variacion");
+        jPanel3.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, -1, -1));
+
+        jLabel13.setText("Hora inicial");
+        jPanel3.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+
+        jLabel12.setText("Hora inicial variacion");
+        jPanel3.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, -1, -1));
+        jPanel3.add(hora_fin_variacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 50, 110, -1));
+        jPanel3.add(hora_ini, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, 110, -1));
+        jPanel3.add(hora_ini_variacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 50, 110, -1));
+        jPanel3.add(hora_fin, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, 110, -1));
+
+        jLabel14.setText("Cada hora");
+        jPanel3.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, -1));
+        jPanel3.add(cada_horas, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 80, 110, -1));
+
+        jLabel15.setText("Escribir con");
+        jPanel3.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, -1));
+
+        tiempo_x2.setText("Tiempo x 2");
+        jPanel3.add(tiempo_x2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, -1, -1));
+
+        modo_prueba.setText("Modo prueba");
+        jPanel3.add(modo_prueba, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, -1, -1));
+
+        dias_semana.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(dias_semana);
+
+        jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 100, 110, -1));
+
+        jLabel16.setText("Hora final");
+        jPanel3.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 20, -1, -1));
+
+        escribirCon.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "javascript", "sendkeys" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(escribirCon);
+
+        jPanel3.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 110, 110, 50));
+
+        jTabbedPane4.addTab("Hitleap", jPanel3);
+
+        getContentPane().add(jTabbedPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 630, 310));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -105,7 +207,18 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
                     + "rapido,"
                     + "medio,"
                     + "lento,"
-                    + "mlento "
+                    + "mlento,"
+                    + "min_king,"
+                    + "max_king,"
+                    + "hora_ini,"
+                    + "hora_ini_variacion,"
+                    + "hora_fin,"
+                    + "hora_fin_variacion,"
+                    + "cada_horas,"
+                    + "dias_semana,"
+                    + "escribirCon,"
+                    + "modo_prueba,"
+                    + "tiempo_x2 "
                     + "FROM configuracion";
             ResultSet rs = statement.executeQuery(query);
             pathDrive.setText(rs.getString("path_drive"));
@@ -113,7 +226,38 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
             medio.setText(rs.getString("medio"));
             lento.setText(rs.getString("lento"));
             mlento.setText(rs.getString("mlento"));
-
+            min_king.setText(rs.getString("min_king"));
+            max_king.setText(rs.getString("max_king"));
+            hora_ini.setText(rs.getString("hora_ini"));
+            hora_ini_variacion.setText(rs.getString("hora_ini_variacion"));
+            hora_fin.setText(rs.getString("hora_fin"));
+            hora_fin_variacion.setText(rs.getString("hora_fin_variacion"));
+            cada_horas.setText(rs.getString("cada_horas"));
+            escribirCon.setSelectedValue(rs.getString("escribirCon"), false);
+            //SI ES 1 ACTIVAMOS EL CHECK DE MODO PRUEBA
+            if( Integer.parseInt(rs.getString("modo_prueba"))==1){
+                modo_prueba.setSelected(true);
+            }
+            else{
+                modo_prueba.setSelected(false);
+            }
+            //SI ES 1 ACTIVAMOS EL CHECK DE EL DOBLE DE VELOCIDAD
+            if( Integer.parseInt(rs.getString("tiempo_x2"))==1){
+                tiempo_x2.setSelected(true);
+            }
+            else{
+                tiempo_x2.setSelected(false);
+            }
+            //SI EL CAMPO DE DIAS DE LA SEMANA TIENE TEXTO SE COLOCAN LOS VALORES EN EL ELEMENTO
+            if(rs.getString("dias_semana").length()>0){
+                //DEPENDIENDO DE LOS NUMERO EN LA COLUMNA SE SELECCIONA LOS DIAS DE LA SEMANA
+                String[] array_dias_semana = rs.getString("dias_semana").split(",");
+                int[] dias = new int[array_dias_semana.length];
+                for (int ciclo = 0; ciclo < array_dias_semana.length; ciclo++) {
+                    dias[ciclo]= Integer.parseInt(array_dias_semana[ciclo]);
+                }
+                dias_semana.setSelectedIndices(dias);
+            }
             query = "SELECT id,nombre,tipo1,valor1,tipo2,valor2,tipo3,valor3,tipo4,valor4,tipo5,valor5 FROM capabilities";
             rs = statement.executeQuery(query);
             DefaultTableModel dfm=new DefaultTableModel();
@@ -148,8 +292,29 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
 
 
     private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
+        int Imodo_prueba=0;
+        int Itiempo_x2=0;
+        String Sdias_semana="";
+        if(modo_prueba.isSelected()==true){
+            Imodo_prueba=1;
+        }else{
+            Imodo_prueba=0;
+        }
+        if(tiempo_x2.isSelected()==true){
+            Itiempo_x2=1;
+        }else{
+            Itiempo_x2=0;
+        }
+        int []Idias_semana=dias_semana.getSelectedIndices();
+        for(int ciclo=0;ciclo<Idias_semana.length;ciclo++){
+            if(ciclo==0){
+                Sdias_semana=String.valueOf(Idias_semana[ciclo])+"";
+            }else if(ciclo>0){
+                Sdias_semana=Sdias_semana+","+String.valueOf(Idias_semana[ciclo])+"";
+            }
+            
+        }
         try {
-            String Slocal_remoto;
             connection = DriverManager.getConnection("jdbc:sqlite:tmt.db");
             statement = connection.createStatement();
             String Sbrowser_max;
@@ -159,7 +324,18 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
                     + "rapido='" + rapido.getText() + "',"
                     + "medio='" + medio.getText() + "',"
                     + "lento='" + lento.getText() + "',"
-                    + "mlento='" + mlento.getText() + "' "
+                    + "mlento='" + mlento.getText() + "',"
+                    + "min_king='"+min_king.getText()+"',"
+                    + "max_king='"+max_king.getText()+"',"
+                    + "hora_ini='"+hora_ini.getText()+"',"
+                    + "hora_ini_variacion='"+hora_ini_variacion.getText()+"',"
+                    + "hora_fin='"+hora_fin.getText()+"',"
+                    + "hora_fin_variacion='"+hora_fin_variacion.getText()+"',"
+                    + "cada_horas='"+cada_horas.getText()+"',"
+                    + "escribirCon='"+escribirCon.getSelectedValue()+"', "
+                    + "modo_prueba='"+Imodo_prueba+"', "
+                    + "tiempo_x2='"+Itiempo_x2+"', "
+                    + "dias_semana='"+Sdias_semana+"' "
                     + "WHERE (id=1)";
             statement.executeQuery(query);
             statement.close();
@@ -192,18 +368,45 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField cada_horas;
+    private javax.swing.JList<String> dias_semana;
+    private javax.swing.JList<String> escribirCon;
     private javax.swing.JButton guardar;
+    private javax.swing.JTextField hora_fin;
+    private javax.swing.JTextField hora_fin_variacion;
+    private javax.swing.JTextField hora_ini;
+    private javax.swing.JTextField hora_ini_variacion;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTabbedPane jTabbedPane4;
     private javax.swing.JTextField lento;
+    private javax.swing.JTextField max_king;
     private javax.swing.JTextField medio;
+    private javax.swing.JTextField min_king;
     private javax.swing.JTextField mlento;
+    private javax.swing.JCheckBox modo_prueba;
     private javax.swing.JTextField pathDrive;
     private javax.swing.JTextField rapido;
     private javax.swing.JButton seleccionarImagen;
+    private javax.swing.JCheckBox tiempo_x2;
     // End of variables declaration//GEN-END:variables
 }
