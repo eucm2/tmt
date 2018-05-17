@@ -489,7 +489,7 @@ public class hitleap extends javax.swing.JInternalFrame {
                 }
                 //SI ES MODO PRUEBA COLOCAMOS LA FECHAS PARA QUE SE EJECUTEN CADA 2 MINUTOS
                 if (modo_prueba == 1) {
-                    horaEjecutar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + hora + ":" + (minuto + cadaXcantidadHoras) + ":59");
+                    horaEjecutar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + hora + ":" + (minuto + (contadorHoras*2)) + ":59");
                 }
                 //INICIALIZAMOS EL CALENDARIO
                 calHorasEjecutar[contadorHoras] = Calendar.getInstance();
