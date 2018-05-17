@@ -699,6 +699,9 @@ public class fYoutube extends javax.swing.JInternalFrame {
 
     private void activarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activarActionPerformed
         reiniciarCronometro();
+        if (modo_prueba == 0) {
+            cronometroParaEjecutar();
+        }
     }//GEN-LAST:event_activarActionPerformed
 
     private void btnGanarPuntosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGanarPuntosActionPerformed
@@ -1010,7 +1013,6 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 if (modo_prueba == 0) {
                     //GENERAMOS LA HORA DE INICIO DE EJECUCION OSEA CADA 24 HORAS
                     horaReiniciar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + reiniciarAlasHoras + ":" + reiniciarAlasMinutos + ":" + reiniciarAlasSegundos);
-                    cronometroParaEjecutar();
                 }
                 if (modo_prueba == 1) {
                     horaReiniciar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + hora + ":" + minuto + ":59");
