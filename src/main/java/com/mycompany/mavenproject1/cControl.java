@@ -15,9 +15,14 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.HtmlEmail;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -158,6 +163,7 @@ public class cControl {
 
     public String[] compartirFB(String urlVideo, String pathImagen, String titulo, String idPub,int numeroAcompartir,String idsYaCompartidos) {
         String grupoError = "";
+        String grupoBien = "";
         int vecesCompartido=0;
         String listaIdsDeGrupos="";        
         try {
@@ -214,6 +220,7 @@ public class cControl {
                                 + urlVideo 
                                 + "\\r"
                         );
+                        grupoBien = grupoBien + " </br> " + rs.getString("nombre") + " </br>\n " + rs.getString("url") + " </br>\n ";
                         pausa(mlento);
                         driver.findElement(By.name("xhpc_message_text")).sendKeys(Keys.chord(espacio+borrar+ Keys.CONTROL, Keys.ENTER));
                         pausa(mlento);
@@ -249,7 +256,7 @@ public class cControl {
                 System.err.println(e);
             }
         }
-        return new String[] { grupoError, listaIdsDeGrupos };
+        return new String[] { grupoError, listaIdsDeGrupos,grupoBien };
     }
     
     
@@ -702,5 +709,45 @@ public class cControl {
         }
     }
 
+    public void mandaMail(String correoRecibe,String asunto,String deNombre,String mensaje){
+        String HOST_NAME = "smtp.gmail.com";
+        int PORT = 465;
+        String TEXT_PLAIN = "text/plain";
+
+        String correoEnvia="eugenio@onefocusdigital.com";
+        String password="Demo4231#@64";
+        
+        HtmlEmail email = new HtmlEmail();
+        email.setHostName(HOST_NAME);
+        email.setSmtpPort(PORT);
+        email.setSSLOnConnect(true);
+ 
+        email.setAuthentication(correoEnvia, password);
+ 
+        email.setSubject(asunto);
+        try {
+            email.setFrom(correoEnvia, deNombre, String.valueOf(StandardCharsets.UTF_8));
+        } catch (EmailException ex) {
+            Logger.getLogger(hitleap.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            email.addTo(correoRecibe);
+        } catch (EmailException ex) {
+            Logger.getLogger(hitleap.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            email.setHtmlMsg(mensaje);
+        } catch (EmailException ex) {
+            Logger.getLogger(hitleap.class.getName()).log(Level.SEVERE, null, ex);
+        }
+ 
+        try {
+            email.send();
+        } catch (EmailException ex) {
+            Logger.getLogger(hitleap.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }
 
 }

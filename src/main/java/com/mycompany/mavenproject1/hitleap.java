@@ -289,7 +289,7 @@ public class hitleap extends javax.swing.JInternalFrame {
             //SI YA NO HAY PUBLICACIONES
             if(contPublicaciones==0){
                 //MANDAMOS UNA NOTIFICACION POR CORREO
-                mandaMail("eucm2g@gmail.com","Ya no hay publicaciones para poner en hitleap","tmt","Ya no hay publicaciones para poner en hitleap");
+                c.mandaMail("eucm2g@gmail.com","Ya no hay publicaciones para poner en hitleap","tmt","Ya no hay publicaciones para poner en hitleap");
                 return;
             }
             //QUITAMOS LA ULTIMA LETRA (QUE ES UN RETURNCAR Y UN ,)
@@ -315,7 +315,7 @@ public class hitleap extends javax.swing.JInternalFrame {
         boolean resultado = c.registraVideos(listaUrlPub);
         //SI ESOS VIDEOS SE AGREGARON EXITOSAMENTE ACTUALIZAMOS EN LA BD ESOS VIDEOS
         if (resultado == true) {
-            mandaMail("eucm2g@gmail.com","Videos publicados","tmt","Se publicaron estos videos </br>"+listaPubMail+" ");
+            c.mandaMail("eucm2g@gmail.com","Videos publicados","tmt","Se publicaron estos videos </br>"+listaPubMail+" ");
             //QUERY QUE ACTUALIZA MARCA COMO PUBLICADO EL VIDEO QUE SE ACABA DE PUBLICAR EN HITLEAP
             String sqlListaPub = " update publicaciones set pub_hitleap='1' where id IN (" + ListIds + "); ";
             try (Connection conn = this.connect();
@@ -328,7 +328,7 @@ public class hitleap extends javax.swing.JInternalFrame {
             }
         }
         else{
-            mandaMail("eucm2g@gmail.com","Videos NO publicados","tmt fallo","NO se publicaron estos videos </br>"+listaPubMail+" ");
+            c.mandaMail("eucm2g@gmail.com","Videos NO publicados","tmt fallo","NO se publicaron estos videos </br>"+listaPubMail+" ");
         }
         c.pausa(mlento);
         c.cerrarNavegador();
@@ -573,46 +573,6 @@ public class hitleap extends javax.swing.JInternalFrame {
         }
     }
 
-    public void mandaMail(String correoRecibe,String asunto,String deNombre,String mensaje){
-        String HOST_NAME = "smtp.gmail.com";
-        int PORT = 465;
-        String TEXT_PLAIN = "text/plain";
-
-        String correoEnvia="eugenio@onefocusdigital.com";
-        String password="Demo4231#@64";
-        
-        HtmlEmail email = new HtmlEmail();
-        email.setHostName(HOST_NAME);
-        email.setSmtpPort(PORT);
-        email.setSSLOnConnect(true);
- 
-        email.setAuthentication(correoEnvia, password);
- 
-        email.setSubject(asunto);
-        try {
-            email.setFrom(correoEnvia, deNombre, String.valueOf(StandardCharsets.UTF_8));
-        } catch (EmailException ex) {
-            Logger.getLogger(hitleap.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            email.addTo(correoRecibe);
-        } catch (EmailException ex) {
-            Logger.getLogger(hitleap.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            email.setHtmlMsg(mensaje);
-        } catch (EmailException ex) {
-            Logger.getLogger(hitleap.class.getName()).log(Level.SEVERE, null, ex);
-        }
- 
-        try {
-            email.send();
-        } catch (EmailException ex) {
-            Logger.getLogger(hitleap.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox activar;

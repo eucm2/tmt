@@ -551,6 +551,8 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 numeroNoCompartidoFB = countLines(errorYlistaGrupos[0]);
                 //AGREGAMOS LOS GRUPOS YA COMPARTIDOS DE ESTE ARTICULO
                 actualizaYaPublicadoEnFB(errorYlistaGrupos[1],idPubCompartir);
+                //MANDAMOS MAIL CON EL ARTICULO Y EL GRUPO DONDE SE COMPARTIO
+                c.mandaMail("eucm2g@gmail.com","En fb","tmt","Se publico este videos "+urlVideo.getText()+" </br> en estos grupos"+ errorYlistaGrupos[2] +" ");
                 //SI NO ESTA SELECCIONADO GP CERRAMOS EL NAVEGADOR
                 if (checkGP.isSelected()==false) {
                     c.cerrarNavegador();
