@@ -935,7 +935,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
             "WHERE\n" +
             "publicaciones."+campo+" = 0 AND\n" +
             "publicaciones.activo = 1\n" +
-            "order by orden\n" +
+            "order BY RANDOM() \n" +
             "LIMIT 1; ";
             ResultSet rs = statement.executeQuery(query);
             String[] datos = new String[3];
