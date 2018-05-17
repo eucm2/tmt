@@ -208,6 +208,7 @@ public class cControl {
                             borrar=borrar+Keys.BACK_SPACE;
                         }
                         //ESCRIBIMOS EL TITULO Y EL VIDEO DE LA PUBLICACION
+                        /*
                         driver.findElement(By.name("xhpc_message_text")).sendKeys(
                                 titulo 
                                 + Keys.RETURN 
@@ -217,6 +218,15 @@ public class cControl {
                                 + borrar
                                 + Keys.chord(Keys.CONTROL, Keys.ENTER)
                         );
+                        */
+                        escribeTexto(driver.findElement(By.name("xhpc_message_text")),
+                                titulo 
+                                + Keys.RETURN 
+                                + urlVideo 
+                                + Keys.RETURN 
+                                + espacio
+                                + borrar
+                                + Keys.chord(Keys.CONTROL, Keys.ENTER));
                         //pausa(mlento);
                         //pausa(mlento);
                         pausa(mlento);
