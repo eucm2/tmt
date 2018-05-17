@@ -142,8 +142,10 @@ public class cControl {
     public void accedeFB(String user, String password) {
         driver.get("https://www.facebook.com/");
         if (user.length() > 0 && password.length() > 0) {
-            driver.findElement(By.xpath("//*[@id=\"email\"]")).sendKeys(user);
-            driver.findElement(By.xpath("//*[@id=\"pass\"]")).sendKeys(password);
+            escribeTexto(driver.findElement(By.xpath("//*[@id=\"email\"]")),user);
+            escribeTexto(driver.findElement(By.xpath("//*[@id=\"pass\"]")),password);
+            //driver.findElement(By.xpath("//*[@id=\"email\"]")).sendKeys(user);
+            //driver.findElement(By.xpath("//*[@id=\"pass\"]")).sendKeys(password);
             pausa(rapido);
             driver.findElement(By.xpath("//*[@id=\"pass\"]")).sendKeys(Keys.ENTER);
             //JOptionPane.showMessageDialog(null, "Elimine todos los popups de facebook y haga click en aceptar en este mensaje para continuar");
