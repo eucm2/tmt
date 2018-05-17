@@ -113,6 +113,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
             dias_semana = rs.getString("dias_semana");
             modo_prueba = Integer.parseInt(rs.getString("modo_prueba"));
             tiempo_x2 = Integer.parseInt(rs.getString("tiempo_x2"));
+            escribirCon = rs.getString("escribirCon");
             //SI EL MODO PRUEBA ESTA ACTIVO (SE EJECUTAN PUBLICACIONES CADA 2 MINUTOS)
             if(modo_prueba==1){
                 //MOSTRAMOS UN LABEL QUE AVISE QUE EL MODO PRUEBA ESTA ACTIVO
@@ -124,7 +125,8 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 lblModo.setText("Modo prueba descativo  tiempo por 2 =" + tiempo_x2);
                 lblModo.setBackground(Color.red);
             }
-
+            //INICIALIZAMOS E CONTROLADOR CON LA FORMA DE ESCRIBIR QUE ESTA EN LA BD
+            c.cControl(escribirCon);
             //CARGAMOS LOS DATOS DE CONFIGURACION COMO LA VELOCIDAD ENTRE ECCIONES Y LA URL DEL PATH DRIVER
             String queryAccesos = "SELECT "
                     + "id,"
