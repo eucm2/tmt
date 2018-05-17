@@ -12,9 +12,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.NoSuchElementException;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -43,6 +46,15 @@ public class fYoutube extends javax.swing.JInternalFrame {
     String passwordTW = "";
     String idPub = "";
     Object[] options = {"Continuar", "Detener"};
+    int hora_ini = 0;
+    int hora_ini_variacion = 0;
+    int hora_fin = 0;
+    int hora_fin_variacion = 0;
+    int cada_horas = 0;
+    String dias_semana = "";
+    String escribirCon = "";
+    int modo_prueba=0;
+    int tiempo_x2=0;
 
     private Connection connect() {
         Connection conn = null;
@@ -57,6 +69,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
     public fYoutube() {
 
         initComponents();
+        listaHorarios.getColumn("No").setMaxWidth(40);
         modelo_publicaciones.addColumn("id");
         modelo_publicaciones.addColumn("url");
         modelo_publicaciones.addColumn("titulo");
@@ -74,7 +87,16 @@ public class fYoutube extends javax.swing.JInternalFrame {
                     + "rapido,"
                     + "medio,"
                     + "lento,"
-                    + "mlento "
+                    + "mlento, "
+                    + "hora_ini, "
+                    + "hora_ini_variacion, "
+                    + "hora_fin, "
+                    + "hora_fin_variacion, "
+                    + "cada_horas, "
+                    + "dias_semana, "
+                    + "escribirCon, "
+                    + "modo_prueba, "
+                    + "tiempo_x2 "
                     + "FROM configuracion";
 
             ResultSet rs = statement.executeQuery(query);
@@ -83,6 +105,25 @@ public class fYoutube extends javax.swing.JInternalFrame {
             medio = Long.parseLong(rs.getString("medio"));
             lento = Long.parseLong(rs.getString("lento"));
             mlento = Long.parseLong(rs.getString("mlento"));
+            hora_ini = Integer.parseInt(rs.getString("hora_ini"));
+            hora_ini_variacion = Integer.parseInt(rs.getString("hora_ini_variacion"));
+            hora_fin = Integer.parseInt(rs.getString("hora_fin"));
+            hora_fin_variacion = Integer.parseInt(rs.getString("hora_fin_variacion"));
+            cada_horas = Integer.parseInt(rs.getString("cada_horas"));
+            dias_semana = rs.getString("dias_semana");
+            modo_prueba = Integer.parseInt(rs.getString("modo_prueba"));
+            tiempo_x2 = Integer.parseInt(rs.getString("tiempo_x2"));
+            //SI EL MODO PRUEBA ESTA ACTIVO (SE EJECUTAN PUBLICACIONES CADA 2 MINUTOS)
+            if(modo_prueba==1){
+                //MOSTRAMOS UN LABEL QUE AVISE QUE EL MODO PRUEBA ESTA ACTIVO
+                lblModo.setText("Modo prueba activo tiempo por 2 =" + tiempo_x2 );
+                lblModo.setBackground(Color.green);
+            }
+            //SI EL MODO PRUEBA ESTA DESACTIVO (FUNCIONA DE FORMA NORMAL)
+            else{
+                lblModo.setText("Modo prueba descativo  tiempo por 2 =" + tiempo_x2);
+                lblModo.setBackground(Color.red);
+            }
 
             //CARGAMOS LOS DATOS DE CONFIGURACION COMO LA VELOCIDAD ENTRE ECCIONES Y LA URL DEL PATH DRIVER
             String queryAccesos = "SELECT "
@@ -171,6 +212,21 @@ public class fYoutube extends javax.swing.JInternalFrame {
         jLabel15 = new javax.swing.JLabel();
         passwordGP = new javax.swing.JPasswordField();
         passwordFB = new javax.swing.JPasswordField();
+        activar = new javax.swing.JCheckBox();
+        lblHoraReiniciar = new javax.swing.JLabel();
+        btnGanarPuntos = new javax.swing.JButton();
+        horaActual = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        horaIni = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        horaFin = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        listaHorarios = new javax.swing.JTable();
+        jLabel21 = new javax.swing.JLabel();
+        tiempoFaltaEjecutar = new javax.swing.JLabel();
+        lblModo = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
 
         setTitle("Publicar");
         setInheritsPopupMenu(true);
@@ -182,12 +238,12 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 compartirVideoActionPerformed(evt);
             }
         });
-        getContentPane().add(compartirVideo, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 570, -1, -1));
+        getContentPane().add(compartirVideo, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 420, -1, -1));
 
         jLabel1.setText("URL");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 420, -1, -1));
-        getContentPane().add(urlVideo, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 420, 900, -1));
-        getContentPane().add(pathImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 480, 770, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, -1, -1));
+        getContentPane().add(urlVideo, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 270, 900, -1));
+        getContentPane().add(pathImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 330, 770, -1));
 
         buscarImagen.setText("Buscar imagen");
         buscarImagen.addActionListener(new java.awt.event.ActionListener() {
@@ -195,21 +251,21 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 buscarImagenActionPerformed(evt);
             }
         });
-        getContentPane().add(buscarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 480, -1, -1));
+        getContentPane().add(buscarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 330, -1, -1));
 
         jLabel2.setText("Path imagen");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 480, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, -1, -1));
 
         jScrollPane1.setViewportView(grupoErrores);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 660, 1050, 128));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 460, 910, 60));
 
-        jLabel3.setText("Grupo con errores");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 630, -1, -1));
+        jLabel3.setText("Grupos con errores");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 470, -1, -1));
 
         jLabel4.setText("Titulo");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 450, -1, -1));
-        getContentPane().add(titulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 450, 900, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 300, -1, -1));
+        getContentPane().add(titulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 300, 900, -1));
 
         tabla_publicaciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -240,30 +296,30 @@ public class fYoutube extends javax.swing.JInternalFrame {
         });
         jScrollPane2.setViewportView(tabla_publicaciones);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 1060, 300));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 1060, 150));
 
         jLabel5.setText("numero_veces_compartido");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 510, -1, -1));
-        getContentPane().add(numero_veces_compartido, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 510, 900, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 360, -1, -1));
+        getContentPane().add(numero_veces_compartido, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 360, 900, -1));
 
         jLabel6.setText("Compartir en");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 580, -1, -1));
-        getContentPane().add(ultima_vez_compartida, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 540, 900, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 430, -1, -1));
+        getContentPane().add(ultima_vez_compartida, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 390, 900, -1));
 
         jLabel7.setText("Ultima vez compartido");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 540, -1, -1));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 390, -1, -1));
 
         checkTW.setSelected(true);
         checkTW.setText("Twitter");
-        getContentPane().add(checkTW, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 580, -1, -1));
+        getContentPane().add(checkTW, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 430, -1, -1));
 
         checkFB.setSelected(true);
         checkFB.setText("Facebook");
-        getContentPane().add(checkFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 580, -1, -1));
+        getContentPane().add(checkFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 430, -1, -1));
 
         checkGP.setSelected(true);
         checkGP.setText("Google +");
-        getContentPane().add(checkGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 580, -1, -1));
+        getContentPane().add(checkGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 430, -1, -1));
 
         jLabel11.setText("Buscar por titulo");
         getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, -1));
@@ -337,28 +393,102 @@ public class fYoutube extends javax.swing.JInternalFrame {
         getContentPane().add(passwordGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 30, 140, -1));
         getContentPane().add(passwordFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 30, 140, -1));
 
+        activar.setText("Activar");
+        activar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                activarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(activar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 550, 70, 20));
+
+        lblHoraReiniciar.setText("horaReiniciar");
+        getContentPane().add(lblHoraReiniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 550, 360, 20));
+
+        btnGanarPuntos.setText("Ejecutar ahora");
+        btnGanarPuntos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGanarPuntosActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnGanarPuntos, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 550, -1, -1));
+
+        horaActual.setText("Hora actual");
+        getContentPane().add(horaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 590, -1, -1));
+
+        jLabel16.setText("Hora actual.............");
+        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 590, -1, -1));
+
+        horaIni.setText("Hora Inicial");
+        getContentPane().add(horaIni, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 620, -1, -1));
+
+        jLabel17.setText("Hora Inicial.............");
+        getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 620, -1, -1));
+
+        jLabel20.setText("Hora Final.......................................");
+        getContentPane().add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 590, -1, -1));
+
+        horaFin.setText("Hora Final");
+        getContentPane().add(horaFin, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 590, -1, -1));
+
+        listaHorarios.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "No", "Hora"
+            }
+        ));
+        listaHorarios.setName("listaHorarios"); // NOI18N
+        jScrollPane3.setViewportView(listaHorarios);
+
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 590, 310, 130));
+
+        jLabel21.setText("Segundos que faltan para ejeuitar");
+        getContentPane().add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 620, -1, -1));
+
+        tiempoFaltaEjecutar.setText("Tiempo a ajecutar");
+        getContentPane().add(tiempoFaltaEjecutar, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 620, -1, -1));
+
+        lblModo.setBackground(new java.awt.Color(102, 102, 255));
+        lblModo.setText("modo");
+        lblModo.setOpaque(true);
+        getContentPane().add(lblModo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 660, -1, -1));
+
+        jLabel9.setText("jLabel9");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 760, -1, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void compartirVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compartirVideoActionPerformed
+        //COMPARTIMOS LOS ARTICULOS EN FB
+        compartirPublicacion();
 
+    }//GEN-LAST:event_compartirVideoActionPerformed
+
+    public void compartirPublicacion(){
+    
         //SACAMOS EL REGISTRO SELECCIONADO
         int rowSel = tabla_publicaciones.getSelectedRow();
         //SCAMOS EL ID DE LA PUBLICACION
         String idPubCompartir = tabla_publicaciones.getValueAt(rowSel, 0).toString();
-        //SACAMOS EL NUMERO DE VECES QUE SE VA A COMPARTIR ESTE ARTICULO
+        //SACAMOS EL NUMERO DE GRUPOS EN LOS QUE SE VA A COMPARTIR ESTE ARTICULO
         int numeroCompartidasFB = 0;
         int numeroCompartidasGP = 0;
+        //NUMERO DE ARTICULOS A COMPARTIR POR TANDA
+        int numeroAcompartir=3;
+        //SI ESTA ACTIVO EL CHECKBOX DE COMPARTIR EN FB LO COMPARTIMOS EN FB
         if (checkFB.isSelected()) {
             numeroCompartidasFB = c.numeroCompartidasFB(idPubCompartir);
             if (numeroCompartidasFB == 0) {
-                int res = JOptionPane.showOptionDialog(null, "Este articulo no se compartio ninguna vez en FB\nDesea continuar con cancelar", "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+                int res = JOptionPane.showOptionDialog(null, "Este articulo no se compartira en ningun grupo de FB\nDesea continuar con cancelar", "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
                 //SI SE DIO CLICK EN DETENER NOS SALIMOS DE ESTA FUNCION
                 if (res != 0) {
                     return;
                 }
             }
         }
+        //SI ESTA ACTIVO EL CHECKBOX DE COMPARTIR EN GOOGLE+ LO COMPARTIMOS EN FB
         if (checkGP.isSelected()) {
             numeroCompartidasGP = c.numeroCompartidasGP(idPubCompartir);
             //SI EL ARTICULO NO TIENE GRUPOS DONDE COMPARTIRSE MANDAMOS UN MENAJE DE ERROR
@@ -401,9 +531,10 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 //NOS LOGUEAMOS EN FB O ESPERAMOS A QUE EL USUARIO TERMINE DE LOGUEARSE
                 c.accedeFB(userFB.getText(), passwordFB.getText());
                 //COMENZAMOS A COMPARTIR EL VIDEO
-                String grupoError = c.compartirFB(urlVideo.getText(), pathImagen.getText(), titulo.getText(), idPubCompartir);
-                grupoErrores.setText(grupoError);
-                numeroNoCompartidoFB = countLines(grupoError);
+                String [] errorYlistaGrupos = c.compartirFB(urlVideo.getText(), pathImagen.getText(), titulo.getText(), idPubCompartir,numeroAcompartir);
+                grupoErrores.setText(errorYlistaGrupos[0]);
+                numeroNoCompartidoFB = countLines(errorYlistaGrupos[0]);
+                actualizaYaPublicadoEnFB(errorYlistaGrupos[1],idPubCompartir);
             }
             //SI EL CHECK DE G+ ESTA ACTIVO PUBLICAMOS EN G+ GGGG+++++++
             if (checkGP.isSelected()) {
@@ -422,8 +553,9 @@ public class fYoutube extends javax.swing.JInternalFrame {
 
         }
 
+        
+    }
 
-    }//GEN-LAST:event_compartirVideoActionPerformed
     //NUMERO DE LINEAS DE UN STRING
     private static int countLines(String str) {
         String[] lines = str.split("\r\n|\r|\n");
@@ -543,6 +675,16 @@ public class fYoutube extends javax.swing.JInternalFrame {
         }
 
     }//GEN-LAST:event_guardarGPActionPerformed
+
+    private void activarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activarActionPerformed
+        reiniciarCronometro();
+    }//GEN-LAST:event_activarActionPerformed
+
+    private void btnGanarPuntosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGanarPuntosActionPerformed
+        
+        compartirPublicacion();
+        
+    }//GEN-LAST:event_btnGanarPuntosActionPerformed
     //COLOCAMOS EL TEXTO DE LA TABLA EN CADA INPUT TEXT
     public void asigna_tabla_publicaciones_input_text() {
         try {
@@ -654,7 +796,16 @@ public class fYoutube extends javax.swing.JInternalFrame {
             System.out.println(e.getMessage());
         }
     }
-
+    public void actualizaYaPublicadoEnFB(String listaIdsGrupos,String idPub){
+        String sql = "UPDATE publicaciones SET  ya_publicado_en_fb=ya_publicado_en_fb||'"+listaIdsGrupos+"' WHERE id='"+idPub+"'; ";
+        try (Connection conn = this.connect();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            //EJECUTAMOS EL COMANDO
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
     //EDITA FECHA DE ULTIMA VEZ QUE SE COMPARTIO
     public void editar_numero_veces_compartido(String id, String numero_veces_compartido) {
         String sql = "UPDATE publicaciones SET "
@@ -685,9 +836,195 @@ public class fYoutube extends javax.swing.JInternalFrame {
         }
     }
 
+    
+    
+    
+    //REINICIA CRONMETRO CADA 24HORAS PARA QUE LA HORA DEL DIA SE LIMPIE
+    public void reiniciarCronometro() {
+        if (activar.isSelected()) {
+            final int reiniciarAlasHoras = 23;
+            final int reiniciarAlasMinutos = 59;
+            final int reiniciarAlasSegundos = 59;
+
+            int minuto = Calendar.getInstance().get(Calendar.MINUTE);
+            int hora = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+            int ano = Calendar.getInstance().get(Calendar.YEAR);
+            int mes = Calendar.getInstance().get(Calendar.MONTH) + 1;
+            int dia = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+
+            java.util.Date horaReiniciar = null;
+            DateFormat formatoFechaHora = new SimpleDateFormat("yyyy/MM/dd kk:mm:ss");
+            try {
+                if (modo_prueba == 0) {
+                    //GENERAMOS LA HORA DE INICIO DE EJECUCION OSEA CADA 24 HORAS
+                    horaReiniciar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + reiniciarAlasHoras + ":" + reiniciarAlasMinutos + ":" + reiniciarAlasSegundos);
+                    cronometroParaEjecutar();
+                }
+                if (modo_prueba == 1) {
+                    horaReiniciar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + hora + ":" + minuto + ":59");
+                }
+            } catch (ParseException ex) {
+                Logger.getLogger(hitleap.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            final Calendar calHorasReiniciar = Calendar.getInstance();
+            calHorasReiniciar.setTime(horaReiniciar);
+            final Timer timerReiniciar = new Timer();
+            TimerTask taskReiniciar = new TimerTask() {
+                @Override
+                //INICIA EL TEMPORALIZADOR
+                public void run() {
+                    //INIZIALIZAMOS EL CALENDARIO CON LA HORA ACTUAL
+                    final Calendar calHoraActualReiniciar = Calendar.getInstance();
+                    long segundosFaltanParaReiniciar = (calHorasReiniciar.getTimeInMillis() - calHoraActualReiniciar.getTimeInMillis()) / (1000);
+                    //SI ESTA ACTIVO EL TIEMPO POR 2 EN LA BD HACEMOS QUE EL TIEMPO DE REINICIO SEA DE LA MITAD
+                    if(tiempo_x2==1){
+                        segundosFaltanParaReiniciar=segundosFaltanParaReiniciar/2;
+                    }
+                    lblHoraReiniciar.setText("Segundos que faltan para reiniciar=" + segundosFaltanParaReiniciar);
+                    //SI YA ESTAMOS EN EL MINUTO 0 EJECUTAMOS LA PUBLICACION
+                    if (segundosFaltanParaReiniciar >= 0 && segundosFaltanParaReiniciar <= 10) {
+                        //COMENZAMOS LA CUENTA REGRESIVA PARA EJECUTAR EL PUBLICAR VIDEOS
+                        cronometroParaEjecutar();
+                        c.pausa(1000 * 335);
+                        timerReiniciar.cancel();
+                        timerReiniciar.purge();
+                        //REINICIAMOS ESTE MISMO CRONOMETRO CADA 24 HORAS PARA QUE SE ACTUALICE LA HORA Y EL DIA A EJECUTAR
+                        reiniciarCronometro();
+                    }
+
+                }
+            };
+            timerReiniciar.scheduleAtFixedRate(taskReiniciar, 1000, 1000);
+        }
+    }
+
+    
+    
+    
+    int counter = 10;
+    Boolean isIt = false;
+
+    Calendar calHoraIni = Calendar.getInstance();
+    Calendar calHoraFin = Calendar.getInstance();
+    Calendar[] calHorasEjecutar = new Calendar[25];
+
+    //CALCULA EL TIEMPO ENTRE UNA EJECUCION Y OTRA
+    public void cronometroParaEjecutar() {
+        int minuto = Calendar.getInstance().get(Calendar.MINUTE);
+        int hora = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        int ano = Calendar.getInstance().get(Calendar.YEAR);
+        int mes = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        int dia = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        //CUENTA EL NUMERO DE VES QUE SE PUBLICA PARA EVITAR QUE SE PUBLIQUE MAS DE 2 VECES
+        int intNumeroPublicadas=0;
+        DateFormat formatoFechaHora = new SimpleDateFormat("yyyy/MM/dd kk:mm:ss");
+        //ASIGNAMOS LA CANTIDAD DE HORAS QUE VA A VARIAR LA HORA DE INICIO Y FIN
+        int hora_ini_variacion_res = (int) (Math.random() * (hora_ini_variacion * 2)) - hora_ini_variacion;
+        int hora_fin_variacion_res = (int) (Math.random() * (hora_fin_variacion * 2)) - hora_fin_variacion;
+        //COLOCAMOS LA HORA EN QUE VA A COMENZAR Y TERMINAL EL PROCESO
+        int hora_ini_res = hora_ini + hora_ini_variacion_res;
+        int hora_fin_res = hora_fin + hora_fin_variacion_res;
+        //LE COLOCAMOS AL CALENDARIO LA HORA INICIAL Y FINAL
+        calHoraIni.set(Calendar.HOUR_OF_DAY, hora_ini_res);
+        calHoraFin.set(Calendar.HOUR_OF_DAY, hora_fin_res);
+        //COLOCAMOS LA HORA ACTUAL EN EL LABEL
+        horaIni.setText(calHoraIni.get(Calendar.HOUR_OF_DAY) + ":" + calHoraIni.get(Calendar.MINUTE) + ":" + calHoraIni.get(Calendar.SECOND));
+        horaFin.setText(calHoraFin.get(Calendar.HOUR_OF_DAY) + ":" + calHoraFin.get(Calendar.MINUTE) + ":" + calHoraFin.get(Calendar.SECOND));
+        //INICIALIZAMOS EL MODELO DE LA TABLA
+        DefaultTableModel modelTablaConHorarios = (DefaultTableModel) listaHorarios.getModel();
+        
+        //CONTAMOS LA CANTIDAD DE REGISTROS QUE TIENE LA TLABLA
+        int rowCount = modelTablaConHorarios.getRowCount();
+        //BORRAMOS TODOS LOS REGISTROS DE LA TABLA
+        for (int i = rowCount - 1; i >= 0; i--) {
+            modelTablaConHorarios.removeRow(i);
+        }
+        //CONTADOR DE HORAS QUE PASAN ENTRE EL INICIO Y EL FINAL
+        int contadorHoras = 0;
+        java.util.Date horaEjecutar = null;
+        //BUCLE QUE LLENA LA TABLA CON LAS HORAS ENTRE EL INICIO Y EL FINAL
+        for (int cadaXcantidadHoras = hora_ini_res; cadaXcantidadHoras <= hora_fin_res; cadaXcantidadHoras = cadaXcantidadHoras + cada_horas) {
+            try {
+                //SI NO ES MODO PRUEBA HACEMOS QUE SE EJECUTEN 
+                if (modo_prueba == 0) {
+                    //GENERAMOS LA HORA DE INICIO DE EJECUCION
+                    horaEjecutar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + cadaXcantidadHoras + ":" + calHoraIni.get(Calendar.MINUTE) + ":59");
+                }
+                //SI ES MODO PRUEBA COLOCAMOS LA FECHAS PARA QUE SE EJECUTEN CADA 2 MINUTOS
+                if (modo_prueba == 1) {
+                    horaEjecutar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + hora + ":" + (minuto + cadaXcantidadHoras) + ":59");
+                }
+                //INICIALIZAMOS EL CALENDARIO
+                calHorasEjecutar[contadorHoras] = Calendar.getInstance();
+                //LE ASIGNAMOS AL CALENDARIO LA HORA DE INICIO DE JECUCION
+                calHorasEjecutar[contadorHoras].setTime(horaEjecutar);
+            } catch (ParseException ex) {
+                Logger.getLogger(hitleap.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            //ESCRIBIMOS EN LA TABLA LAS HORAS EN LAS QUE SE VA EJECUTAR
+            modelTablaConHorarios.addRow(new Object[]{"" + (contadorHoras + 1), calHorasEjecutar[contadorHoras].get(Calendar.YEAR) + "-" + calHorasEjecutar[contadorHoras].get(Calendar.MONTH) + "-" + calHorasEjecutar[contadorHoras].get(Calendar.DAY_OF_MONTH) + " " + calHorasEjecutar[contadorHoras].get(Calendar.HOUR_OF_DAY) + ":" + calHorasEjecutar[contadorHoras].get(Calendar.MINUTE) + ":" + calHorasEjecutar[contadorHoras].get(Calendar.SECOND)});
+            contadorHoras = contadorHoras + 1;
+        }
+        //CREAMOS ESTA VARIABLE PARA PODER METERLA DENDRO DEL RELOJ
+        final int contadorHorasFinal = contadorHoras;
+        //INICIALIZAMOS EL TEMPORALIZADOR
+        final Timer temporalizador = new Timer();
+        TimerTask tarea = new TimerTask() {
+            @Override
+            //INICIA EL TEMPORALIZADOR
+            public void run() {
+                //VARIABLE QUE SE USA SOLO PARA MOSTRAR 1 SIGUIENTE HORARIO A EJECUTAR
+                boolean flagSoloElPrimero = false;
+                //INICIALIZAMOS EL CALENDARIOACTUAL CON LA HORA ACTUAL
+                final Calendar calHoraActual = Calendar.getInstance();
+                //COLOCAMOS EN EL LABEL LA HORA ACTUAL
+                horaActual.setText(
+                        calHoraActual.get(Calendar.YEAR) + "/"
+                        + calHoraActual.get(Calendar.MONTH) + "/"
+                        + calHoraActual.get(Calendar.DAY_OF_MONTH) + " "
+                        + calHoraActual.get(Calendar.HOUR_OF_DAY) + ":"
+                        + calHoraActual.get(Calendar.MINUTE) + ":"
+                        + calHoraActual.get(Calendar.SECOND)
+                );
+                //CICLAMOS POR CADA HORA PUESTA (SI ALGUN HORARIO SE AJUSTA CON LA HORA ACTUAL SE EJECUTA LA CREACION DE PUBLICACIONES)
+                for (int j = 0; j < contadorHorasFinal; j++) {
+                    //SACAMOS LOS SEGUNDOS QUE FALTAN PARA EJECUTAR
+                    long segundosFaltanParaEjecutar = (calHorasEjecutar[j].getTimeInMillis() - calHoraActual.getTimeInMillis()) / (1000);
+                    //SI ESTA ACTIVA EN LA BD EN TEIMPO POR 2 EL TIEMPO QUE SE EJECUTAN LOS COCESOS SE DIVIDE ENTRE 2
+                    if(tiempo_x2==1){
+                        segundosFaltanParaEjecutar=segundosFaltanParaEjecutar/2;
+                    }
+                    if (segundosFaltanParaEjecutar > 0 && flagSoloElPrimero == false) {
+                        //MOSTRAMOS EN LABEL EL TIEMPO QUE FALTA PARA EJECUTARSE EL SIGUIENTE
+                        tiempoFaltaEjecutar.setText("" + segundosFaltanParaEjecutar);
+                        //COMO YA ENTRO ESTE YA ENTRA NINGUN OTRO
+                        flagSoloElPrimero = true;
+                    }
+                    //SI YA ESTAMOS EN EL MINUTO 0 EJECUTAMOS LA PUBLICACION
+                    if (segundosFaltanParaEjecutar >= 0 && segundosFaltanParaEjecutar <= 10) {
+                        temporalizador.cancel();
+                        temporalizador.purge();
+                        compartirPublicacion();
+                        //ESPERAMOS 35 SEGUNDOS DESPUES DE HABER PUBLICADO LOS VIDEOS PARA DAR TIEMPO AL CRONOMETRO DE REINICIO A QUE TRABAJE
+                        c.pausa(1000 * 35);
+                        //SI NO ES MODO PRUEBA SE EJECUTA DE NUEVO EL CONOMETRO PARA EJECUTAR
+                        if(modo_prueba==0){
+                            cronometroParaEjecutar();
+                        }
+                    }
+                }
+            }
+        };
+        temporalizador.scheduleAtFixedRate(tarea, 1000, 1000);
+
+    }
+
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Buscar;
+    private javax.swing.JCheckBox activar;
+    private javax.swing.JButton btnGanarPuntos;
     private javax.swing.JTextField busca_titulo;
     private javax.swing.JTextField busca_url;
     private javax.swing.JButton buscarImagen;
@@ -698,26 +1035,39 @@ public class fYoutube extends javax.swing.JInternalFrame {
     private javax.swing.JTextPane grupoErrores;
     private javax.swing.JCheckBox guardarFB;
     private javax.swing.JCheckBox guardarGP;
+    private javax.swing.JLabel horaActual;
+    private javax.swing.JLabel horaFin;
+    private javax.swing.JLabel horaIni;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel lblHoraReiniciar;
+    private javax.swing.JLabel lblModo;
+    private javax.swing.JTable listaHorarios;
     private javax.swing.JTextField numero_veces_compartido;
     private javax.swing.JPasswordField passwordFB;
     private javax.swing.JPasswordField passwordGP;
     private javax.swing.JTextField pathImagen;
     private javax.swing.JTable tabla_publicaciones;
+    private javax.swing.JLabel tiempoFaltaEjecutar;
     private javax.swing.JTextField titulo;
     private javax.swing.JTextField ultima_vez_compartida;
     private javax.swing.JTextField urlVideo;

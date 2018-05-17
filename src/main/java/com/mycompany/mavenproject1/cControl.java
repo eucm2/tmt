@@ -1,11 +1,5 @@
 package com.mycompany.mavenproject1;
 
-import java.awt.Robot;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.KeyEvent;
-import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -13,29 +7,18 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.Platform;
-import org.openqa.selenium.Capabilities;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import org.openqa.selenium.Alert;
-import org.openqa.selenium.Dimension;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
@@ -74,6 +57,7 @@ public class cControl {
             ChromeOptions optionsGoo = new ChromeOptions();
             //optionsGoo.setExperimentalOption("args", "no-sandbox");
             optionsGoo.addArguments("--no-sandbox");
+            optionsGoo.addArguments("--disable-notifications");
             //FIN EVITAMOS QUE APARESCAN NOTIFICACIONES (PERMITIR GEOLOCALIZACION)
             driver = new ChromeDriver(optionsGoo);
         } catch (NoSuchElementException e) {
@@ -162,7 +146,7 @@ public class cControl {
             driver.findElement(By.xpath("//*[@id=\"pass\"]")).sendKeys(password);
             pausa(rapido);
             driver.findElement(By.xpath("//*[@id=\"pass\"]")).sendKeys(Keys.ENTER);
-            JOptionPane.showMessageDialog(null, "Elimine todos los popups de facebook y haga click en aceptar en este mensaje para continuar");
+            //JOptionPane.showMessageDialog(null, "Elimine todos los popups de facebook y haga click en aceptar en este mensaje para continuar");
         } else {
             //PEDIMOS AL USUARIO QUE PONGA SU USUARIO Y CONTRASEÑA PARA PODER CONTINUAR
             JOptionPane.showMessageDialog(null, "Favor de loguearse en su cuenta y despues hacer click en aceptar");
@@ -170,14 +154,18 @@ public class cControl {
 
     }
 
-    public String compartirFB(String urlVideo, String pathImagen, String titulo, String idPub) {
+    public String[] compartirFB(String urlVideo, String pathImagen, String titulo, String idPub,int numeroAcompartir) {
         String grupoError = "";
         int vecesCompartido=0;
+        String listaIdsDeGrupos="";
+        
+        //SACAMOS LA LISTA DE LOS ID'S DE LOS GRUPOS QUE YA SE COMPARTIERON EN ESTE ARTICULO DE FB
+        String idsYaCompartidos=yaSeCompartioEn(idPub,"FB");
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:tmt.db");
             statement = connection.createStatement();
             statement.setQueryTimeout(20);
-            //SACAMOS LA LISTA DE TODOS LOS GRUPOS DE FACEBOOK
+            //SACAMOS LA LISTA DE TODOS LOS GRUPOS DE FACEBOOK MENOS LOS GRUPOS EN LOS QUE YA SE COMPARTIO
             String query = "  SELECT DISTINCT\n"
                     + "grupos.id,\n"
                     + "grupos.nombre,\n"
@@ -192,7 +180,9 @@ public class cControl {
                     + "WHERE\n"
                     + "grupos.activo = '1' \n"
                     + "and publicaciones.id='" + idPub + "' "
-                    + "and grupos.tipo='FB';  ";
+                    + "AND grupos.id not in ("+idsYaCompartidos+")   "
+                    + "and grupos.tipo='FB'  "
+                    + "limit "+numeroAcompartir+" ;  ";
             ResultSet rs = statement.executeQuery(query);
             //HACEMOS UN BLUCLE CON TODOS LOS GRUPOS DE FACEBOOK
             while (rs.next()) {
@@ -205,6 +195,8 @@ public class cControl {
                         alert.accept();
                     } //SI NO HAY ALERT PROCEDEMOS A ECRIBIR EL ARTICULO
                     catch (NoAlertPresentException e) {
+                        //AGREGAMOS LOS GRUPOS QUE SE VAN A GUARDAR EN GRUPOS YA PUBLICADOS
+                        listaIdsDeGrupos=listaIdsDeGrupos+","+rs.getString("id");
                         pausa(mlento);
                         String espacio="";
                         String borrar="";
@@ -223,27 +215,18 @@ public class cControl {
                                 + borrar
                                 + Keys.chord(Keys.CONTROL, Keys.ENTER)
                         );
-                        pausa(mlento);
-                        pausa(mlento);
+                        //pausa(mlento);
+                        //pausa(mlento);
                         pausa(mlento);
                         pausa(mlento);
                         vecesCompartido++;
-                        /*
-                        //SI NO HAY IMAGEN NO LA PONEMOS (POR AHORA NO FUNCIONA)
-                        if(pathImagen.length()>0){
-                            //SUBIMOS LA IMAGEN
-                            driver.findElement(By.cssSelector("*[data-testid='media-sprout']")).sendKeys(pathImagen);
-                            pausa(mlento);
-                            pausa(mlento);
-                            pausa(mlento);
-                        }
-                         */
                     }
                 } catch (NoSuchElementException e) {
                     grupoError = grupoError + rs.getString("nombre") + "\n" + rs.getString("url") + "\n";
                 } catch (Exception e) {
                     grupoError = grupoError + rs.getString("nombre") + "\n" + rs.getString("url") + "\n";
                 }
+                
             }
         } catch (NoSuchElementException e) {
             int res = JOptionPane.showOptionDialog(null, "Desea continuar o detener? \n error= " + e, "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
@@ -265,8 +248,61 @@ public class cControl {
                 System.err.println(e);
             }
         }
-        return grupoError;
+        return new String[] { grupoError, listaIdsDeGrupos };
     }
+    
+    public String yaSeCompartioEn(String idPub,String tipo) {
+        String id = "";
+        int vecesCompartido=0;
+        String ya_publicado="";
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:tmt.db");
+            statement = connection.createStatement();
+            statement.setQueryTimeout(20);
+            //SACAMOS LA LISTA DE TODOS LOS GRUPOS DE FACEBOOK
+            String query = "  SELECT " +
+            "publicaciones.id, " +
+            "publicaciones.ya_publicado_en_fb, " +
+            "publicaciones.ya_publicado_en_gp " +
+            "FROM " +
+            "publicaciones " +
+            "WHERE " +
+            "publicaciones.id = '"+idPub+"';  ";
+            ResultSet rs = statement.executeQuery(query);
+            //RETORNAMOS SOLO LOS ARTICULOS DE DE FB
+            if(tipo.equals("FB")==true){
+                return Objects.toString(rs.getString("ya_publicado_en_fb"),"");
+            }
+            //RETORNAMOS SOLO LOS ARTICULOS DE DE GP
+            else if(tipo.equals("GP")==true){
+                return Objects.toString(rs.getString("ya_publicado_en_gp"),"");
+            }
+
+        }
+        catch (NoSuchElementException e) {
+            int res = JOptionPane.showOptionDialog(null, "Desea continuar o detener? \n error= " + e, "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+            if (res == 1) {
+                driver.quit();
+            }
+        } catch (Exception e) {
+            int res = JOptionPane.showOptionDialog(null, "Desea continuar o detener? \n error= " + e, "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+            if (res == 1) {
+                driver.quit();
+            }
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                // connection close failed.
+                System.err.println(e);
+            }
+        }
+        return "";
+    }
+    
+    
     public int numeroCompartidasFB(String idPub) {
         int vecesCompartido=0;
         try {
@@ -322,7 +358,7 @@ public class cControl {
             pausa(rapido);
             driver.findElement(By.id("passwordNext")).click();
             pausa(medio);
-            JOptionPane.showMessageDialog(null, "Elimine todos los popups de G+ y haga click en aceptar en este mensaje para continuar");
+            //JOptionPane.showMessageDialog(null, "Elimine todos los popups de G+ y haga click en aceptar en este mensaje para continuar");
             pausa(rapido);
         } else {
             //PEDIMOS AL USUARIO QUE PONGA SU USUARIO Y CONTRASEÑA PARA PODER CONTINUAR
