@@ -156,13 +156,10 @@ public class cControl {
 
     }
 
-    public String[] compartirFB(String urlVideo, String pathImagen, String titulo, String idPub,int numeroAcompartir) {
+    public String[] compartirFB(String urlVideo, String pathImagen, String titulo, String idPub,int numeroAcompartir,String idsYaCompartidos) {
         String grupoError = "";
         int vecesCompartido=0;
-        String listaIdsDeGrupos="";
-        
-        //SACAMOS LA LISTA DE LOS ID'S DE LOS GRUPOS QUE YA SE COMPARTIERON EN ESTE ARTICULO DE FB
-        String idsYaCompartidos=yaSeCompartioEn(idPub,"FB");
+        String listaIdsDeGrupos="";        
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:tmt.db");
             statement = connection.createStatement();
@@ -186,6 +183,9 @@ public class cControl {
                     + "and grupos.tipo='FB'  "
                     + "limit "+numeroAcompartir+" ;  ";
             ResultSet rs = statement.executeQuery(query);
+            if(rs.isBeforeFirst()==false){
+                return null;
+            }
             //HACEMOS UN BLUCLE CON TODOS LOS GRUPOS DE FACEBOOK
             while (rs.next()) {
                 try {
@@ -208,17 +208,6 @@ public class cControl {
                             borrar=borrar+Keys.BACK_SPACE;
                         }
                         //ESCRIBIMOS EL TITULO Y EL VIDEO DE LA PUBLICACION
-                        /*
-                        driver.findElement(By.name("xhpc_message_text")).sendKeys(
-                                titulo 
-                                + Keys.RETURN 
-                                + urlVideo 
-                                + Keys.RETURN 
-                                + espacio
-                                + borrar
-                                + Keys.chord(Keys.CONTROL, Keys.ENTER)
-                        );
-                        */
                         escribeTexto(driver.findElement(By.name("xhpc_message_text")),
                                 titulo 
                                 + "\\r"
@@ -226,12 +215,9 @@ public class cControl {
                                 + "\\r"
                         );
                         pausa(mlento);
-                        pausa(mlento);
                         driver.findElement(By.name("xhpc_message_text")).sendKeys(Keys.chord(espacio+borrar+ Keys.CONTROL, Keys.ENTER));
                         pausa(mlento);
-                        //driver.findElement(By.name("xhpc_message_text")).sendKeys(Keys.chord(Keys.CONTROL, Keys.ENTER));
-                        //pausa(mlento);
-                        //pausa(mlento);
+                        pausa(mlento);
                         pausa(mlento);
                         pausa(mlento);
                         vecesCompartido++;
@@ -266,56 +252,6 @@ public class cControl {
         return new String[] { grupoError, listaIdsDeGrupos };
     }
     
-    public String yaSeCompartioEn(String idPub,String tipo) {
-        String id = "";
-        int vecesCompartido=0;
-        String ya_publicado="";
-        try {
-            connection = DriverManager.getConnection("jdbc:sqlite:tmt.db");
-            statement = connection.createStatement();
-            statement.setQueryTimeout(20);
-            //SACAMOS LA LISTA DE TODOS LOS GRUPOS DE FACEBOOK
-            String query = "  SELECT " +
-            "publicaciones.id, " +
-            "publicaciones.ya_publicado_en_fb, " +
-            "publicaciones.ya_publicado_en_gp " +
-            "FROM " +
-            "publicaciones " +
-            "WHERE " +
-            "publicaciones.id = '"+idPub+"';  ";
-            ResultSet rs = statement.executeQuery(query);
-            //RETORNAMOS SOLO LOS ARTICULOS DE DE FB
-            if(tipo.equals("FB")==true){
-                return Objects.toString(rs.getString("ya_publicado_en_fb"),"");
-            }
-            //RETORNAMOS SOLO LOS ARTICULOS DE DE GP
-            else if(tipo.equals("GP")==true){
-                return Objects.toString(rs.getString("ya_publicado_en_gp"),"");
-            }
-
-        }
-        catch (NoSuchElementException e) {
-            int res = JOptionPane.showOptionDialog(null, "Desea continuar o detener? \n error= " + e, "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-            if (res == 1) {
-                driver.quit();
-            }
-        } catch (Exception e) {
-            int res = JOptionPane.showOptionDialog(null, "Desea continuar o detener? \n error= " + e, "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-            if (res == 1) {
-                driver.quit();
-            }
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                // connection close failed.
-                System.err.println(e);
-            }
-        }
-        return "";
-    }
     
     
     public int numeroCompartidasFB(String idPub) {

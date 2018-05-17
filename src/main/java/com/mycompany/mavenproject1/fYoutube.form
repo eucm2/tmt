@@ -235,7 +235,6 @@
     </Component>
     <Component class="javax.swing.JCheckBox" name="checkTW">
       <Properties>
-        <Property name="selected" type="boolean" value="true"/>
         <Property name="text" type="java.lang.String" value="Twitter"/>
       </Properties>
       <Constraints>
@@ -257,7 +256,6 @@
     </Component>
     <Component class="javax.swing.JCheckBox" name="checkGP">
       <Properties>
-        <Property name="selected" type="boolean" value="true"/>
         <Property name="text" type="java.lang.String" value="Google +"/>
       </Properties>
       <Constraints>

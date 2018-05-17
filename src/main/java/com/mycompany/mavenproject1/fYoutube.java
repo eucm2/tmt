@@ -16,19 +16,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.Select;
-import sun.util.calendar.BaseCalendar.Date;
 
 public class fYoutube extends javax.swing.JInternalFrame {
 
@@ -311,7 +307,6 @@ public class fYoutube extends javax.swing.JInternalFrame {
         jLabel7.setText("Ultima vez compartido");
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 390, -1, -1));
 
-        checkTW.setSelected(true);
         checkTW.setText("Twitter");
         getContentPane().add(checkTW, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 430, -1, -1));
 
@@ -319,7 +314,6 @@ public class fYoutube extends javax.swing.JInternalFrame {
         checkFB.setText("Facebook");
         getContentPane().add(checkFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 430, -1, -1));
 
-        checkGP.setSelected(true);
         checkGP.setText("Google +");
         getContentPane().add(checkGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 430, -1, -1));
 
@@ -464,16 +458,25 @@ public class fYoutube extends javax.swing.JInternalFrame {
 
     private void compartirVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compartirVideoActionPerformed
         //COMPARTIMOS LOS ARTICULOS EN FB
-        compartirPublicacion();
+        compartirPublicacion("manual");
 
     }//GEN-LAST:event_compartirVideoActionPerformed
 
-    public void compartirPublicacion(){
-    
-        //SACAMOS EL REGISTRO SELECCIONADO
-        int rowSel = tabla_publicaciones.getSelectedRow();
-        //SCAMOS EL ID DE LA PUBLICACION
-        String idPubCompartir = tabla_publicaciones.getValueAt(rowSel, 0).toString();
+    public void compartirPublicacion(String ejecutadoDeForma){
+        String idPubCompartir="";
+        //SI LA FORMA DE COMPARTIR FUE DE FORMA MANUAL OSEA CON UN CLICK SE EJECUTA EL REGISTRO SELECCIONADO
+        if(ejecutadoDeForma.equals("manual")){
+            //SACAMOS EL REGISTRO SELECCIONADO
+            int rowSel = tabla_publicaciones.getSelectedRow();
+            //SCAMOS EL ID DE LA PUBLICACION
+            idPubCompartir = tabla_publicaciones.getValueAt(rowSel, 0).toString();
+        }
+        //SI EL COMPARTIR VIENE DESE CRONOMETRO SE SELECCIONA EL SIGUIENTE ARTICULO EN LA LISTA
+        else if(ejecutadoDeForma.equals("cronometro")){
+            idPubCompartir = sigArtAcomparir("FB");
+            //FILTRAMOS LA TABLA POR ESTE ID
+            buscarTablaPorId(idPubCompartir);
+        }
         //SACAMOS EL NUMERO DE GRUPOS EN LOS QUE SE VA A COMPARTIR ESTE ARTICULO
         int numeroCompartidasFB = 0;
         int numeroCompartidasGP = 0;
@@ -509,7 +512,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
         //EDITAMOS EN LA BD LA FECHA DE LA ULTIMA VEZ PUBLICADO (OSEA HOY)
         editar_ultima_vez(idPubCompartir, fechaHoy);
         //ACTUALIZAMOS EL JTABLE, EL REGISTRO DE ESTA PUBLICACION CON LA FECHA DE HOY
-        tabla_publicaciones.setValueAt(fechaHoy, rowSel, 5);
+        //tabla_publicaciones.setValueAt(fechaHoy, rowSel, 5);
         //VARIABLE QUE ALAMACENA LOS INPUTS QUE NO SE HAN PUESTO Y MUESTRA UN MENSAJE TEXTAREA CON ESOS GRUPOS
         String mensajeError = "";
         //VALIDAMOS QUE EL ARTICULO TENGA TITULO Y URL
@@ -532,11 +535,26 @@ public class fYoutube extends javax.swing.JInternalFrame {
             if (checkFB.isSelected()) {
                 //NOS LOGUEAMOS EN FB O ESPERAMOS A QUE EL USUARIO TERMINE DE LOGUEARSE
                 c.accedeFB(userFB.getText(), passwordFB.getText());
+                //SACAMOS LA LISTA DE LOS ID'S DE LOS GRUPOS QUE YA SE COMPARTIERON EN ESTE ARTICULO DE FB
+                String idsYaCompartidos=yaSeCompartioEn(idPubCompartir,"FB");
                 //COMENZAMOS A COMPARTIR EL VIDEO
-                String [] errorYlistaGrupos = c.compartirFB(urlVideo.getText(), pathImagen.getText(), titulo.getText(), idPubCompartir,numeroAcompartir);
+                String [] errorYlistaGrupos = c.compartirFB(urlVideo.getText(), pathImagen.getText(), titulo.getText(), idPubCompartir,numeroAcompartir,idsYaCompartidos);
+                if (errorYlistaGrupos == null) {
+                    //ACTUALIZAMOS ESTE ARTICULO Y LO MARCAMOS COMO YA COMPARTIDO
+                    articuloYaCompartido(idPubCompartir,"FB");
+                    //CERRAMOS EL NAVEGADOR
+                    c.cerrarNavegador();
+                    //COMO ESTE ARTICULO YA ESTA COMPARTIDO REGRESAMOS AL PRINCIPIO A COMPARTIR EL SIGUIENTE
+                    compartirPublicacion("cronometro");
+                }
                 grupoErrores.setText(errorYlistaGrupos[0]);
                 numeroNoCompartidoFB = countLines(errorYlistaGrupos[0]);
+                //AGREGAMOS LOS GRUPOS YA COMPARTIDOS DE ESTE ARTICULO
                 actualizaYaPublicadoEnFB(errorYlistaGrupos[1],idPubCompartir);
+                //SI NO ESTA SELECCIONADO GP CERRAMOS EL NAVEGADOR
+                if (checkGP.isSelected()==false) {
+                    c.cerrarNavegador();
+                }
             }
             //SI EL CHECK DE G+ ESTA ACTIVO PUBLICAMOS EN G+ GGGG+++++++
             if (checkGP.isSelected()) {
@@ -547,12 +565,13 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 grupoErrores.setText(grupoErrores.getText() + grupoError);
                 numeroNoCompartidoGP = countLines(grupoError);
             }
+            /*
             //SUMAMOS LAS COMPARTIDAS MENOS LAS NO COMPARTIDAS
             int totalCompartidas = numeroCompartidasFB + numeroCompartidasGP - numeroNoCompartidoFB - numeroNoCompartidoGP;
             editar_numero_veces_compartido(idPubCompartir, "" + totalCompartidas + "");
             int selRow = tabla_publicaciones.getSelectedRow();
             tabla_publicaciones.setValueAt(totalCompartidas, selRow, 4);
-
+            */
         }
 
         
@@ -684,7 +703,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
 
     private void btnGanarPuntosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGanarPuntosActionPerformed
         
-        compartirPublicacion();
+        compartirPublicacion("manual");
         
     }//GEN-LAST:event_btnGanarPuntosActionPerformed
     //COLOCAMOS EL TEXTO DE LA TABLA EN CADA INPUT TEXT
@@ -726,6 +745,13 @@ public class fYoutube extends javax.swing.JInternalFrame {
         carga_tabla_publicaciones(where);
     }
 
+    public void buscarTablaPorId(String id) {
+        String where = "";
+        where = where + " WHERE id = '" + id + "' ";
+        carga_tabla_publicaciones(where);
+    }
+
+    
     //CARGA PUBLICACIONES
     public void carga_tabla_publicaciones(String where) {
         String Dato[] = new String[6];
@@ -798,6 +824,26 @@ public class fYoutube extends javax.swing.JInternalFrame {
             System.out.println(e.getMessage());
         }
     }
+    //ACTUALIZAMOS ESTE ARTICULO Y LO MARCAMOS COMO YA COMPARTIDO
+    public void articuloYaCompartido(String idPubCompartir,String tipo){
+        String campo="";
+        //DEPENDIENDO DE LA RED SOCIAL ENVIA SE ACTUALIZA EL CAMPO EN ESPESIFICO
+        if(tipo.equals("FB")){
+            campo="terminado_compartir_fb";
+        }else if(tipo.equals("GP")){
+            campo="terminado_compartir_gp";
+        }
+        String sql = "UPDATE publicaciones SET "
+                + campo + " = '1'  "
+                + "WHERE id = " + idPubCompartir;
+        try (Connection conn = this.connect();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            //EJECUTAMOS EL COMANDO
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }        
+    }
     public void actualizaYaPublicadoEnFB(String listaIdsGrupos,String idPub){
         String sql = "UPDATE publicaciones SET  ya_publicado_en_fb=ya_publicado_en_fb||'"+listaIdsGrupos+"' WHERE id='"+idPub+"'; ";
         try (Connection conn = this.connect();
@@ -807,6 +853,110 @@ public class fYoutube extends javax.swing.JInternalFrame {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+    //ENTREGAMOS UN STRING SEPARADO POR COMAS DE TODOS LOS GRUPOS DONDE YA SE PUBLICO UN ARTICULO
+    public String yaSeCompartioEn(String idPub,String tipo) {
+        String id = "";
+        int vecesCompartido=0;
+        String ya_publicado="";
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:tmt.db");
+            statement = connection.createStatement();
+            statement.setQueryTimeout(20);
+            //SACAMOS LA LISTA DE TODOS LOS GRUPOS DE FACEBOOK
+            String query = "  SELECT " +
+            "publicaciones.id, " +
+            "publicaciones.ya_publicado_en_fb, " +
+            "publicaciones.ya_publicado_en_gp " +
+            "FROM " +
+            "publicaciones " +
+            "WHERE " +
+            "publicaciones.id = '"+idPub+"';  ";
+            ResultSet rs = statement.executeQuery(query);
+            //RETORNAMOS SOLO LOS ARTICULOS DE DE FB
+            if(tipo.equals("FB")==true){
+                return Objects.toString(rs.getString("ya_publicado_en_fb"),"");
+            }
+            //RETORNAMOS SOLO LOS ARTICULOS DE DE GP
+            else if(tipo.equals("GP")==true){
+                return Objects.toString(rs.getString("ya_publicado_en_gp"),"");
+            }
+
+        }
+        catch (NoSuchElementException e) {
+            int res = JOptionPane.showOptionDialog(null, "Desea continuar o detener? \n error= " + e, "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+            if (res == 1) {
+                driver.quit();
+            }
+        } catch (Exception e) {
+            int res = JOptionPane.showOptionDialog(null, "Desea continuar o detener? \n error= " + e, "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+            if (res == 1) {
+                driver.quit();
+            }
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                // connection close failed.
+                System.err.println(e);
+            }
+        }
+        return "";
+    }
+    //ENTREGAMOS EL ID DEL ARTICULO QUE AUN NO SE HA PUBLICADO EN TODOS LOS GRUPOS
+    public String sigArtAcomparir(String tipo) {
+        
+        String campo="";
+        //DEPENDIENDO DE LA RED SOCIAL ENVIA SE ACTUALIZA EL CAMPO EN ESPESIFICO
+        if(tipo.equals("FB")){
+            campo="terminado_compartir_fb";
+        }else if(tipo.equals("GP")){
+            campo="terminado_compartir_gp";
+        }
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:tmt.db");
+            statement = connection.createStatement();
+            statement.setQueryTimeout(20);
+            //SACAMOS LA LISTA DE TODOS LOS GRUPOS DE FACEBOOK 
+            String query = " SELECT\n" +
+            "publicaciones.id,\n" +
+            "publicaciones.titulo,\n" +
+            "publicaciones.imagen,\n" +
+            "publicaciones.url,\n" +
+            "publicaciones.orden\n" +
+            "FROM publicaciones\n" +
+            "WHERE\n" +
+            "publicaciones."+campo+" = 0 AND\n" +
+            "publicaciones.activo = 1\n" +
+            "order by orden\n" +
+            "LIMIT 1; ";
+            ResultSet rs = statement.executeQuery(query);
+            String[] datos = new String[3];
+            return rs.getString("id");
+        }
+        catch (NoSuchElementException e) {
+            int res = JOptionPane.showOptionDialog(null, "Desea continuar o detener? \n error= " + e, "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+            if (res == 1) {
+                driver.quit();
+            }
+        } catch (Exception e) {
+            int res = JOptionPane.showOptionDialog(null, "Desea continuar o detener? \n error= " + e, "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+            if (res == 1) {
+                driver.quit();
+            }
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                // connection close failed.
+                System.err.println(e);
+            }
+        }
+        return "";
     }
     //EDITA FECHA DE ULTIMA VEZ QUE SE COMPARTIO
     public void editar_numero_veces_compartido(String id, String numero_veces_compartido) {
@@ -1006,7 +1156,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
                     if (segundosFaltanParaEjecutar >= 0 && segundosFaltanParaEjecutar <= 10) {
                         temporalizador.cancel();
                         temporalizador.purge();
-                        compartirPublicacion();
+                        compartirPublicacion("cronometro");
                         //ESPERAMOS 35 SEGUNDOS DESPUES DE HABER PUBLICADO LOS VIDEOS PARA DAR TIEMPO AL CRONOMETRO DE REINICIO A QUE TRABAJE
                         c.pausa(1000 * 35);
                         //SI NO ES MODO PRUEBA SE EJECUTA DE NUEVO EL CONOMETRO PARA EJECUTAR
