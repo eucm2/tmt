@@ -221,12 +221,15 @@ public class cControl {
                         */
                         escribeTexto(driver.findElement(By.name("xhpc_message_text")),
                                 titulo 
-                                + Keys.RETURN 
+                                + "\\r"
                                 + urlVideo 
-                                + Keys.RETURN 
-                                + espacio
-                                + borrar
-                                + Keys.chord(Keys.CONTROL, Keys.ENTER));
+                                + "\\r"
+                        );
+                        pausa(mlento);
+                        pausa(mlento);
+                        driver.findElement(By.name("xhpc_message_text")).sendKeys(Keys.chord(espacio+borrar+ Keys.CONTROL, Keys.ENTER));
+                        pausa(mlento);
+                        //driver.findElement(By.name("xhpc_message_text")).sendKeys(Keys.chord(Keys.CONTROL, Keys.ENTER));
                         //pausa(mlento);
                         //pausa(mlento);
                         pausa(mlento);
@@ -697,11 +700,6 @@ public class cControl {
         else if(escribirCon.equals("javascript")){
             JavascriptExecutor js = (JavascriptExecutor) driver;
             js.executeScript("arguments[0].value='"+texto+"';", elementoWeb);
-        }
-    }
-    public void escribeTexto(WebElement elementoWeb,Keys tecla){
-        if(escribirCon.equals("sendkeys") || escribirCon.equals("sendkeys")){
-            elementoWeb.sendKeys(tecla);
         }
     }
     //PONEMOS LOS VIDEOS LE LOS SLOTS DE HITLEAP
