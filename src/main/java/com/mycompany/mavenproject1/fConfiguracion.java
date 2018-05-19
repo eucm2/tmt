@@ -66,6 +66,29 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
         jLabel16 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         escribirCon = new javax.swing.JList<>();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel17 = new javax.swing.JLabel();
+        hora_ini_rs = new javax.swing.JTextField();
+        jLabel18 = new javax.swing.JLabel();
+        hora_ini_variacion_rs = new javax.swing.JTextField();
+        jLabel19 = new javax.swing.JLabel();
+        cada_horas_rs = new javax.swing.JTextField();
+        jLabel20 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        escribirCon_rs = new javax.swing.JList<>();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        hora_fin_rs = new javax.swing.JTextField();
+        hora_fin_variacion_rs = new javax.swing.JTextField();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        dias_semana_rs = new javax.swing.JList<>();
+        jLabel23 = new javax.swing.JLabel();
+        modo_prueba_rs = new javax.swing.JCheckBox();
+        tiempo_x2_rs = new javax.swing.JCheckBox();
+        jLabel24 = new javax.swing.JLabel();
+        cantidad_comparir_fb = new javax.swing.JTextField();
+        jLabel25 = new javax.swing.JLabel();
+        cantidad_comparir_gp = new javax.swing.JTextField();
 
         setTitle("Configuracion General");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -182,6 +205,68 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
 
         jTabbedPane4.addTab("Hitleap", jPanel3);
 
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel17.setText("Hora inicial....................");
+        jPanel4.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+        jPanel4.add(hora_ini_rs, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 20, 110, -1));
+
+        jLabel18.setText("Hora inicial variacion.......");
+        jPanel4.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, -1, -1));
+        jPanel4.add(hora_ini_variacion_rs, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, 110, -1));
+
+        jLabel19.setText("Cada hora......................");
+        jPanel4.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, -1));
+        jPanel4.add(cada_horas_rs, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 80, 110, -1));
+
+        jLabel20.setText("Escribir con....................");
+        jPanel4.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, -1, -1));
+
+        escribirCon_rs.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "javascript", "sendkeys" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane3.setViewportView(escribirCon_rs);
+
+        jPanel4.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 110, 110, 50));
+
+        jLabel21.setText("Hora final................");
+        jPanel4.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 20, -1, -1));
+
+        jLabel22.setText("Hora final variacion...");
+        jPanel4.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 50, -1, -1));
+        jPanel4.add(hora_fin_rs, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, 110, -1));
+        jPanel4.add(hora_fin_variacion_rs, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 50, 110, -1));
+
+        dias_semana_rs.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane4.setViewportView(dias_semana_rs);
+
+        jPanel4.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 100, 110, -1));
+
+        jLabel23.setText("Dias de la semana...");
+        jPanel4.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 110, -1, -1));
+
+        modo_prueba_rs.setText("Modo prueba");
+        jPanel4.add(modo_prueba_rs, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, -1, -1));
+
+        tiempo_x2_rs.setText("Tiempo x 2");
+        jPanel4.add(tiempo_x2_rs, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 250, -1, -1));
+
+        jLabel24.setText("Cantidad a compartir fb...");
+        jPanel4.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, -1));
+        jPanel4.add(cantidad_comparir_fb, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 180, 110, -1));
+
+        jLabel25.setText("Cantidad a compartir gp...");
+        jPanel4.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
+        jPanel4.add(cantidad_comparir_gp, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 220, 110, -1));
+
+        jTabbedPane4.addTab("Redes sociales", jPanel4);
+
         getContentPane().add(jTabbedPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 630, 310));
 
         pack();
@@ -218,7 +303,18 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
                     + "dias_semana,"
                     + "escribirCon,"
                     + "modo_prueba,"
-                    + "tiempo_x2 "
+                    + "tiempo_x2, "
+                    + "hora_ini_rs,"
+                    + "hora_ini_variacion_rs,"
+                    + "hora_fin_rs,"
+                    + "hora_fin_variacion_rs,"
+                    + "cada_horas_rs,"
+                    + "dias_semana_rs,"
+                    + "escribirCon_rs,"
+                    + "modo_prueba_rs,"
+                    + "tiempo_x2_rs,"
+                    + "cantidad_comparir_fb,"
+                    + "cantidad_comparir_gp "
                     + "FROM configuracion";
             ResultSet rs = statement.executeQuery(query);
             pathDrive.setText(rs.getString("path_drive"));
@@ -234,6 +330,8 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
             hora_fin_variacion.setText(rs.getString("hora_fin_variacion"));
             cada_horas.setText(rs.getString("cada_horas"));
             escribirCon.setSelectedValue(rs.getString("escribirCon"), false);
+            cantidad_comparir_fb.setText(rs.getString("cantidad_comparir_fb"));
+            cantidad_comparir_gp.setText(rs.getString("cantidad_comparir_gp"));
             //SI ES 1 ACTIVAMOS EL CHECK DE MODO PRUEBA
             if( Integer.parseInt(rs.getString("modo_prueba"))==1){
                 modo_prueba.setSelected(true);
@@ -258,6 +356,40 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
                 }
                 dias_semana.setSelectedIndices(dias);
             }
+            
+            hora_ini_rs.setText(rs.getString("hora_ini_rs"));
+            hora_ini_variacion_rs.setText(rs.getString("hora_ini_variacion_rs"));
+            hora_fin_rs.setText(rs.getString("hora_fin_rs"));
+            hora_fin_variacion_rs.setText(rs.getString("hora_fin_variacion_rs"));
+            cada_horas_rs.setText(rs.getString("cada_horas_rs"));
+            escribirCon_rs.setSelectedValue(rs.getString("escribirCon_rs"), false);
+            //SI ES 1 ACTIVAMOS EL CHECK DE MODO PRUEBA
+            if( Integer.parseInt(rs.getString("modo_prueba_rs"))==1){
+                modo_prueba_rs.setSelected(true);
+            }
+            else{
+                modo_prueba_rs.setSelected(false);
+            }
+            //SI ES 1 ACTIVAMOS EL CHECK DE EL DOBLE DE VELOCIDAD
+            if( Integer.parseInt(rs.getString("tiempo_x2_rs"))==1){
+                tiempo_x2_rs.setSelected(true);
+            }
+            else{
+                tiempo_x2_rs.setSelected(false);
+            }
+            //SI EL CAMPO DE DIAS DE LA SEMANA TIENE TEXTO SE COLOCAN LOS VALORES EN EL ELEMENTO
+            if(rs.getString("dias_semana_rs").length()>0){
+                //DEPENDIENDO DE LOS NUMERO EN LA COLUMNA SE SELECCIONA LOS DIAS DE LA SEMANA
+                String[] array_dias_semana_rs = rs.getString("dias_semana_rs").split(",");
+                int[] dias_rs = new int[array_dias_semana_rs.length];
+                for (int ciclo_rs = 0; ciclo_rs < array_dias_semana_rs.length; ciclo_rs++) {
+                    dias_rs[ciclo_rs]= Integer.parseInt(array_dias_semana_rs[ciclo_rs]);
+                }
+                dias_semana_rs.setSelectedIndices(dias_rs);
+            }
+
+            
+            
             query = "SELECT id,nombre,tipo1,valor1,tipo2,valor2,tipo3,valor3,tipo4,valor4,tipo5,valor5 FROM capabilities";
             rs = statement.executeQuery(query);
             DefaultTableModel dfm=new DefaultTableModel();
@@ -314,28 +446,63 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
             }
             
         }
+        
+        int Imodo_prueba_rs=0;
+        int Itiempo_x2_rs=0;
+        String Sdias_semana_rs="";
+        if(modo_prueba_rs.isSelected()==true){
+            Imodo_prueba_rs=1;
+        }else{
+            Imodo_prueba_rs=0;
+        }
+        if(tiempo_x2_rs.isSelected()==true){
+            Itiempo_x2_rs=1;
+        }else{
+            Itiempo_x2_rs=0;
+        }
+        int []Idias_semana_rs=dias_semana_rs.getSelectedIndices();
+        for(int ciclo_rs=0;ciclo_rs<Idias_semana_rs.length;ciclo_rs++){
+            if(ciclo_rs==0){
+                Sdias_semana_rs=String.valueOf(Idias_semana_rs[ciclo_rs])+"";
+            }else if(ciclo_rs>0){
+                Sdias_semana_rs=Sdias_semana_rs+","+String.valueOf(Idias_semana_rs[ciclo_rs])+"";
+            }
+            
+        }
+        
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:tmt.db");
             statement = connection.createStatement();
             String Sbrowser_max;
             //GUARDAMOS LOS DATOS DE LA COMPRA
-            String query = "UPDATE configuracion SET "
-                    + "path_drive='" + pathDrive.getText() + "', "
-                    + "rapido='" + rapido.getText() + "',"
-                    + "medio='" + medio.getText() + "',"
-                    + "lento='" + lento.getText() + "',"
-                    + "mlento='" + mlento.getText() + "',"
-                    + "min_king='"+min_king.getText()+"',"
-                    + "max_king='"+max_king.getText()+"',"
-                    + "hora_ini='"+hora_ini.getText()+"',"
-                    + "hora_ini_variacion='"+hora_ini_variacion.getText()+"',"
-                    + "hora_fin='"+hora_fin.getText()+"',"
-                    + "hora_fin_variacion='"+hora_fin_variacion.getText()+"',"
+            String query = "UPDATE configuracion SET \n"
+                    + "path_drive='" + pathDrive.getText() + "',\n "
+                    + "rapido='" + rapido.getText() + "',\n"
+                    + "medio='" + medio.getText() + "',\n"
+                    + "lento='" + lento.getText() + "',\n"
+                    + "mlento='" + mlento.getText() + "',\n"
+                    + "min_king='"+min_king.getText()+"',\n"
+                    + "max_king='"+max_king.getText()+"',\n"
+                    + "hora_ini='"+hora_ini.getText()+"',\n"
+                    + "hora_ini_variacion='"+hora_ini_variacion.getText()+"',\n"
+                    + "hora_fin='"+hora_fin.getText()+"',\n"
+                    + "hora_fin_variacion='"+hora_fin_variacion.getText()+"',\n"
                     + "cada_horas='"+cada_horas.getText()+"',"
-                    + "escribirCon='"+escribirCon.getSelectedValue()+"', "
-                    + "modo_prueba='"+Imodo_prueba+"', "
-                    + "tiempo_x2='"+Itiempo_x2+"', "
-                    + "dias_semana='"+Sdias_semana+"' "
+                    + "escribirCon='"+escribirCon.getSelectedValue()+"',\n"
+                    + "modo_prueba='"+Imodo_prueba+"',\n"
+                    + "tiempo_x2='"+Itiempo_x2+"',\n"
+                    + "dias_semana='"+Sdias_semana+"',\n"
+                    + "hora_ini_rs='"+hora_ini_rs.getText()+"',\n"
+                    + "hora_ini_variacion_rs='"+hora_ini_variacion_rs.getText()+"',\n"
+                    + "hora_fin_rs='"+hora_fin_rs.getText()+"',\n"
+                    + "hora_fin_variacion_rs='"+hora_fin_variacion_rs.getText()+"',\n"
+                    + "cada_horas_rs='"+cada_horas_rs.getText()+"',\n"
+                    + "escribirCon_rs='"+escribirCon_rs.getSelectedValue()+"',\n"
+                    + "modo_prueba_rs='"+Imodo_prueba_rs+"',\n"
+                    + "tiempo_x2_rs='"+Itiempo_x2_rs+"',\n"
+                    + "dias_semana_rs='"+Sdias_semana_rs+"',\n"
+                    + "cantidad_comparir_fb='"+cantidad_comparir_fb.getText()+"',\n"
+                    + "cantidad_comparir_gp='"+cantidad_comparir_gp.getText()+"'\n"
                     + "WHERE (id=1)";
             statement.executeQuery(query);
             statement.close();
@@ -369,13 +536,22 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField cada_horas;
+    private javax.swing.JTextField cada_horas_rs;
+    private javax.swing.JTextField cantidad_comparir_fb;
+    private javax.swing.JTextField cantidad_comparir_gp;
     private javax.swing.JList<String> dias_semana;
+    private javax.swing.JList<String> dias_semana_rs;
     private javax.swing.JList<String> escribirCon;
+    private javax.swing.JList<String> escribirCon_rs;
     private javax.swing.JButton guardar;
     private javax.swing.JTextField hora_fin;
+    private javax.swing.JTextField hora_fin_rs;
     private javax.swing.JTextField hora_fin_variacion;
+    private javax.swing.JTextField hora_fin_variacion_rs;
     private javax.swing.JTextField hora_ini;
+    private javax.swing.JTextField hora_ini_rs;
     private javax.swing.JTextField hora_ini_variacion;
+    private javax.swing.JTextField hora_ini_variacion_rs;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -384,7 +560,16 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -395,8 +580,11 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTabbedPane4;
     private javax.swing.JTextField lento;
     private javax.swing.JTextField max_king;
@@ -404,9 +592,11 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
     private javax.swing.JTextField min_king;
     private javax.swing.JTextField mlento;
     private javax.swing.JCheckBox modo_prueba;
+    private javax.swing.JCheckBox modo_prueba_rs;
     private javax.swing.JTextField pathDrive;
     private javax.swing.JTextField rapido;
     private javax.swing.JButton seleccionarImagen;
     private javax.swing.JCheckBox tiempo_x2;
+    private javax.swing.JCheckBox tiempo_x2_rs;
     // End of variables declaration//GEN-END:variables
 }

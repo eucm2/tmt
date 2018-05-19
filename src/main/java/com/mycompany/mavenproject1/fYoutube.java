@@ -42,16 +42,17 @@ public class fYoutube extends javax.swing.JInternalFrame {
     String passwordTW = "";
     String idPub = "";
     Object[] options = {"Continuar", "Detener"};
-    int hora_ini = 0;
-    int hora_ini_variacion = 0;
-    int hora_fin = 0;
-    int hora_fin_variacion = 0;
-    int cada_horas = 0;
-    String dias_semana = "";
-    String escribirCon = "";
-    int modo_prueba=0;
-    int tiempo_x2=0;
-
+    int hora_ini_rs = 0;
+    int hora_ini_variacion_rs = 0;
+    int hora_fin_rs = 0;
+    int hora_fin_variacion_rs = 0;
+    int cada_horas_rs = 0;
+    String dias_semana_rs = "";
+    String escribirCon_rs = "";
+    int modo_prueba_rs=0;
+    int tiempo_x2_rs=0;
+    int cantidad_comparir_fb=0;
+    int cantidad_comparir_gp=0;
     private Connection connect() {
         Connection conn = null;
         try {
@@ -84,15 +85,17 @@ public class fYoutube extends javax.swing.JInternalFrame {
                     + "medio,"
                     + "lento,"
                     + "mlento, "
-                    + "hora_ini, "
-                    + "hora_ini_variacion, "
-                    + "hora_fin, "
-                    + "hora_fin_variacion, "
-                    + "cada_horas, "
-                    + "dias_semana, "
-                    + "escribirCon, "
-                    + "modo_prueba, "
-                    + "tiempo_x2 "
+                    + "hora_ini_rs, "
+                    + "hora_ini_variacion_rs, "
+                    + "hora_fin_rs, "
+                    + "hora_fin_variacion_rs, "
+                    + "cada_horas_rs, "
+                    + "dias_semana_rs, "
+                    + "escribirCon_rs, "
+                    + "modo_prueba_rs, "
+                    + "tiempo_x2_rs,"
+                    + "cantidad_comparir_fb,"
+                    + "cantidad_comparir_gp "
                     + "FROM configuracion";
 
             ResultSet rs = statement.executeQuery(query);
@@ -101,28 +104,30 @@ public class fYoutube extends javax.swing.JInternalFrame {
             medio = Long.parseLong(rs.getString("medio"));
             lento = Long.parseLong(rs.getString("lento"));
             mlento = Long.parseLong(rs.getString("mlento"));
-            hora_ini = Integer.parseInt(rs.getString("hora_ini"));
-            hora_ini_variacion = Integer.parseInt(rs.getString("hora_ini_variacion"));
-            hora_fin = Integer.parseInt(rs.getString("hora_fin"));
-            hora_fin_variacion = Integer.parseInt(rs.getString("hora_fin_variacion"));
-            cada_horas = Integer.parseInt(rs.getString("cada_horas"));
-            dias_semana = rs.getString("dias_semana");
-            modo_prueba = Integer.parseInt(rs.getString("modo_prueba"));
-            tiempo_x2 = Integer.parseInt(rs.getString("tiempo_x2"));
-            escribirCon = rs.getString("escribirCon");
+            hora_ini_rs = Integer.parseInt(rs.getString("hora_ini_rs"));
+            hora_ini_variacion_rs = Integer.parseInt(rs.getString("hora_ini_variacion_rs"));
+            hora_fin_rs = Integer.parseInt(rs.getString("hora_fin_rs"));
+            hora_fin_variacion_rs = Integer.parseInt(rs.getString("hora_fin_variacion_rs"));
+            cada_horas_rs = Integer.parseInt(rs.getString("cada_horas_rs"));
+            dias_semana_rs = rs.getString("dias_semana_rs");
+            modo_prueba_rs = Integer.parseInt(rs.getString("modo_prueba_rs"));
+            tiempo_x2_rs = Integer.parseInt(rs.getString("tiempo_x2_rs"));
+            escribirCon_rs = rs.getString("escribirCon_rs");
+            cantidad_comparir_fb = Integer.parseInt(rs.getString("cantidad_comparir_fb"));
+            cantidad_comparir_gp = Integer.parseInt(rs.getString("cantidad_comparir_gp"));
             //SI EL MODO PRUEBA ESTA ACTIVO (SE EJECUTAN PUBLICACIONES CADA 2 MINUTOS)
-            if(modo_prueba==1){
+            if(modo_prueba_rs==1){
                 //MOSTRAMOS UN LABEL QUE AVISE QUE EL MODO PRUEBA ESTA ACTIVO
-                lblModo.setText("Modo prueba activo tiempo por 2 =" + tiempo_x2 );
+                lblModo.setText("Modo prueba activo tiempo por 2 =" + tiempo_x2_rs );
                 lblModo.setBackground(Color.green);
             }
             //SI EL MODO PRUEBA ESTA DESACTIVO (FUNCIONA DE FORMA NORMAL)
             else{
-                lblModo.setText("Modo prueba descativo  tiempo por 2 =" + tiempo_x2);
+                lblModo.setText("Modo prueba descativo  tiempo por 2 =" + tiempo_x2_rs);
                 lblModo.setBackground(Color.red);
             }
             //INICIALIZAMOS E CONTROLADOR CON LA FORMA DE ESCRIBIR QUE ESTA EN LA BD
-            c.cControl(escribirCon);
+            c.cControl(escribirCon_rs);
             //CARGAMOS LOS DATOS DE CONFIGURACION COMO LA VELOCIDAD ENTRE ECCIONES Y LA URL DEL PATH DRIVER
             String queryAccesos = "SELECT "
                     + "id,"
@@ -480,8 +485,6 @@ public class fYoutube extends javax.swing.JInternalFrame {
         //SACAMOS EL NUMERO DE GRUPOS EN LOS QUE SE VA A COMPARTIR ESTE ARTICULO
         int numeroCompartidasFB = 0;
         int numeroCompartidasGP = 0;
-        //NUMERO DE ARTICULOS A COMPARTIR POR TANDA
-        int numeroAcompartir=3;
         //SI ESTA ACTIVO EL CHECKBOX DE COMPARTIR EN FB LO COMPARTIMOS EN FB
         if (checkFB.isSelected()) {
             numeroCompartidasFB = c.numeroCompartidasFB(idPubCompartir);
@@ -538,7 +541,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 //SACAMOS LA LISTA DE LOS ID'S DE LOS GRUPOS QUE YA SE COMPARTIERON EN ESTE ARTICULO DE FB
                 String idsYaCompartidos=yaSeCompartioEn(idPubCompartir,"FB");
                 //COMENZAMOS A COMPARTIR EL VIDEO
-                String [] errorYlistaGrupos = c.compartirFB(urlVideo.getText(), pathImagen.getText(), titulo.getText(), idPubCompartir,numeroAcompartir,idsYaCompartidos);
+                String [] errorYlistaGrupos = c.compartirFB(urlVideo.getText(), pathImagen.getText(), titulo.getText(), idPubCompartir,cantidad_comparir_fb,idsYaCompartidos);
                 if (errorYlistaGrupos == null) {
                     //ACTUALIZAMOS ESTE ARTICULO Y LO MARCAMOS COMO YA COMPARTIDO
                     articuloYaCompartido(idPubCompartir,"FB");
@@ -701,7 +704,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
 
     private void activarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activarActionPerformed
         reiniciarCronometro();
-        if (modo_prueba == 0) {
+        if (modo_prueba_rs == 0) {
             cronometroParaEjecutar();
         }
     }//GEN-LAST:event_activarActionPerformed
@@ -1012,11 +1015,11 @@ public class fYoutube extends javax.swing.JInternalFrame {
             java.util.Date horaReiniciar = null;
             DateFormat formatoFechaHora = new SimpleDateFormat("yyyy/MM/dd kk:mm:ss");
             try {
-                if (modo_prueba == 0) {
+                if (modo_prueba_rs == 0) {
                     //GENERAMOS LA HORA DE INICIO DE EJECUCION OSEA CADA 24 HORAS
                     horaReiniciar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + reiniciarAlasHoras + ":" + reiniciarAlasMinutos + ":" + reiniciarAlasSegundos);
                 }
-                if (modo_prueba == 1) {
+                if (modo_prueba_rs == 1) {
                     horaReiniciar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + hora + ":" + minuto + ":59");
                 }
             } catch (ParseException ex) {
@@ -1033,7 +1036,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
                     final Calendar calHoraActualReiniciar = Calendar.getInstance();
                     long segundosFaltanParaReiniciar = (calHorasReiniciar.getTimeInMillis() - calHoraActualReiniciar.getTimeInMillis()) / (1000);
                     //SI ESTA ACTIVO EL TIEMPO POR 2 EN LA BD HACEMOS QUE EL TIEMPO DE REINICIO SEA DE LA MITAD
-                    if(tiempo_x2==1){
+                    if(tiempo_x2_rs==1){
                         segundosFaltanParaReiniciar=segundosFaltanParaReiniciar/2;
                     }
                     lblHoraReiniciar.setText("Segundos que faltan para reiniciar=" + segundosFaltanParaReiniciar);
@@ -1075,11 +1078,11 @@ public class fYoutube extends javax.swing.JInternalFrame {
         int intNumeroPublicadas=0;
         DateFormat formatoFechaHora = new SimpleDateFormat("yyyy/MM/dd kk:mm:ss");
         //ASIGNAMOS LA CANTIDAD DE HORAS QUE VA A VARIAR LA HORA DE INICIO Y FIN
-        int hora_ini_variacion_res = (int) (Math.random() * (hora_ini_variacion * 2)) - hora_ini_variacion;
-        int hora_fin_variacion_res = (int) (Math.random() * (hora_fin_variacion * 2)) - hora_fin_variacion;
+        int hora_ini_variacion_res = (int) (Math.random() * (hora_ini_variacion_rs * 2)) - hora_ini_variacion_rs;
+        int hora_fin_variacion_res = (int) (Math.random() * (hora_fin_variacion_rs * 2)) - hora_fin_variacion_rs;
         //COLOCAMOS LA HORA EN QUE VA A COMENZAR Y TERMINAL EL PROCESO
-        int hora_ini_res = hora_ini + hora_ini_variacion_res;
-        int hora_fin_res = hora_fin + hora_fin_variacion_res;
+        int hora_ini_res = hora_ini_rs + hora_ini_variacion_res;
+        int hora_fin_res = hora_fin_rs + hora_fin_variacion_res;
         //LE COLOCAMOS AL CALENDARIO LA HORA INICIAL Y FINAL
         calHoraIni.set(Calendar.HOUR_OF_DAY, hora_ini_res);
         calHoraFin.set(Calendar.HOUR_OF_DAY, hora_fin_res);
@@ -1099,15 +1102,15 @@ public class fYoutube extends javax.swing.JInternalFrame {
         int contadorHoras = 0;
         java.util.Date horaEjecutar = null;
         //BUCLE QUE LLENA LA TABLA CON LAS HORAS ENTRE EL INICIO Y EL FINAL
-        for (int cadaXcantidadHoras = hora_ini_res; cadaXcantidadHoras <= hora_fin_res; cadaXcantidadHoras = cadaXcantidadHoras + cada_horas) {
+        for (int cadaXcantidadHoras = hora_ini_res; cadaXcantidadHoras <= hora_fin_res; cadaXcantidadHoras = cadaXcantidadHoras + cada_horas_rs) {
             try {
                 //SI NO ES MODO PRUEBA HACEMOS QUE SE EJECUTEN 
-                if (modo_prueba == 0) {
+                if (modo_prueba_rs == 0) {
                     //GENERAMOS LA HORA DE INICIO DE EJECUCION
                     horaEjecutar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + cadaXcantidadHoras + ":" + calHoraIni.get(Calendar.MINUTE) + ":59");
                 }
                 //SI ES MODO PRUEBA COLOCAMOS LA FECHAS PARA QUE SE EJECUTEN CADA 2 MINUTOS
-                if (modo_prueba == 1) {
+                if (modo_prueba_rs == 1) {
                     horaEjecutar = formatoFechaHora.parse(ano + "/" + mes + "/" + dia + " " + hora + ":" + (minuto + (contadorHoras*2)) + ":59");
                 }
                 //INICIALIZAMOS EL CALENDARIO
@@ -1147,7 +1150,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
                     //SACAMOS LOS SEGUNDOS QUE FALTAN PARA EJECUTAR
                     long segundosFaltanParaEjecutar = (calHorasEjecutar[j].getTimeInMillis() - calHoraActual.getTimeInMillis()) / (1000);
                     //SI ESTA ACTIVA EN LA BD EN TEIMPO POR 2 EL TIEMPO QUE SE EJECUTAN LOS COCESOS SE DIVIDE ENTRE 2
-                    if(tiempo_x2==1){
+                    if(tiempo_x2_rs==1){
                         segundosFaltanParaEjecutar=segundosFaltanParaEjecutar/2;
                     }
                     if (segundosFaltanParaEjecutar > 0 && flagSoloElPrimero == false) {
@@ -1164,7 +1167,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
                         //ESPERAMOS 35 SEGUNDOS DESPUES DE HABER PUBLICADO LOS VIDEOS PARA DAR TIEMPO AL CRONOMETRO DE REINICIO A QUE TRABAJE
                         c.pausa(1000 * 35);
                         //SI NO ES MODO PRUEBA SE EJECUTA DE NUEVO EL CONOMETRO PARA EJECUTAR
-                        if(modo_prueba==0){
+                        if(modo_prueba_rs==0){
                             cronometroParaEjecutar();
                         }
                     }
