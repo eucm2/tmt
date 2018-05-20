@@ -625,6 +625,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 actualizaYaPublicado(errorYlistaGrupos[1],idPubCompartir,"GP");
                 //MANDAMOS MAIL CON EL ARTICULO Y EL GRUPO DONDE SE COMPARTIO
                 c.mandaMail("eucm2g@gmail.com","En gp","tmt","Se publico este videos "+urlVideo.getText()+" </br> en estos grupos"+ errorYlistaGrupos[2] +" ");
+                c.cerrarNavegador();
             }
         }
 

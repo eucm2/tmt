@@ -308,11 +308,13 @@ public class cControl {
     public void accedeGP(String user, String password,String forma) {
         driver.get("https://accounts.google.com/signin/v2/identifier?continue=https%3A%2F%2Fplus.google.com");
         if (user.length() > 0 && password.length() > 0) {
-            driver.findElement(By.id("identifierId")).sendKeys(user);
+            escribeTexto(driver.findElement(By.id("identifierId")), user);
+            //driver.findElement(By.id("identifierId")).sendKeys(user);
             pausa(rapido);
             driver.findElement(By.id("identifierNext")).click();
             pausa(rapido);
-            driver.findElement(By.name("password")).sendKeys(password);
+            escribeTexto(driver.findElement(By.name("password")), password);
+            //driver.findElement(By.name("password")).sendKeys(password);
             pausa(rapido);
             if(forma.equals("automatico")){
                 driver.findElement(By.id("passwordNext")).click();
