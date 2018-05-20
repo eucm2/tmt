@@ -91,6 +91,14 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
         cantidad_comparir_gp = new javax.swing.JTextField();
         checkFB = new javax.swing.JCheckBox();
         checkGP = new javax.swing.JCheckBox();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        accesoManualGP = new javax.swing.JList<>();
+        jLabel26 = new javax.swing.JLabel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        accesoManualFB = new javax.swing.JList<>();
+        jLabel27 = new javax.swing.JLabel();
+        numLetrasEsperar = new javax.swing.JTextField();
+        jLabel28 = new javax.swing.JLabel();
 
         setTitle("Configuracion General");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -101,7 +109,7 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
                 guardarActionPerformed(evt);
             }
         });
-        getContentPane().add(guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 400, -1, -1));
+        getContentPane().add(guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 520, -1, -1));
 
         jLabel2.setText("jLabel2");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 580, -1, -1));
@@ -254,28 +262,56 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
         jPanel4.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 110, -1, -1));
 
         modo_prueba_rs.setText("Modo prueba");
-        jPanel4.add(modo_prueba_rs, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, -1, -1));
+        jPanel4.add(modo_prueba_rs, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, -1, -1));
 
         tiempo_x2_rs.setText("Tiempo x 2");
-        jPanel4.add(tiempo_x2_rs, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 250, -1, -1));
+        jPanel4.add(tiempo_x2_rs, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 350, -1, -1));
 
         jLabel24.setText("Cantidad a compartir fb...");
         jPanel4.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, -1));
         jPanel4.add(cantidad_comparir_fb, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 180, 110, -1));
 
-        jLabel25.setText("Cantidad a compartir gp...");
-        jPanel4.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
+        jLabel25.setText("Num de letras a esperar");
+        jPanel4.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 320, -1, -1));
         jPanel4.add(cantidad_comparir_gp, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 220, 110, -1));
 
         checkFB.setText("Publicar en FB");
-        jPanel4.add(checkFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 250, -1, -1));
+        jPanel4.add(checkFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 350, -1, -1));
 
         checkGP.setText("Publicar en GP");
-        jPanel4.add(checkGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 250, -1, -1));
+        jPanel4.add(checkGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 350, -1, -1));
+
+        accesoManualGP.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "automatico", "manual" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane5.setViewportView(accesoManualGP);
+
+        jPanel4.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 250, 110, 50));
+
+        jLabel26.setText("Cantidad a compartir gp...");
+        jPanel4.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
+
+        accesoManualFB.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "automatico", "manual" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane6.setViewportView(accesoManualFB);
+
+        jPanel4.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 250, 110, 50));
+
+        jLabel27.setText("Acceso GP....................");
+        jPanel4.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 250, -1, -1));
+        jPanel4.add(numLetrasEsperar, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 320, 110, -1));
+
+        jLabel28.setText("Acceso FB.......................");
+        jPanel4.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, -1));
 
         jTabbedPane4.addTab("Redes sociales", jPanel4);
 
-        getContentPane().add(jTabbedPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 630, 310));
+        getContentPane().add(jTabbedPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 630, 440));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -324,7 +360,10 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
                     + "cantidad_comparir_fb,"
                     + "cantidad_comparir_gp, "
                     + "checkFB, "
-                    + "checkGP "
+                    + "checkGP,"
+                    + "numLetrasEsperar,"
+                    + "accesoManualFB,"
+                    + "accesoManualGP "
                     + "FROM configuracion";
             ResultSet rs = statement.executeQuery(query);
             pathDrive.setText(rs.getString("path_drive"));
@@ -342,6 +381,8 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
             escribirCon.setSelectedValue(rs.getString("escribirCon"), false);
             cantidad_comparir_fb.setText(rs.getString("cantidad_comparir_fb"));
             cantidad_comparir_gp.setText(rs.getString("cantidad_comparir_gp"));
+            numLetrasEsperar.setText(rs.getString("numLetrasEsperar"));
+            
             //SI ES 1 ACTIVAMOS EL CHECK DE MODO PRUEBA
             if( Integer.parseInt(rs.getString("modo_prueba"))==1){
                 modo_prueba.setSelected(true);
@@ -385,6 +426,8 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
             hora_fin_variacion_rs.setText(rs.getString("hora_fin_variacion_rs"));
             cada_horas_rs.setText(rs.getString("cada_horas_rs"));
             escribirCon_rs.setSelectedValue(rs.getString("escribirCon_rs"), false);
+            accesoManualFB.setSelectedValue(rs.getString("accesoManualFB"), false);
+            accesoManualGP.setSelectedValue(rs.getString("accesoManualGP"), false);
             //SI ES 1 ACTIVAMOS EL CHECK DE MODO PRUEBA
             if( Integer.parseInt(rs.getString("modo_prueba_rs"))==1){
                 modo_prueba_rs.setSelected(true);
@@ -534,14 +577,19 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
                     + "hora_fin_variacion_rs='"+hora_fin_variacion_rs.getText()+"',\n"
                     + "cada_horas_rs='"+cada_horas_rs.getText()+"',\n"
                     + "escribirCon_rs='"+escribirCon_rs.getSelectedValue()+"',\n"
+                    + "accesoManualFB='"+accesoManualFB.getSelectedValue()+"',\n"
+                    + "accesoManualGP='"+accesoManualGP.getSelectedValue()+"',\n"
                     + "modo_prueba_rs='"+Imodo_prueba_rs+"',\n"
                     + "tiempo_x2_rs='"+Itiempo_x2_rs+"',\n"
                     + "dias_semana_rs='"+Sdias_semana_rs+"',\n"
                     + "cantidad_comparir_fb='"+cantidad_comparir_fb.getText()+"',\n"
                     + "cantidad_comparir_gp='"+cantidad_comparir_gp.getText()+"',\n"
+                    + "numLetrasEsperar='"+numLetrasEsperar.getText()+"',\n"
                     + "checkFB='"+IcheckFB+"',\n"
                     + "checkGP='"+IcheckGP+"'\n"
                     + "WHERE (id=1)";
+            
+            
             statement.executeQuery(query);
             statement.close();
         } catch (SQLException e) {
@@ -573,6 +621,8 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JList<String> accesoManualFB;
+    private javax.swing.JList<String> accesoManualGP;
     private javax.swing.JTextField cada_horas;
     private javax.swing.JTextField cada_horas_rs;
     private javax.swing.JTextField cantidad_comparir_fb;
@@ -610,6 +660,9 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -625,6 +678,8 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTabbedPane jTabbedPane4;
     private javax.swing.JTextField lento;
     private javax.swing.JTextField max_king;
@@ -633,6 +688,7 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
     private javax.swing.JTextField mlento;
     private javax.swing.JCheckBox modo_prueba;
     private javax.swing.JCheckBox modo_prueba_rs;
+    private javax.swing.JTextField numLetrasEsperar;
     private javax.swing.JTextField pathDrive;
     private javax.swing.JTextField rapido;
     private javax.swing.JButton seleccionarImagen;
