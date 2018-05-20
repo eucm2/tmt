@@ -53,6 +53,9 @@ public class fYoutube extends javax.swing.JInternalFrame {
     int tiempo_x2_rs=0;
     int cantidad_comparir_fb=0;
     int cantidad_comparir_gp=0;
+    String accesoManualGP="";
+    String accesoManualFB="";
+    boolean yaEstaActivoCronometro=false;
     private Connection connect() {
         Connection conn = null;
         try {
@@ -97,7 +100,9 @@ public class fYoutube extends javax.swing.JInternalFrame {
                     + "cantidad_comparir_fb,"
                     + "cantidad_comparir_gp,"
                     + "checkFB,"
-                    + "checkGP "
+                    + "checkGP,"
+                    + "accesoManualGP,"
+                    + "accesoManualFB "
                     + "FROM configuracion";
 
             ResultSet rs = statement.executeQuery(query);
@@ -117,6 +122,8 @@ public class fYoutube extends javax.swing.JInternalFrame {
             escribirCon_rs = rs.getString("escribirCon_rs");
             cantidad_comparir_fb = Integer.parseInt(rs.getString("cantidad_comparir_fb"));
             cantidad_comparir_gp = Integer.parseInt(rs.getString("cantidad_comparir_gp"));
+            accesoManualGP=escribirCon_rs = rs.getString("accesoManualGP");
+            accesoManualFB=escribirCon_rs = rs.getString("accesoManualFB");
             //SI EL MODO PRUEBA ESTA ACTIVO (SE EJECUTAN PUBLICACIONES CADA 2 MINUTOS)
             if(modo_prueba_rs==1){
                 //MOSTRAMOS UN LABEL QUE AVISE QUE EL MODO PRUEBA ESTA ACTIVO
@@ -485,6 +492,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_compartirVideoActionPerformed
 
     public void compartirPublicacion(String ejecutadoDeForma){
+        yaEstaActivoCronometro=false;
         String idPubCompartir="";
         //SI LA FORMA DE COMPARTIR FUE DE FORMA MANUAL OSEA CON UN CLICK SE EJECUTA EL REGISTRO SELECCIONADO
         if(ejecutadoDeForma.equals("manual")){
@@ -553,24 +561,33 @@ public class fYoutube extends javax.swing.JInternalFrame {
             c.inicializarWebdriver(path_drive);
             //SI EL CHECK DE FB ESTA ACTIVO PUBLICAMOS EN FB FFFFBBBBBB
             if (checkFB.isSelected()) {
-                //NOS LOGUEAMOS EN FB O ESPERAMOS A QUE EL USUARIO TERMINE DE LOGUEARSE
+                //NOS LOGUEAMOS EN FB O
                 c.accedeFB(userFB.getText(), passwordFB.getText());
                 //SACAMOS LA LISTA DE LOS ID'S DE LOS GRUPOS QUE YA SE COMPARTIERON EN ESTE ARTICULO DE FB
                 String idsYaCompartidos=yaSeCompartioEn(idPubCompartir,"FB");
                 //COMENZAMOS A COMPARTIR EL VIDEO
-                String [] errorYlistaGrupos = c.compartirFB(urlVideo.getText(), pathImagen.getText(), titulo.getText(), idPubCompartir,cantidad_comparir_fb,idsYaCompartidos);
+                String [] errorYlistaGrupos = c.compartirFB(
+                        urlVideo.getText(), 
+                        pathImagen.getText(), 
+                        titulo.getText(), 
+                        idPubCompartir,
+                        cantidad_comparir_fb,
+                        idsYaCompartidos);
                 if (errorYlistaGrupos == null) {
                     //ACTUALIZAMOS ESTE ARTICULO Y LO MARCAMOS COMO YA COMPARTIDO
                     articuloYaCompartido(idPubCompartir,"FB");
                     //CERRAMOS EL NAVEGADOR
                     c.cerrarNavegador();
-                    //COMO ESTE ARTICULO YA ESTA COMPARTIDO REGRESAMOS AL PRINCIPIO A COMPARTIR EL SIGUIENTE
-                    compartirPublicacion("cronometro");
+                    if(yaEstaActivoCronometro==false){
+                        yaEstaActivoCronometro=true;
+                        //COMO ESTE ARTICULO YA ESTA COMPARTIDO REGRESAMOS AL PRINCIPIO A COMPARTIR EL SIGUIENTE
+                        compartirPublicacion("cronometro");
+                    }
                 }
-                grupoErrores.setText(errorYlistaGrupos[0]);
+                grupoErrores.setText(grupoErrores.getText() + errorYlistaGrupos[0]);
                 numeroNoCompartidoFB = countLines(errorYlistaGrupos[0]);
                 //AGREGAMOS LOS GRUPOS YA COMPARTIDOS DE ESTE ARTICULO
-                actualizaYaPublicadoEnFB(errorYlistaGrupos[1],idPubCompartir);
+                actualizaYaPublicado(errorYlistaGrupos[1],idPubCompartir,"FB");
                 //MANDAMOS MAIL CON EL ARTICULO Y EL GRUPO DONDE SE COMPARTIO
                 c.mandaMail("eucm2g@gmail.com","En fb","tmt","Se publico este videos "+urlVideo.getText()+" </br> en estos grupos"+ errorYlistaGrupos[2] +" ");
                 //SI NO ESTA SELECCIONADO GP CERRAMOS EL NAVEGADOR
@@ -581,19 +598,34 @@ public class fYoutube extends javax.swing.JInternalFrame {
             //SI EL CHECK DE G+ ESTA ACTIVO PUBLICAMOS EN G+ GGGG+++++++
             if (checkGP.isSelected()) {
                 //NOS LOGUEAMOS EN FB O ESPERAMOS A QUE EL USUARIO TERMINE DE LOGUEARSE
-                c.accedeGP(userGP.getText(), passwordGP.getText());
+                c.accedeGP(userGP.getText(), passwordGP.getText(),accesoManualGP);
+                //SACAMOS LA LISTA DE LOS ID'S DE LOS GRUPOS QUE YA SE COMPARTIERON EN ESTE ARTICULO DE FB
+                String idsYaCompartidos=yaSeCompartioEn(idPubCompartir,"GP");
                 //COMENZAMOS A COMPARTIR EL VIDEO
-                String grupoError = c.compartirGP(urlVideo.getText(), pathImagen.getText(), titulo.getText(), idPubCompartir);
-                grupoErrores.setText(grupoErrores.getText() + grupoError);
-                numeroNoCompartidoGP = countLines(grupoError);
+                String [] errorYlistaGrupos = c.compartirGP(
+                        urlVideo.getText(), 
+                        pathImagen.getText(), 
+                        titulo.getText(), 
+                        idPubCompartir,
+                        cantidad_comparir_gp,
+                        idsYaCompartidos);
+                if (errorYlistaGrupos == null) {
+                    //ACTUALIZAMOS ESTE ARTICULO Y LO MARCAMOS COMO YA COMPARTIDO
+                    articuloYaCompartido(idPubCompartir,"GP");
+                    //CERRAMOS EL NAVEGADOR
+                    c.cerrarNavegador();
+                    if(yaEstaActivoCronometro==false){
+                        yaEstaActivoCronometro=true;
+                        //COMO ESTE ARTICULO YA ESTA COMPARTIDO REGRESAMOS AL PRINCIPIO A COMPARTIR EL SIGUIENTE
+                        compartirPublicacion("cronometro");
+                    }
+                }
+                grupoErrores.setText(grupoErrores.getText() + errorYlistaGrupos[0]);
+                numeroNoCompartidoGP = countLines(errorYlistaGrupos[0]);
+                actualizaYaPublicado(errorYlistaGrupos[1],idPubCompartir,"GP");
+                //MANDAMOS MAIL CON EL ARTICULO Y EL GRUPO DONDE SE COMPARTIO
+                c.mandaMail("eucm2g@gmail.com","En gp","tmt","Se publico este videos "+urlVideo.getText()+" </br> en estos grupos"+ errorYlistaGrupos[2] +" ");
             }
-            /*
-            //SUMAMOS LAS COMPARTIDAS MENOS LAS NO COMPARTIDAS
-            int totalCompartidas = numeroCompartidasFB + numeroCompartidasGP - numeroNoCompartidoFB - numeroNoCompartidoGP;
-            editar_numero_veces_compartido(idPubCompartir, "" + totalCompartidas + "");
-            int selRow = tabla_publicaciones.getSelectedRow();
-            tabla_publicaciones.setValueAt(totalCompartidas, selRow, 4);
-            */
         }
 
         
@@ -869,8 +901,15 @@ public class fYoutube extends javax.swing.JInternalFrame {
             System.out.println(e.getMessage());
         }        
     }
-    public void actualizaYaPublicadoEnFB(String listaIdsGrupos,String idPub){
-        String sql = "UPDATE publicaciones SET  ya_publicado_en_fb=ya_publicado_en_fb||'"+listaIdsGrupos+"' WHERE id='"+idPub+"'; ";
+    public void actualizaYaPublicado(String listaIdsGrupos,String idPub,String tipo){
+        String campo="";
+        if(tipo=="FB"){
+            campo="ya_publicado_en_fb";
+        }
+        else if (tipo=="GP"){
+            campo="ya_publicado_en_gp";
+        }
+        String sql = "UPDATE publicaciones SET  "+campo+"="+campo+"||'"+listaIdsGrupos+"' WHERE id='"+idPub+"'; ";
         try (Connection conn = this.connect();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
             //EJECUTAMOS EL COMANDO

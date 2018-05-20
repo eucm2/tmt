@@ -165,7 +165,7 @@ public class cControl {
         String grupoError = "";
         String grupoBien = "";
         int vecesCompartido=0;
-        String listaIdsDeGrupos="";        
+        String listaIdsDeGrupos="";
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:tmt.db");
             statement = connection.createStatement();
@@ -305,7 +305,7 @@ public class cControl {
     *
     *
      */
-    public void accedeGP(String user, String password) {
+    public void accedeGP(String user, String password,String forma) {
         driver.get("https://accounts.google.com/signin/v2/identifier?continue=https%3A%2F%2Fplus.google.com");
         if (user.length() > 0 && password.length() > 0) {
             driver.findElement(By.id("identifierId")).sendKeys(user);
@@ -314,18 +314,38 @@ public class cControl {
             pausa(rapido);
             driver.findElement(By.name("password")).sendKeys(password);
             pausa(rapido);
-            driver.findElement(By.id("passwordNext")).click();
-            pausa(medio);
-            //JOptionPane.showMessageDialog(null, "Elimine todos los popups de G+ y haga click en aceptar en este mensaje para continuar");
-            pausa(rapido);
+            if(forma.equals("automatico")){
+                driver.findElement(By.id("passwordNext")).click();
+                pausa(medio);
+                pausa(rapido);
+            }
+            else if(forma.equals("manual")){
+                JOptionPane.showMessageDialog(null, "Favor de loguearse en su cuenta y despues hacer click en aceptar");
+            }
         } else {
             //PEDIMOS AL USUARIO QUE PONGA SU USUARIO Y CONTRASEÑA PARA PODER CONTINUAR
             JOptionPane.showMessageDialog(null, "Favor de loguearse en su cuenta y despues hacer click en aceptar");
         }
     }
 
-    public String compartirGP(String urlVideo, String pathImagen, String titulo, String idPub) {
+    public void accedeGPManual(String user, String password) {
+        driver.get("https://accounts.google.com/signin/v2/identifier?continue=https%3A%2F%2Fplus.google.com");
+        pausa(rapido);
+            driver.findElement(By.id("identifierId")).sendKeys(user);
+            pausa(rapido);
+            driver.findElement(By.id("identifierNext")).click();
+            pausa(rapido);
+            driver.findElement(By.name("password")).sendKeys(password);
+            pausa(rapido);
+        JOptionPane.showMessageDialog(null, "Favor de loguearse en su cuenta y despues hacer click en aceptar");
+    }
+
+    
+    public String[] compartirGP(String urlVideo, String pathImagen, String titulo, String idPub,int numeroAcompartir,String idsYaCompartidos) {
         String grupoError = "";
+        String grupoBien = "";
+        int vecesCompartido=0;
+        String listaIdsDeGrupos="";
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:tmt.db");
             statement = connection.createStatement();
@@ -348,9 +368,14 @@ public class cControl {
                     + "WHERE\n"
                     + "grupos.activo = '1' \n"
                     + "and publicaciones.id='" + idPub + "' "
-                    + "and grupos.tipo='GP';  ";
+                    + "AND grupos.id not in ("+idsYaCompartidos+")   "
+                    + "and grupos.tipo='GP';  "
+                    + "limit "+numeroAcompartir+" ";
             ResultSet rs = statement.executeQuery(query);
-            //HACEMOS UN BLUCLE CON TODOS LOS GRUPOS DE FACEBOOK
+            if(rs.isBeforeFirst()==false){
+                return null;
+            }
+            //HACEMOS UN BLUCLE CON TODOS LOS GRUPOS DE GOOGLE
             while (rs.next()) {
                 flagSeEncontroUnaPalabraPlus = 0;
                 try {
@@ -359,19 +384,30 @@ public class cControl {
                     pausa(medio);
                     driver.findElement(By.cssSelector("span[role='button']")).click();
                     pausa(medio);
+                    String espacio="";
+                    String borrar="";
+                    //CICLO QUE ESCRIBE Y BORRA LETRAS PARA ESPERAR QUE SE CARGUE LA IMAGEN AUTOMATICAMENTE
+                    for(int letras=0;letras<380;letras++){
+                        espacio=espacio+"1";
+                        borrar=borrar+Keys.BACK_SPACE;
+                    }
                     //ESCRIBIMOS EL TEXTO DEL VIDEO
-                    driver.findElement(By.cssSelector("textarea[role='textbox']")).sendKeys(titulo + Keys.RETURN + urlVideo + Keys.RETURN + "                             " + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE  + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.chord(Keys.CONTROL, Keys.ENTER));
-                    //driver.findElement(By.cssSelector("textarea[role='textbox']")).sendKeys(titulo + Keys.RETURN + urlVideo + Keys.RETURN);
+                    //driver.findElement(By.cssSelector("textarea[role='textbox']")).sendKeys(titulo + Keys.RETURN + urlVideo + Keys.RETURN + "                             " + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE  + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.chord(Keys.CONTROL, Keys.ENTER));
+                    
+                    escribeTexto(driver.findElement(By.cssSelector("textarea[role='textbox']")),
+                        titulo 
+                        + "\\r"
+                        + urlVideo 
+                    );
+                    driver.findElement(By.cssSelector("textarea[role='textbox']")).sendKeys(Keys.ENTER);
+                    driver.findElement(By.cssSelector("textarea[role='textbox']")).sendKeys(Keys.chord(espacio+borrar+ Keys.CONTROL, Keys.ENTER));
+                    //SACAMOS LA LSTA DE LOS NOMBRES DE LOS GRUPOS QUE SI SE ESCRIBIERON
+                    grupoBien = grupoBien + " </br> " + rs.getString("nombre") + " </br>\n " + rs.getString("url") + " </br>\n ";
+                    //AGREGAMOS LOS GRUPOS QUE SE VAN A GUARDAR EN GRUPOS YA PUBLICADOS
+                    listaIdsDeGrupos=listaIdsDeGrupos+","+rs.getString("id");
                     pausa(mlento);
                     pausa(mlento);
-                    /*
-                    Robot robot = new Robot();
-                    robot.keyPress(KeyEvent.VK_CONTROL);
-                    robot.keyPress(KeyEvent.VK_ENTER);
-                    // CTRL+Z is now pressed (receiving application should see a "key down" event.)
-                    robot.keyRelease(KeyEvent.VK_ENTER);
-                    robot.keyRelease(KeyEvent.VK_CONTROL);
-                     */
+                    vecesCompartido++;
                     //SI NO HAY PALABRAS PLUS ES PORQUE ESE GRUPO NO TIENE Y NOS SEGUIMOS AL SIGUIENTE GRUPO
                     if (rs.getString("palabras_plus").length() > 1) {
                         pausa(rapido);
@@ -421,7 +457,7 @@ public class cControl {
                 System.err.println(e);
             }
         }
-        return grupoError;
+        return new String[] { grupoError, listaIdsDeGrupos ,grupoBien };
     }
     public int numeroCompartidasGP(String idPub) {
         try {
