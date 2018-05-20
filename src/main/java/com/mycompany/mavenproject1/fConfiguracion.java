@@ -89,6 +89,8 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
         cantidad_comparir_fb = new javax.swing.JTextField();
         jLabel25 = new javax.swing.JLabel();
         cantidad_comparir_gp = new javax.swing.JTextField();
+        checkFB = new javax.swing.JCheckBox();
+        checkGP = new javax.swing.JCheckBox();
 
         setTitle("Configuracion General");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -246,7 +248,7 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
         });
         jScrollPane4.setViewportView(dias_semana_rs);
 
-        jPanel4.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 100, 110, -1));
+        jPanel4.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 80, 110, 150));
 
         jLabel23.setText("Dias de la semana...");
         jPanel4.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 110, -1, -1));
@@ -264,6 +266,12 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
         jLabel25.setText("Cantidad a compartir gp...");
         jPanel4.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
         jPanel4.add(cantidad_comparir_gp, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 220, 110, -1));
+
+        checkFB.setText("Publicar en FB");
+        jPanel4.add(checkFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 250, -1, -1));
+
+        checkGP.setText("Publicar en GP");
+        jPanel4.add(checkGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 250, -1, -1));
 
         jTabbedPane4.addTab("Redes sociales", jPanel4);
 
@@ -314,7 +322,9 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
                     + "modo_prueba_rs,"
                     + "tiempo_x2_rs,"
                     + "cantidad_comparir_fb,"
-                    + "cantidad_comparir_gp "
+                    + "cantidad_comparir_gp, "
+                    + "checkFB, "
+                    + "checkGP "
                     + "FROM configuracion";
             ResultSet rs = statement.executeQuery(query);
             pathDrive.setText(rs.getString("path_drive"));
@@ -345,6 +355,18 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
             }
             else{
                 tiempo_x2.setSelected(false);
+            }
+            if( Integer.parseInt(rs.getString("checkFB"))==1){
+                checkFB.setSelected(true);
+            }
+            else{
+                checkFB.setSelected(false);
+            }
+            if( Integer.parseInt(rs.getString("checkGP"))==1){
+                checkGP.setSelected(true);
+            }
+            else{
+                checkGP.setSelected(false);
             }
             //SI EL CAMPO DE DIAS DE LA SEMANA TIENE TEXTO SE COLOCAN LOS VALORES EN EL ELEMENTO
             if(rs.getString("dias_semana").length()>0){
@@ -426,6 +448,8 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
     private void guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarActionPerformed
         int Imodo_prueba=0;
         int Itiempo_x2=0;
+        int IcheckFB=0;
+        int IcheckGP=0;
         String Sdias_semana="";
         if(modo_prueba.isSelected()==true){
             Imodo_prueba=1;
@@ -437,6 +461,18 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
         }else{
             Itiempo_x2=0;
         }
+        if(checkFB.isSelected()==true){
+            IcheckFB=1;
+        }else{
+            IcheckFB=0;
+        }
+        if(checkGP.isSelected()==true){
+            IcheckGP=1;
+        }else{
+            IcheckGP=0;
+        }
+        
+        
         int []Idias_semana=dias_semana.getSelectedIndices();
         for(int ciclo=0;ciclo<Idias_semana.length;ciclo++){
             if(ciclo==0){
@@ -502,7 +538,9 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
                     + "tiempo_x2_rs='"+Itiempo_x2_rs+"',\n"
                     + "dias_semana_rs='"+Sdias_semana_rs+"',\n"
                     + "cantidad_comparir_fb='"+cantidad_comparir_fb.getText()+"',\n"
-                    + "cantidad_comparir_gp='"+cantidad_comparir_gp.getText()+"'\n"
+                    + "cantidad_comparir_gp='"+cantidad_comparir_gp.getText()+"',\n"
+                    + "checkFB='"+IcheckFB+"',\n"
+                    + "checkGP='"+IcheckGP+"'\n"
                     + "WHERE (id=1)";
             statement.executeQuery(query);
             statement.close();
@@ -539,6 +577,8 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
     private javax.swing.JTextField cada_horas_rs;
     private javax.swing.JTextField cantidad_comparir_fb;
     private javax.swing.JTextField cantidad_comparir_gp;
+    private javax.swing.JCheckBox checkFB;
+    private javax.swing.JCheckBox checkGP;
     private javax.swing.JList<String> dias_semana;
     private javax.swing.JList<String> dias_semana_rs;
     private javax.swing.JList<String> escribirCon;

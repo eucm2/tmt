@@ -95,7 +95,9 @@ public class fYoutube extends javax.swing.JInternalFrame {
                     + "modo_prueba_rs, "
                     + "tiempo_x2_rs,"
                     + "cantidad_comparir_fb,"
-                    + "cantidad_comparir_gp "
+                    + "cantidad_comparir_gp,"
+                    + "checkFB,"
+                    + "checkGP "
                     + "FROM configuracion";
 
             ResultSet rs = statement.executeQuery(query);
@@ -126,6 +128,21 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 lblModo.setText("Modo prueba descativo  tiempo por 2 =" + tiempo_x2_rs);
                 lblModo.setBackground(Color.red);
             }
+            //SI ES 1 ACTIVAMOS EL CHECK DE FB PARA QUE SE PUBLIQUE EN FB
+            if( Integer.parseInt(rs.getString("checkFB"))==1){
+                checkFB.setSelected(true);
+            }
+            else{
+                checkFB.setSelected(false);
+            }
+            //SI ES 1 ACTIVAMOS EL CHECK DE FB PARA QUE SE PUBLIQUE EN FB
+            if( Integer.parseInt(rs.getString("checkGP"))==1){
+                checkGP.setSelected(true);
+            }
+            else{
+                checkGP.setSelected(false);
+            }
+
             //INICIALIZAMOS E CONTROLADOR CON LA FORMA DE ESCRIBIR QUE ESTA EN LA BD
             c.cControl(escribirCon_rs);
             //CARGAMOS LOS DATOS DE CONFIGURACION COMO LA VELOCIDAD ENTRE ECCIONES Y LA URL DEL PATH DRIVER
