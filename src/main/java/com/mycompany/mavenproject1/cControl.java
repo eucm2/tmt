@@ -369,8 +369,8 @@ public class cControl {
                     + "grupos.activo = '1' \n"
                     + "and publicaciones.id='" + idPub + "' "
                     + "AND grupos.id not in ("+idsYaCompartidos+")   "
-                    + "and grupos.tipo='GP';  "
-                    + "limit "+numeroAcompartir+" ";
+                    + "and grupos.tipo='GP'  "
+                    + "limit "+numeroAcompartir+"; ";
             ResultSet rs = statement.executeQuery(query);
             if(rs.isBeforeFirst()==false){
                 return null;
@@ -399,6 +399,7 @@ public class cControl {
                         + "\\r"
                         + urlVideo 
                     );
+                    pausa(rapido);
                     driver.findElement(By.cssSelector("textarea[role='textbox']")).sendKeys(Keys.ENTER);
                     driver.findElement(By.cssSelector("textarea[role='textbox']")).sendKeys(Keys.chord(espacio+borrar+ Keys.CONTROL, Keys.ENTER));
                     //SACAMOS LA LSTA DE LOS NOMBRES DE LOS GRUPOS QUE SI SE ESCRIBIERON

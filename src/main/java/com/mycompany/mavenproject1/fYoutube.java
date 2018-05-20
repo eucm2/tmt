@@ -122,8 +122,8 @@ public class fYoutube extends javax.swing.JInternalFrame {
             escribirCon_rs = rs.getString("escribirCon_rs");
             cantidad_comparir_fb = Integer.parseInt(rs.getString("cantidad_comparir_fb"));
             cantidad_comparir_gp = Integer.parseInt(rs.getString("cantidad_comparir_gp"));
-            accesoManualGP=escribirCon_rs = rs.getString("accesoManualGP");
-            accesoManualFB=escribirCon_rs = rs.getString("accesoManualFB");
+            accesoManualGP = rs.getString("accesoManualGP");
+            accesoManualFB = rs.getString("accesoManualFB");
             //SI EL MODO PRUEBA ESTA ACTIVO (SE EJECUTAN PUBLICACIONES CADA 2 MINUTOS)
             if(modo_prueba_rs==1){
                 //MOSTRAMOS UN LABEL QUE AVISE QUE EL MODO PRUEBA ESTA ACTIVO
