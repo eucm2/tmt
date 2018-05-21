@@ -55,6 +55,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
     int cantidad_comparir_gp=0;
     String accesoManualGP="";
     String accesoManualFB="";
+    String publicacionConsecutiva="";
     boolean yaEstaActivoCronometro=false;
     private Connection connect() {
         Connection conn = null;
@@ -102,7 +103,8 @@ public class fYoutube extends javax.swing.JInternalFrame {
                     + "checkFB,"
                     + "checkGP,"
                     + "accesoManualGP,"
-                    + "accesoManualFB "
+                    + "accesoManualFB,"
+                    + "publicacionConsecutiva "
                     + "FROM configuracion";
 
             ResultSet rs = statement.executeQuery(query);
@@ -124,6 +126,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
             cantidad_comparir_gp = Integer.parseInt(rs.getString("cantidad_comparir_gp"));
             accesoManualGP = rs.getString("accesoManualGP");
             accesoManualFB = rs.getString("accesoManualFB");
+            publicacionConsecutiva = rs.getString("publicacionConsecutiva");
             //SI EL MODO PRUEBA ESTA ACTIVO (SE EJECUTAN PUBLICACIONES CADA 2 MINUTOS)
             if(modo_prueba_rs==1){
                 //MOSTRAMOS UN LABEL QUE AVISE QUE EL MODO PRUEBA ESTA ACTIVO
@@ -972,7 +975,15 @@ public class fYoutube extends javax.swing.JInternalFrame {
     }
     //ENTREGAMOS EL ID DEL ARTICULO QUE AUN NO SE HA PUBLICADO EN TODOS LOS GRUPOS
     public String sigArtAcomparir(String tipo) {
-        
+        String orden="";
+        //SI LA CONFIGURACION DICE QUE LA FORMA DE OBTENER LA SIGUIENTE PUBLICACION ES CONSECUTIVA SE MODIFICA LA CONSULTA ORDENANDOLA BY ORDEN
+        if(publicacionConsecutiva.equals("consecutivo")){
+            orden=" order by orden ";
+        }
+        //SI LA CONFIGURACION DICE QUE LA FORMA DE OBTENER LA SIGUIENTE PUBLICACION ES ALEATORIA SE MODIFICA LA CONSULTA ORDENANDOLA BY RANDOM
+        else if(publicacionConsecutiva.equals("aleatorio")){
+            orden=" order BY RANDOM() ";
+        }
         String campo="";
         //DEPENDIENDO DE LA RED SOCIAL ENVIA SE ACTUALIZA EL CAMPO EN ESPESIFICO
         if(tipo.equals("FB")){
@@ -995,7 +1006,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
             "WHERE\n" +
             "publicaciones."+campo+" = 0 AND\n" +
             "publicaciones.activo = 1\n" +
-            "order BY RANDOM() \n" +
+            " "+ orden +" \n" +
             "LIMIT 1; ";
             ResultSet rs = statement.executeQuery(query);
             String[] datos = new String[3];

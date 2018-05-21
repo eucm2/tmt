@@ -99,6 +99,9 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
         jLabel27 = new javax.swing.JLabel();
         numLetrasEsperar = new javax.swing.JTextField();
         jLabel28 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        publicacionConsecutiva = new javax.swing.JList<>();
 
         setTitle("Configuracion General");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -262,10 +265,10 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
         jPanel4.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 110, -1, -1));
 
         modo_prueba_rs.setText("Modo prueba");
-        jPanel4.add(modo_prueba_rs, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, -1, -1));
+        jPanel4.add(modo_prueba_rs, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 390, -1, -1));
 
         tiempo_x2_rs.setText("Tiempo x 2");
-        jPanel4.add(tiempo_x2_rs, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 350, -1, -1));
+        jPanel4.add(tiempo_x2_rs, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 390, -1, -1));
 
         jLabel24.setText("Cantidad a compartir fb...");
         jPanel4.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, -1));
@@ -276,10 +279,10 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
         jPanel4.add(cantidad_comparir_gp, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 220, 110, -1));
 
         checkFB.setText("Publicar en FB");
-        jPanel4.add(checkFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 350, -1, -1));
+        jPanel4.add(checkFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 390, -1, -1));
 
         checkGP.setText("Publicar en GP");
-        jPanel4.add(checkGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 350, -1, -1));
+        jPanel4.add(checkGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 390, -1, -1));
 
         accesoManualGP.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "automatico", "manual" };
@@ -309,9 +312,21 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
         jLabel28.setText("Acceso FB.......................");
         jPanel4.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, -1));
 
+        jLabel29.setText("Publicacion consecutiva");
+        jPanel4.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 310, -1, -1));
+
+        publicacionConsecutiva.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "consecutivo", "aleatorio" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane7.setViewportView(publicacionConsecutiva);
+
+        jPanel4.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 310, 110, 50));
+
         jTabbedPane4.addTab("Redes sociales", jPanel4);
 
-        getContentPane().add(jTabbedPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 630, 440));
+        getContentPane().add(jTabbedPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 630, 450));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -363,7 +378,8 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
                     + "checkGP,"
                     + "numLetrasEsperar,"
                     + "accesoManualFB,"
-                    + "accesoManualGP "
+                    + "accesoManualGP,"
+                    + "publicacionConsecutiva "
                     + "FROM configuracion";
             ResultSet rs = statement.executeQuery(query);
             pathDrive.setText(rs.getString("path_drive"));
@@ -428,6 +444,7 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
             escribirCon_rs.setSelectedValue(rs.getString("escribirCon_rs"), false);
             accesoManualFB.setSelectedValue(rs.getString("accesoManualFB"), false);
             accesoManualGP.setSelectedValue(rs.getString("accesoManualGP"), false);
+            publicacionConsecutiva.setSelectedValue(rs.getString("publicacionConsecutiva"), false);
             //SI ES 1 ACTIVAMOS EL CHECK DE MODO PRUEBA
             if( Integer.parseInt(rs.getString("modo_prueba_rs"))==1){
                 modo_prueba_rs.setSelected(true);
@@ -579,6 +596,7 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
                     + "escribirCon_rs='"+escribirCon_rs.getSelectedValue()+"',\n"
                     + "accesoManualFB='"+accesoManualFB.getSelectedValue()+"',\n"
                     + "accesoManualGP='"+accesoManualGP.getSelectedValue()+"',\n"
+                    + "publicacionConsecutiva='"+publicacionConsecutiva.getSelectedValue()+"',\n"
                     + "modo_prueba_rs='"+Imodo_prueba_rs+"',\n"
                     + "tiempo_x2_rs='"+Itiempo_x2_rs+"',\n"
                     + "dias_semana_rs='"+Sdias_semana_rs+"',\n"
@@ -663,6 +681,7 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -680,6 +699,7 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JTabbedPane jTabbedPane4;
     private javax.swing.JTextField lento;
     private javax.swing.JTextField max_king;
@@ -690,6 +710,7 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
     private javax.swing.JCheckBox modo_prueba_rs;
     private javax.swing.JTextField numLetrasEsperar;
     private javax.swing.JTextField pathDrive;
+    private javax.swing.JList<String> publicacionConsecutiva;
     private javax.swing.JTextField rapido;
     private javax.swing.JButton seleccionarImagen;
     private javax.swing.JCheckBox tiempo_x2;
