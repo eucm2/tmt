@@ -618,7 +618,7 @@ public class cControl {
             //OBTENEMOS UN NUMERO ENTRE 4 Y 11
             int numeroAleatorio = (int) (Math.random() * 4) + 7;
             //CONVERTIMOS LOS SEGUNDOS EN MILISEGUNDOS
-            int miliSegundos=(totSeg + numeroAleatorio)*1000;
+            int miliSegundos=(totSeg + numeroAleatorio + 50 )*1000;
             //ESPERAMOS LOS MINUTOS SE PIDIO PARA CERRAR LA SUBVENTANA
             pausa(miliSegundos);
             
