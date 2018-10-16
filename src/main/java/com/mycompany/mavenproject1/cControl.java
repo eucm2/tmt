@@ -541,6 +541,13 @@ public class cControl {
         String codigoOnClick = "";
         //SEGUNDOS A ESPERAR EL VIDEO ABIERTO
         int totSeg=0;
+        pausa(mlento);
+        pausa(mlento);
+        pausa(mlento);
+        pausa(mlento);
+        pausa(mlento);
+        pausa(mlento);
+
         //VAMOS A LA PAGINA DE LOS VIDEOS
         driver.get("https://kingdomlikes.com/free_points/youtube-views");
         //ESPERAMOS UN RATO A QUE CARGUEN TODOS LOS VIDEOS
