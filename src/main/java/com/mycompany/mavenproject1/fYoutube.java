@@ -257,6 +257,8 @@ public class fYoutube extends javax.swing.JInternalFrame {
         tiempoFaltaEjecutar = new javax.swing.JLabel();
         lblModo = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        btnAbrirNav = new javax.swing.JButton();
+        checkMostrarPassFB = new javax.swing.JCheckBox();
 
         setTitle("Publicar");
         setInheritsPopupMenu(true);
@@ -350,14 +352,14 @@ public class fYoutube extends javax.swing.JInternalFrame {
         getContentPane().add(checkGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 430, -1, -1));
 
         jLabel11.setText("Buscar por titulo");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, -1, -1));
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
 
         busca_titulo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 busca_tituloKeyPressed(evt);
             }
         });
-        getContentPane().add(busca_titulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, 380, -1));
+        getContentPane().add(busca_titulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 70, 380, -1));
 
         jLabel8.setText("Buscar por url");
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 60, -1, -1));
@@ -377,7 +379,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
         });
         getContentPane().add(Buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 60, -1, -1));
 
-        jLabel12.setText("Password FB");
+        jLabel12.setText("Pass FB");
         getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 10, -1, -1));
 
         userFB.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -385,9 +387,9 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 userFBKeyPressed(evt);
             }
         });
-        getContentPane().add(userFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 150, -1));
+        getContentPane().add(userFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, 110, -1));
 
-        jLabel13.setText("Password G+");
+        jLabel13.setText("Pass G+");
         getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 10, -1, -1));
 
         userGP.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -395,7 +397,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 userGPKeyPressed(evt);
             }
         });
-        getContentPane().add(userGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 30, 150, -1));
+        getContentPane().add(userGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 10, 110, -1));
 
         guardarGP.setText("Guardar G+");
         guardarGP.addActionListener(new java.awt.event.ActionListener() {
@@ -403,7 +405,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 guardarGPActionPerformed(evt);
             }
         });
-        getContentPane().add(guardarGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 30, -1, -1));
+        getContentPane().add(guardarGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 10, -1, -1));
 
         guardarFB.setText("Guardar FB");
         guardarFB.addActionListener(new java.awt.event.ActionListener() {
@@ -411,15 +413,15 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 guardarFBActionPerformed(evt);
             }
         });
-        getContentPane().add(guardarFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 30, -1, -1));
+        getContentPane().add(guardarFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 10, -1, -1));
 
         jLabel14.setText("User FB");
         getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
         jLabel15.setText("User G+");
-        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 10, -1, -1));
-        getContentPane().add(passwordGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 30, 140, -1));
-        getContentPane().add(passwordFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 30, 140, -1));
+        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 10, -1, -1));
+        getContentPane().add(passwordGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 10, 100, -1));
+        getContentPane().add(passwordFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 10, 110, -1));
 
         activar.setText("Activar");
         activar.addActionListener(new java.awt.event.ActionListener() {
@@ -485,6 +487,22 @@ public class fYoutube extends javax.swing.JInternalFrame {
         jLabel9.setText("jLabel9");
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 760, -1, -1));
 
+        btnAbrirNav.setText("Abrir nav");
+        btnAbrirNav.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAbrirNavActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnAbrirNav, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 10, -1, -1));
+
+        checkMostrarPassFB.setText("Mostrar password");
+        checkMostrarPassFB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkMostrarPassFBActionPerformed(evt);
+            }
+        });
+        getContentPane().add(checkMostrarPassFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 30, -1, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -524,6 +542,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 }
             }
         }
+        /*
         //SI ESTA ACTIVO EL CHECKBOX DE COMPARTIR EN GOOGLE+ LO COMPARTIMOS EN FB
         if (checkGP.isSelected()) {
             numeroCompartidasGP = c.numeroCompartidasGP(idPubCompartir);
@@ -536,6 +555,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 }
             }
         }
+        */
         //SACAMOS LA FECHA DE HOY
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -561,7 +581,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
             int numeroNoCompartidoFB = 0;
             int numeroNoCompartidoGP = 0;
             //INICIALIZAMOS EL CHROMEDRIVER
-            c.inicializarWebdriver(path_drive);
+            //c.inicializarWebdriver(path_drive);
             //SI EL CHECK DE FB ESTA ACTIVO PUBLICAMOS EN FB FFFFBBBBBB
             if (checkFB.isSelected()) {
                 //NOS LOGUEAMOS EN FB O
@@ -594,10 +614,13 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 //MANDAMOS MAIL CON EL ARTICULO Y EL GRUPO DONDE SE COMPARTIO
                 c.mandaMail("eucm2g@gmail.com","En fb","tmt","Se publico este videos "+urlVideo.getText()+" </br> en estos grupos"+ errorYlistaGrupos[2] +" ");
                 //SI NO ESTA SELECCIONADO GP CERRAMOS EL NAVEGADOR
+                /*
                 if (checkGP.isSelected()==false) {
                     c.cerrarNavegador();
                 }
+                */
             }
+            /*
             //SI EL CHECK DE G+ ESTA ACTIVO PUBLICAMOS EN G+ GGGG+++++++
             if (checkGP.isSelected()) {
                 //NOS LOGUEAMOS EN FB O ESPERAMOS A QUE EL USUARIO TERMINE DE LOGUEARSE
@@ -630,6 +653,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 c.mandaMail("eucm2g@gmail.com","En gp","tmt","Se publico este videos "+urlVideo.getText()+" </br> en estos grupos"+ errorYlistaGrupos[2] +" ");
                 c.cerrarNavegador();
             }
+            */
         }
 
         
@@ -767,6 +791,15 @@ public class fYoutube extends javax.swing.JInternalFrame {
         compartirPublicacion("manual");
         
     }//GEN-LAST:event_btnGanarPuntosActionPerformed
+
+    private void btnAbrirNavActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbrirNavActionPerformed
+        c.inicializarWebdriver(path_drive);
+        c.accedeFB(userFB.getText(), passwordFB.getText());
+    }//GEN-LAST:event_btnAbrirNavActionPerformed
+
+    private void checkMostrarPassFBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkMostrarPassFBActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_checkMostrarPassFBActionPerformed
     //COLOCAMOS EL TEXTO DE LA TABLA EN CADA INPUT TEXT
     public void asigna_tabla_publicaciones_input_text() {
         try {
@@ -1251,12 +1284,14 @@ public class fYoutube extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Buscar;
     private javax.swing.JCheckBox activar;
+    private javax.swing.JButton btnAbrirNav;
     private javax.swing.JButton btnGanarPuntos;
     private javax.swing.JTextField busca_titulo;
     private javax.swing.JTextField busca_url;
     private javax.swing.JButton buscarImagen;
     private javax.swing.JCheckBox checkFB;
     private javax.swing.JCheckBox checkGP;
+    private javax.swing.JCheckBox checkMostrarPassFB;
     private javax.swing.JCheckBox checkTW;
     private javax.swing.JButton compartirVideo;
     private javax.swing.JTextPane grupoErrores;
