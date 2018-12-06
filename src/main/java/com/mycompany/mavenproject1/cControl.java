@@ -30,6 +30,7 @@ import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 public class cControl {
+
     long rapido = 500;
     long medio = 1000;
     long lento = 2000;
@@ -42,13 +43,16 @@ public class cControl {
     Statement statement = null;
     String path_drive = "";
     Object[] options = {"Continuar", "Detener"};
-    String escribirCon="";
-    public void cControl(String escribirCon1){
-        escribirCon=escribirCon1;
+    String escribirCon = "";
+
+    public void cControl(String escribirCon1) {
+        escribirCon = escribirCon1;
     }
-    public void cControl(){
-        escribirCon="sendkeys";
+
+    public void cControl() {
+        escribirCon = "sendkeys";
     }
+
     public void inicializarWebdriver(String path_drive) {
         try {
             //CREA UNA BD (SI NO EXISTE) EN DONDE SE ENCUENTRE LA APLICACION
@@ -147,8 +151,8 @@ public class cControl {
     public void accedeFB(String user, String password) {
         driver.get("https://www.facebook.com/");
         if (user.length() > 0 && password.length() > 0) {
-            escribeTexto(driver.findElement(By.xpath("//*[@id=\"email\"]")),user);
-            escribeTexto(driver.findElement(By.xpath("//*[@id=\"pass\"]")),password);
+            escribeTexto(driver.findElement(By.xpath("//*[@id=\"email\"]")), user);
+            escribeTexto(driver.findElement(By.xpath("//*[@id=\"pass\"]")), password);
             //driver.findElement(By.xpath("//*[@id=\"email\"]")).sendKeys(user);
             //driver.findElement(By.xpath("//*[@id=\"pass\"]")).sendKeys(password);
             pausa(rapido);
@@ -161,11 +165,11 @@ public class cControl {
 
     }
 
-    public String[] compartirFB(String urlVideo, String pathImagen, String titulo, String idPub,int numeroAcompartir,String idsYaCompartidos) {
+    public String[] compartirFB(String urlVideo, String pathImagen, String titulo, String idPub, int numeroAcompartir, String idsYaCompartidos) {
         String grupoError = "";
         String grupoBien = "";
-        int vecesCompartido=0;
-        String listaIdsDeGrupos="";
+        int vecesCompartido = 0;
+        String listaIdsDeGrupos = "";
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:tmt.db");
             statement = connection.createStatement();
@@ -185,11 +189,11 @@ public class cControl {
                     + "WHERE\n"
                     + "grupos.activo = '1' \n"
                     + "and publicaciones.id='" + idPub + "' "
-                    + "AND grupos.id not in ("+idsYaCompartidos+")   "
+                    + "AND grupos.id not in (" + idsYaCompartidos + ")   "
                     + "and grupos.tipo='FB'  "
-                    + "limit "+numeroAcompartir+" ;  ";
+                    + "limit " + numeroAcompartir + " ;  ";
             ResultSet rs = statement.executeQuery(query);
-            if(rs.isBeforeFirst()==false){
+            if (rs.isBeforeFirst() == false) {
                 return null;
             }
             //HACEMOS UN BLUCLE CON TODOS LOS GRUPOS DE FACEBOOK
@@ -204,25 +208,25 @@ public class cControl {
                     } //SI NO HAY ALERT PROCEDEMOS A ECRIBIR EL ARTICULO
                     catch (NoAlertPresentException e) {
                         //AGREGAMOS LOS GRUPOS QUE SE VAN A GUARDAR EN GRUPOS YA PUBLICADOS
-                        listaIdsDeGrupos=listaIdsDeGrupos+","+rs.getString("id");
+                        listaIdsDeGrupos = listaIdsDeGrupos + "," + rs.getString("id");
                         pausa(mlento);
-                        String espacio="";
-                        String borrar="";
+                        String espacio = "";
+                        String borrar = "";
                         //CICLO QUE ESCRIBE Y BORRA LETRAS PARA ESPERAR QUE SE CARGUE LA IMAGEN AUTOMATICAMENTE
-                        for(int letras=0;letras<380;letras++){
-                            espacio=espacio+"1";
-                            borrar=borrar+Keys.BACK_SPACE;
+                        for (int letras = 0; letras < 380; letras++) {
+                            espacio = espacio + "1";
+                            borrar = borrar + Keys.BACK_SPACE;
                         }
                         //ESCRIBIMOS EL TITULO Y EL VIDEO DE LA PUBLICACION
                         escribeTexto(driver.findElement(By.name("xhpc_message_text")),
-                                titulo 
+                                titulo
                                 + "\\r"
-                                + urlVideo 
+                                + urlVideo
                                 + "\\r"
                         );
                         grupoBien = grupoBien + " </br> " + rs.getString("nombre") + " </br>\n " + rs.getString("url") + " </br>\n ";
                         pausa(mlento);
-                        driver.findElement(By.name("xhpc_message_text")).sendKeys(Keys.chord(espacio+borrar+ Keys.CONTROL, Keys.ENTER));
+                        driver.findElement(By.name("xhpc_message_text")).sendKeys(Keys.chord(espacio + borrar + Keys.CONTROL, Keys.ENTER));
                         pausa(mlento);
                         pausa(mlento);
                         pausa(mlento);
@@ -234,7 +238,7 @@ public class cControl {
                 } catch (Exception e) {
                     grupoError = grupoError + rs.getString("nombre") + "\n" + rs.getString("url") + "\n";
                 }
-                
+
             }
         } catch (NoSuchElementException e) {
             int res = JOptionPane.showOptionDialog(null, "Desea continuar o detener? \n error= " + e, "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
@@ -256,13 +260,11 @@ public class cControl {
                 System.err.println(e);
             }
         }
-        return new String[] { grupoError, listaIdsDeGrupos,grupoBien };
+        return new String[]{grupoError, listaIdsDeGrupos, grupoBien};
     }
-    
-    
-    
+
     public int numeroCompartidasFB(String idPub) {
-        int vecesCompartido=0;
+        int vecesCompartido = 0;
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:tmt.db");
             statement = connection.createStatement();
@@ -282,7 +284,7 @@ public class cControl {
                     + "and grupos.tipo='FB';  ";
             ResultSet rs = statement.executeQuery(query);
             return Integer.parseInt(rs.getString("numeroCompartidasFB"));
-            
+
         } catch (Exception e) {
             return 0;
         } finally {
@@ -305,7 +307,7 @@ public class cControl {
     *
     *
      */
-    public void accedeGP(String user, String password,String forma) {
+    public void accedeGP(String user, String password, String forma) {
         driver.get("https://accounts.google.com/signin/v2/identifier?continue=https%3A%2F%2Fplus.google.com");
         if (user.length() > 0 && password.length() > 0) {
             escribeTexto(driver.findElement(By.id("identifierId")), user);
@@ -316,12 +318,11 @@ public class cControl {
             escribeTexto(driver.findElement(By.name("password")), password);
             //driver.findElement(By.name("password")).sendKeys(password);
             pausa(rapido);
-            if(forma.equals("automatico")){
+            if (forma.equals("automatico")) {
                 driver.findElement(By.id("passwordNext")).click();
                 pausa(medio);
                 pausa(rapido);
-            }
-            else if(forma.equals("manual")){
+            } else if (forma.equals("manual")) {
                 JOptionPane.showMessageDialog(null, "Favor de loguearse en su cuenta y despues hacer click en aceptar");
             }
         } else {
@@ -333,21 +334,20 @@ public class cControl {
     public void accedeGPManual(String user, String password) {
         driver.get("https://accounts.google.com/signin/v2/identifier?continue=https%3A%2F%2Fplus.google.com");
         pausa(rapido);
-            driver.findElement(By.id("identifierId")).sendKeys(user);
-            pausa(rapido);
-            driver.findElement(By.id("identifierNext")).click();
-            pausa(rapido);
-            driver.findElement(By.name("password")).sendKeys(password);
-            pausa(rapido);
+        driver.findElement(By.id("identifierId")).sendKeys(user);
+        pausa(rapido);
+        driver.findElement(By.id("identifierNext")).click();
+        pausa(rapido);
+        driver.findElement(By.name("password")).sendKeys(password);
+        pausa(rapido);
         JOptionPane.showMessageDialog(null, "Favor de loguearse en su cuenta y despues hacer click en aceptar");
     }
 
-    
-    public String[] compartirGP(String urlVideo, String pathImagen, String titulo, String idPub,int numeroAcompartir,String idsYaCompartidos) {
+    public String[] compartirGP(String urlVideo, String pathImagen, String titulo, String idPub, int numeroAcompartir, String idsYaCompartidos) {
         String grupoError = "";
         String grupoBien = "";
-        int vecesCompartido=0;
-        String listaIdsDeGrupos="";
+        int vecesCompartido = 0;
+        String listaIdsDeGrupos = "";
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:tmt.db");
             statement = connection.createStatement();
@@ -370,11 +370,11 @@ public class cControl {
                     + "WHERE\n"
                     + "grupos.activo = '1' \n"
                     + "and publicaciones.id='" + idPub + "' "
-                    + "AND grupos.id not in ("+idsYaCompartidos+")   "
+                    + "AND grupos.id not in (" + idsYaCompartidos + ")   "
                     + "and grupos.tipo='GP'  "
-                    + "limit "+numeroAcompartir+"; ";
+                    + "limit " + numeroAcompartir + "; ";
             ResultSet rs = statement.executeQuery(query);
-            if(rs.isBeforeFirst()==false){
+            if (rs.isBeforeFirst() == false) {
                 return null;
             }
             //HACEMOS UN BLUCLE CON TODOS LOS GRUPOS DE GOOGLE
@@ -386,28 +386,28 @@ public class cControl {
                     pausa(medio);
                     driver.findElement(By.cssSelector("span[role='button']")).click();
                     pausa(medio);
-                    String espacio="";
-                    String borrar="";
+                    String espacio = "";
+                    String borrar = "";
                     //CICLO QUE ESCRIBE Y BORRA LETRAS PARA ESPERAR QUE SE CARGUE LA IMAGEN AUTOMATICAMENTE
-                    for(int letras=0;letras<380;letras++){
-                        espacio=espacio+"1";
-                        borrar=borrar+Keys.BACK_SPACE;
+                    for (int letras = 0; letras < 380; letras++) {
+                        espacio = espacio + "1";
+                        borrar = borrar + Keys.BACK_SPACE;
                     }
                     //ESCRIBIMOS EL TEXTO DEL VIDEO
                     //driver.findElement(By.cssSelector("textarea[role='textbox']")).sendKeys(titulo + Keys.RETURN + urlVideo + Keys.RETURN + "                             " + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE  + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.BACK_SPACE + Keys.chord(Keys.CONTROL, Keys.ENTER));
-                    
+
                     escribeTexto(driver.findElement(By.cssSelector("textarea[role='textbox']")),
-                        titulo 
-                        + "\\r"
-                        + urlVideo 
+                            titulo
+                            + "\\r"
+                            + urlVideo
                     );
                     pausa(rapido);
                     driver.findElement(By.cssSelector("textarea[role='textbox']")).sendKeys(Keys.ENTER);
-                    driver.findElement(By.cssSelector("textarea[role='textbox']")).sendKeys(Keys.chord(espacio+borrar+ Keys.CONTROL, Keys.ENTER));
+                    driver.findElement(By.cssSelector("textarea[role='textbox']")).sendKeys(Keys.chord(espacio + borrar + Keys.CONTROL, Keys.ENTER));
                     //SACAMOS LA LSTA DE LOS NOMBRES DE LOS GRUPOS QUE SI SE ESCRIBIERON
                     grupoBien = grupoBien + " </br> " + rs.getString("nombre") + " </br>\n " + rs.getString("url") + " </br>\n ";
                     //AGREGAMOS LOS GRUPOS QUE SE VAN A GUARDAR EN GRUPOS YA PUBLICADOS
-                    listaIdsDeGrupos=listaIdsDeGrupos+","+rs.getString("id");
+                    listaIdsDeGrupos = listaIdsDeGrupos + "," + rs.getString("id");
                     pausa(mlento);
                     pausa(mlento);
                     vecesCompartido++;
@@ -460,8 +460,9 @@ public class cControl {
                 System.err.println(e);
             }
         }
-        return new String[] { grupoError, listaIdsDeGrupos ,grupoBien };
+        return new String[]{grupoError, listaIdsDeGrupos, grupoBien};
     }
+
     public int numeroCompartidasGP(String idPub) {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:tmt.db");
@@ -482,7 +483,7 @@ public class cControl {
                     + "and grupos.tipo='GP';  ";
             ResultSet rs = statement.executeQuery(query);
             return Integer.parseInt(rs.getString("numeroCompartidasGP"));
-            
+
         } catch (Exception e) {
             return 0;
         } finally {
@@ -506,19 +507,19 @@ public class cControl {
     *
      */
     public void accedeKL(String user, String password) {
-        try{
-        driver.get("https://kingdomlikes.com");
-        pausa(medio);
-        if (user.length() > 0 && password.length() > 0) {
-            driver.findElement(By.name("email")).sendKeys(user);
-            driver.findElement(By.name("password")).sendKeys(password);
-            pausa(rapido);
-            driver.findElement(By.name("password")).sendKeys(Keys.ENTER);
-        } else {
-            //PEDIMOS AL USUARIO QUE PONGA SU USUARIO Y CONTRASEÑA PARA PODER CONTINUAR
-            JOptionPane.showMessageDialog(null, "Favor de loguearse en su cuenta y despues hacer click en aceptar");
-        }
-        }catch(Exception e){
+        try {
+            driver.get("https://kingdomlikes.com");
+            pausa(medio);
+            if (user.length() > 0 && password.length() > 0) {
+                driver.findElement(By.name("email")).sendKeys(user);
+                driver.findElement(By.name("password")).sendKeys(password);
+                pausa(rapido);
+                driver.findElement(By.name("password")).sendKeys(Keys.ENTER);
+            } else {
+                //PEDIMOS AL USUARIO QUE PONGA SU USUARIO Y CONTRASEÑA PARA PODER CONTINUAR
+                JOptionPane.showMessageDialog(null, "Favor de loguearse en su cuenta y despues hacer click en aceptar");
+            }
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.toString());
         }
     }
@@ -540,7 +541,7 @@ public class cControl {
         //ESTE ES EL CODIGO DE LA VENTANA A ABRIR
         String codigoOnClick = "";
         //SEGUNDOS A ESPERAR EL VIDEO ABIERTO
-        int totSeg=0;
+        int totSeg = 0;
         pausa(mlento);
         pausa(mlento);
         pausa(mlento);
@@ -592,28 +593,27 @@ public class cControl {
         pausa(rapido);
         //SI SE ENCONTRO UN BOTON Y SE DIO CLICK EN EL SE HABRE UNA NUEVA VENTANA Y HAY QUE ESPERAR UN TIEMPO Y CERRARLA
         if (banderaEncontro) {
-            
+
             /*   SEGUNDOS A CERRAR SUBVENTANA   */
-            
             //HACEMOS UNA LISTA CON TODOS LOS BOTONES
             List<WebElement> todosCronometros = driver.findElements(By.className("containerbtn"));
             Iterator<WebElement> cronometro = todosCronometros.iterator();
             while (cronometro.hasNext()) {
                 try {
                     //ES EL TEXTO DEL TIEMPO QUE SE TIENE QUE VER EL VIDEO
-                    String textoCronometro =cronometro.next().getText();
+                    String textoCronometro = cronometro.next().getText();
                     //DIVIDIMOS EN TEXTO EN 2 PARTES ANTES Y DESPUES DE /
                     String[] parts = textoCronometro.split("/");
                     //SACAMOS EL TEXTO DE MINUTOS Y SEGUNDOS A PAGAR
-                    String minutosSegundos=parts[1].replaceAll("minutes","").trim();
+                    String minutosSegundos = parts[1].replaceAll("minutes", "").trim();
                     //DIVIDIMOS EL TEXTO EN MINUTOS Y SEGUNDOS
-                    String [] partesMin=minutosSegundos.split(":");
+                    String[] partesMin = minutosSegundos.split(":");
                     //SACAMOS LOS MINUTOS
-                    int partMin=Integer.parseInt(partesMin[0]);
+                    int partMin = Integer.parseInt(partesMin[0]);
                     //SACAMOS LOS SEGUNDOS
-                    int partSeg=Integer.parseInt(partesMin[1]);
+                    int partSeg = Integer.parseInt(partesMin[1]);
                     //SACAMOS LA CANTIDAD TOTAL DE SEGUNDOS
-                    totSeg=(partMin*60)+partSeg;
+                    totSeg = (partMin * 60) + partSeg;
                     break;
                 } catch (Exception e) {
                     //SUMA IN INTENTO MAS
@@ -625,12 +625,11 @@ public class cControl {
             //OBTENEMOS UN NUMERO ENTRE 4 Y 11
             int numeroAleatorio = (int) (Math.random() * 4) + 7;
             //CONVERTIMOS LOS SEGUNDOS EN MILISEGUNDOS
-            int miliSegundos=(totSeg + numeroAleatorio + 5 )*1000;
+            int miliSegundos = (totSeg + numeroAleatorio + 5) * 1000;
             //ESPERAMOS LOS MINUTOS SE PIDIO PARA CERRAR LA SUBVENTANA
             pausa(miliSegundos);
-            
+
             /*  CERRAR VENTANA SECUNDARIA  */
-            
             //JALAMOS EL NOMBRE DE LA VENTANA PRINCIPAL
             String nombreVentanaPrincipal = driver.getWindowHandle();
             //JALAMOS LA LISTA DE VENTANAS
@@ -639,14 +638,19 @@ public class cControl {
             listaVentanas.remove(nombreVentanaPrincipal);
             //EL ARREGLO DE VENTANAS LO REDOMENCIONAMOS A 1
             assert listaVentanas.size() == 1;
-            //NOS MOVEMOS A LA VENTANA SECUNDARIA
-            driver.switchTo().window(listaVentanas.toArray()[0].toString());
-            //CERRAMOS ESA VENTANA
-            driver.close();
-            //REGRESAMOS A LA VENTANA PRINCIPAL
-            driver.switchTo().window(nombreVentanaPrincipal);
+            //SI LA VENTANA SECUNDARIA YA FUE CERRADA YA NO LA CERRAMOS
+            try {
+                //NOS MOVEMOS A LA VENTANA SECUNDARIA
+                driver.switchTo().window(listaVentanas.toArray()[0].toString());
+                //CERRAMOS ESA VENTANA
+                driver.close();
+                //REGRESAMOS A LA VENTANA PRINCIPAL
+                driver.switchTo().window(nombreVentanaPrincipal);
+            } catch (ArrayIndexOutOfBoundsException excepcion) {
+                System.out.println(" Error de índice en un array");
+            }
             //COMO EL PROCESO FUE EXISTOSO REINICIAMOS LOS INTENTOS
-            intentos=0;
+            intentos = 0;
             //ESPERAMOS 3 SEGUNDOS EN LO SE CARGAN NUESTROS PUNTOS
             pausa(lento);
             pausa(lento);
@@ -655,8 +659,6 @@ public class cControl {
         }
     }
 
-    
-    
     /*
     *
     *
@@ -666,31 +668,32 @@ public class cControl {
     *
      */
     public void accedeHL(String user, String password) {
-        try{
-        driver.get("https://hitleap.com/authentication");
-        pausa(lento);
-        if (user.length() > 0 && password.length() > 0) {
-            escribeTexto(driver.findElement(By.name("identifier")),user);
-            escribeTexto(driver.findElement(By.name("password")),password);
-            pausa(medio);
-            driver.findElement(By.name("password")).sendKeys(Keys.ENTER);
-        } else {
-            //PEDIMOS AL USUARIO QUE PONGA SU USUARIO Y CONTRASEÑA PARA PODER CONTINUAR
-            JOptionPane.showMessageDialog(null, "Favor de loguearse en su cuenta y despues hacer click en aceptar");
-        }
-        }catch(Exception e){
+        try {
+            driver.get("https://hitleap.com/authentication");
+            pausa(lento);
+            if (user.length() > 0 && password.length() > 0) {
+                escribeTexto(driver.findElement(By.name("identifier")), user);
+                escribeTexto(driver.findElement(By.name("password")), password);
+                pausa(medio);
+                driver.findElement(By.name("password")).sendKeys(Keys.ENTER);
+            } else {
+                //PEDIMOS AL USUARIO QUE PONGA SU USUARIO Y CONTRASEÑA PARA PODER CONTINUAR
+                JOptionPane.showMessageDialog(null, "Favor de loguearse en su cuenta y despues hacer click en aceptar");
+            }
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.toString());
         }
     }
-    public void escribeTexto(WebElement elementoWeb,String texto){
-        if(escribirCon.equals("sendkeys")){
+
+    public void escribeTexto(WebElement elementoWeb, String texto) {
+        if (escribirCon.equals("sendkeys")) {
             elementoWeb.sendKeys(texto);
-        }
-        else if(escribirCon.equals("javascript")){
+        } else if (escribirCon.equals("javascript")) {
             JavascriptExecutor js = (JavascriptExecutor) driver;
-            js.executeScript("arguments[0].value='"+texto+"';", elementoWeb);
+            js.executeScript("arguments[0].value='" + texto + "';", elementoWeb);
         }
     }
+
     //PONEMOS LOS VIDEOS LE LOS SLOTS DE HITLEAP
     public boolean registraVideos(String listaPub) {
         pausa(lento);
@@ -700,18 +703,18 @@ public class cControl {
         //SACAMOS LA LISTA DE TODAS LA TACHAS DE LAS DE LA LISTA DE PAGINAS PARA BORRARLAS UNA POR UNA
         List<WebElement> todasLasTachas = driver.findElements(By.cssSelector("a[data-original-title='Delete']"));
         //SI HAY TACHAS
-        if(!todasLasTachas.isEmpty()){
+        if (!todasLasTachas.isEmpty()) {
             for (WebElement tachas : todasLasTachas) {
-                try{
+                try {
                     //CLICK EN LA TACHA PARA BORRAR ESTA PAGINA DE HITLEAP
                     tachas.click();
                     pausa(lento);
-                }catch(Exception er){
+                } catch (Exception er) {
                     return false;
                 }
             }
         }
-        try {            
+        try {
             //NOS MOVEMOS AL AREA DE CREAR PAGINAS
             driver.get("https://hitleap.com/websites/new");
             pausa(rapido);
@@ -719,7 +722,7 @@ public class cControl {
             driver.findElement(By.className("add-list")).click();
             pausa(rapido);
             //ESCRIBIMOS LAS 3 URL'S
-            escribeTexto(driver.findElement(By.name("address_list")),listaPub);
+            escribeTexto(driver.findElement(By.name("address_list")), listaPub);
             //driver.findElement(By.id("address_list")).sendKeys(listaPub);
             pausa(rapido);
             //CERRAMOS LA LISTA DE VINCULOS
@@ -733,43 +736,45 @@ public class cControl {
         }
         return true;
     }
+
     public void cerrarNavegador() {
         driver.quit();
     }
-    
+
     public void pausa(long sleeptime) {
         try {
             Thread.sleep(sleeptime);
         } catch (InterruptedException ex) {
         }
     }
-    public void buscaGoogle(String texto,String escribirCon) {
-        try{
+
+    public void buscaGoogle(String texto, String escribirCon) {
+        try {
             driver.get("https://www.google.com");
             pausa(medio);
             JavascriptExecutor js = (JavascriptExecutor) driver;
-            WebElement busGoogle= driver.findElement(By.id("lst-ib"));
-            js.executeScript("arguments[0].value='"+texto+"';", busGoogle);
-        }catch(Exception e){
+            WebElement busGoogle = driver.findElement(By.id("lst-ib"));
+            js.executeScript("arguments[0].value='" + texto + "';", busGoogle);
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.toString());
         }
     }
 
-    public void mandaMail(String correoRecibe,String asunto,String deNombre,String mensaje){
+    public void mandaMail(String correoRecibe, String asunto, String deNombre, String mensaje) {
         String HOST_NAME = "smtp.gmail.com";
         int PORT = 465;
         String TEXT_PLAIN = "text/plain";
 
-        String correoEnvia="eugenio@onefocusdigital.com";
-        String password="Demo4231#@64";
-        
+        String correoEnvia = "eugenio@onefocusdigital.com";
+        String password = "Demo4231#@64";
+
         HtmlEmail email = new HtmlEmail();
         email.setHostName(HOST_NAME);
         email.setSmtpPort(PORT);
         email.setSSLOnConnect(true);
- 
+
         email.setAuthentication(correoEnvia, password);
- 
+
         email.setSubject(asunto);
         try {
             email.setFrom(correoEnvia, deNombre, String.valueOf(StandardCharsets.UTF_8));
@@ -786,14 +791,13 @@ public class cControl {
         } catch (EmailException ex) {
             Logger.getLogger(hitleap.class.getName()).log(Level.SEVERE, null, ex);
         }
- 
+
         try {
             email.send();
         } catch (EmailException ex) {
             Logger.getLogger(hitleap.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
     }
 
 }
