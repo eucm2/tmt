@@ -613,7 +613,7 @@ public class cControl {
                     //SACAMOS LOS SEGUNDOS
                     int partSeg = Integer.parseInt(partesMin[1]);
                     //SACAMOS LA CANTIDAD TOTAL DE SEGUNDOS
-                    totSeg = (partMin * 60) + partSeg;
+                    totSeg = (partMin * 60) + partSeg + 6;
                     break;
                 } catch (Exception e) {
                     //SUMA IN INTENTO MAS
