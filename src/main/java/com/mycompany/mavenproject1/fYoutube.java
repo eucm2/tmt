@@ -584,7 +584,6 @@ public class fYoutube extends javax.swing.JInternalFrame {
             //c.inicializarWebdriver(path_drive);
             //SI EL CHECK DE FB ESTA ACTIVO PUBLICAMOS EN FB FFFFBBBBBB
             if (checkFB.isSelected()) {
-                c.inicializarWebdriver(path_drive);
                 //NOS LOGUEAMOS EN FB O
                 c.accedeFB(userFB.getText(), passwordFB.getText());
                 //SACAMOS LA LISTA DE LOS ID'S DE LOS GRUPOS QUE YA SE COMPARTIERON EN ESTE ARTICULO DE FB
@@ -788,7 +787,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_activarActionPerformed
 
     private void btnGanarPuntosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGanarPuntosActionPerformed
-        
+        c.inicializarWebdriver(path_drive);
         compartirPublicacion("manual");
         
     }//GEN-LAST:event_btnGanarPuntosActionPerformed
