@@ -657,6 +657,13 @@ public class cControl {
             //REINICIAMOS LA FUNCION
             clickVideos();
         }
+        //SI NO ENCONTRO NINGUN VIDEO EN LA LISTA
+        else{
+            //ESPERAMOS UN MINUTO
+            pausa(60000);
+            clickVideos();
+            
+        }
     }
 
     /*
