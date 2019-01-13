@@ -16,6 +16,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
@@ -28,7 +29,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.chrome.ChromeOptions;
-
+import org.openqa.selenium.support.ui.Select;
 public class cControl {
 
     long rapido = 500;
@@ -665,7 +666,26 @@ public class cControl {
             
         }
     }
-
+    //Funcion que prepara el dar de alta lo video de youtube en kindomlikes
+    public void creaVideos(String paises, int numeroTabs) {
+        String listaPaises[] = paises.split("\\r?\\n");
+        pausa(rapido);
+        driver.get("https://kingdomlikes.com/sites/add");
+        for (int tabs=0;tabs<numeroTabs;tabs++){
+            Select drpCountry = new Select(driver.findElement(By.name("idtype")));
+            drpCountry.selectByVisibleText("YouTube Views");
+            driver.findElement(By.id("checkcountries")).click();
+            driver.findElement(By.xpath("//*[@id=\"add\"]/div[4]/div[2]/button")).click();
+            for (int i=0;i<listaPaises.length;i++){
+                driver.findElement(By.xpath("//*[@title='"+listaPaises[i]+"']")).click();
+                pausa(rapido);
+            }
+            ((JavascriptExecutor)driver).executeScript("window.open()");
+            ArrayList<String> tabsEle = new ArrayList<String>(driver.getWindowHandles());
+            driver.switchTo().window(tabsEle.get(tabs+1));
+            driver.get("https://kingdomlikes.com/sites/add");
+        }
+    }
     /*
     *
     *
