@@ -30,6 +30,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.Select;
+
 public class cControl {
 
     long rapido = 500;
@@ -657,35 +658,184 @@ public class cControl {
             pausa(lento);
             //REINICIAMOS LA FUNCION
             clickVideos();
-        }
-        //SI NO ENCONTRO NINGUN VIDEO EN LA LISTA
-        else{
+        } //SI NO ENCONTRO NINGUN VIDEO EN LA LISTA
+        else {
             //ESPERAMOS UN MINUTO
             pausa(60000);
             clickVideos();
-            
+
         }
     }
+
+    public void clickVideosLimite(int limite,int procesosExitoso) {
+        //DESPUES DE 3 INTENTOS Y NO FUNCIONA ES QUE HAY ALGO MAL Y SE SALE
+        if (intentos > 3) {
+            int res = JOptionPane.showOptionDialog(null, "Se han realizado 3 intentos fallidos desea intentar de nuevo o cerrar", "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+            if (res == 1) {
+                driver.quit();
+            } //SI DESEA CONTINUA RESETEAMOS LOS INTENTO A 0 PARA PROBAR DE NUEVO
+            else {
+                intentos = 0;
+            }
+        }
+        //ESTA BANDERA MARCA SI ENCONTRO UN BOTON PARA ABRIR LA VENTANA SECUNDARIA
+        boolean banderaEncontro = false;
+        //ESTE ES EL CODIGO DE LA VENTANA A ABRIR
+        String codigoOnClick = "";
+        //SEGUNDOS A ESPERAR EL VIDEO ABIERTO
+        int totSeg = 0;
+        pausa(mlento);
+        pausa(mlento);
+        pausa(mlento);
+        pausa(mlento);
+        pausa(mlento);
+        pausa(mlento);
+
+        //VAMOS A LA PAGINA DE LOS VIDEOS
+        driver.get("https://kingdomlikes.com/free_points/youtube-views");
+        //ESPERAMOS UN RATO A QUE CARGUEN TODOS LOS VIDEOS
+        pausa(lento);
+        pausa(lento);
+        pausa(lento);
+        pausa(lento);
+        pausa(lento);
+        //HACEMOS UNA LISTA CON TODOS LOS BOTONES
+        List<WebElement> todosLosBotones = driver.findElements(By.className("button"));
+        Iterator<WebElement> boton = todosLosBotones.iterator();
+        //CICLO QUE BUSCA TODOS LOS BOTONES
+        while (boton.hasNext()) {
+            try {
+                //JALAMOS EL CODIGO DEL CLICK
+                codigoOnClick = boton.next().getAttribute("onclick");
+                //SI EL TEXTO NO ESTA VACIO LO EJECUTAMOS
+                if (codigoOnClick.length() > 0) {
+                    if (driver instanceof JavascriptExecutor) {
+                        //Si llegamos a limite de videos cerramos el navegador y nos salimos de la funcion
+                        if (procesosExitoso == limite) {
+                            cerrarNavegador();
+                            return;
+                        }
+                        //Si el proceso fue exitoso contamos 1 mas
+                        procesosExitoso++;
+                        ((JavascriptExecutor) driver).executeScript(codigoOnClick);
+                    } else {
+                        throw new IllegalStateException("This driver does not support JavaScript!");
+                    }
+                } //SI EL TEXTO DEL CODIGO ESTA VACIO SUMAMOS UN INTENTO Y REINICIAMOS ESTA FUNCION
+                else {
+                    intentos++;
+                    clickVideosLimite(limite, procesosExitoso);
+                }
+                //ACTIVAMOS LA BANDERA DICIENDO QUE SI DIMOS CLICK EN EL BOTON
+                banderaEncontro = true;
+            } catch (Exception e) {
+                //LA BANDERA ES FALSA PORQUE REALMENTE NO ENCONTRO NINGUN BOTON
+                banderaEncontro = false;
+                //SUMA IN INTENTO MAS
+                intentos++;
+                //REINICIA LA FUNCION
+                clickVideosLimite(limite, procesosExitoso);
+            }
+            //CERRAMOS EL CICLO
+            break;
+        }
+        pausa(rapido);
+        //SI SE ENCONTRO UN BOTON Y SE DIO CLICK EN EL SE HABRE UNA NUEVA VENTANA Y HAY QUE ESPERAR UN TIEMPO Y CERRARLA
+        if (banderaEncontro) {
+
+            /*   SEGUNDOS A CERRAR SUBVENTANA   */
+            //HACEMOS UNA LISTA CON TODOS LOS BOTONES
+            List<WebElement> todosCronometros = driver.findElements(By.className("containerbtn"));
+            Iterator<WebElement> cronometro = todosCronometros.iterator();
+            while (cronometro.hasNext()) {
+                try {
+                    //ES EL TEXTO DEL TIEMPO QUE SE TIENE QUE VER EL VIDEO
+                    String textoCronometro = cronometro.next().getText();
+                    //DIVIDIMOS EN TEXTO EN 2 PARTES ANTES Y DESPUES DE /
+                    String[] parts = textoCronometro.split("/");
+                    //SACAMOS EL TEXTO DE MINUTOS Y SEGUNDOS A PAGAR
+                    String minutosSegundos = parts[1].replaceAll("minutes", "").trim();
+                    //DIVIDIMOS EL TEXTO EN MINUTOS Y SEGUNDOS
+                    String[] partesMin = minutosSegundos.split(":");
+                    //SACAMOS LOS MINUTOS
+                    int partMin = Integer.parseInt(partesMin[0]);
+                    //SACAMOS LOS SEGUNDOS
+                    int partSeg = Integer.parseInt(partesMin[1]);
+                    //SACAMOS LA CANTIDAD TOTAL DE SEGUNDOS
+                    totSeg = (partMin * 60) + partSeg + 6;
+                    break;
+                } catch (Exception e) {
+                    //SUMA IN INTENTO MAS
+                    intentos++;
+                    //REINICIA LA FUNCION
+                    clickVideosLimite(limite, procesosExitoso);
+                }
+            }
+            //OBTENEMOS UN NUMERO ENTRE 4 Y 11
+            int numeroAleatorio = (int) (Math.random() * 4) + 7;
+            //CONVERTIMOS LOS SEGUNDOS EN MILISEGUNDOS
+            int miliSegundos = (totSeg + numeroAleatorio + 5) * 1000;
+            //ESPERAMOS LOS MINUTOS SE PIDIO PARA CERRAR LA SUBVENTANA
+            pausa(miliSegundos);
+
+            /*  CERRAR VENTANA SECUNDARIA  */
+            //JALAMOS EL NOMBRE DE LA VENTANA PRINCIPAL
+            String nombreVentanaPrincipal = driver.getWindowHandle();
+            //JALAMOS LA LISTA DE VENTANAS
+            Set<String> listaVentanas = driver.getWindowHandles();
+            //DE LA LISTA DE VENTANA BORRAMOS LA VENTANA PRINCIPAL
+            listaVentanas.remove(nombreVentanaPrincipal);
+            //EL ARREGLO DE VENTANAS LO REDOMENCIONAMOS A 1
+            assert listaVentanas.size() == 1;
+            //SI LA VENTANA SECUNDARIA YA FUE CERRADA YA NO LA CERRAMOS
+            try {
+                //NOS MOVEMOS A LA VENTANA SECUNDARIA
+                driver.switchTo().window(listaVentanas.toArray()[0].toString());
+                //CERRAMOS ESA VENTANA
+                driver.close();
+                //REGRESAMOS A LA VENTANA PRINCIPAL
+                driver.switchTo().window(nombreVentanaPrincipal);
+            } catch (ArrayIndexOutOfBoundsException excepcion) {
+                System.out.println(" Error de índice en un array");
+            }
+            //COMO EL PROCESO FUE EXISTOSO REINICIAMOS LOS INTENTOS
+            intentos = 0;
+
+            //ESPERAMOS 3 SEGUNDOS EN LO SE CARGAN NUESTROS PUNTOS
+            pausa(lento);
+            pausa(lento);
+            //REINICIAMOS LA FUNCION
+            clickVideosLimite(limite, procesosExitoso);
+        } //SI NO ENCONTRO NINGUN VIDEO EN LA LISTA
+        else {
+            //ESPERAMOS UN MINUTO
+            pausa(60000);
+            clickVideosLimite(limite, procesosExitoso);
+
+        }
+    }
+
     //Funcion que prepara el dar de alta lo video de youtube en kindomlikes
     public void creaVideos(String paises, int numeroTabs) {
         String listaPaises[] = paises.split("\\r?\\n");
         pausa(rapido);
         driver.get("https://kingdomlikes.com/sites/add");
-        for (int tabs=0;tabs<numeroTabs;tabs++){
+        for (int tabs = 0; tabs < numeroTabs; tabs++) {
             Select drpCountry = new Select(driver.findElement(By.name("idtype")));
             drpCountry.selectByVisibleText("YouTube Views");
             driver.findElement(By.id("checkcountries")).click();
             driver.findElement(By.xpath("//*[@id=\"add\"]/div[4]/div[2]/button")).click();
-            for (int i=0;i<listaPaises.length;i++){
-                driver.findElement(By.xpath("//*[@title='"+listaPaises[i]+"']")).click();
+            for (int i = 0; i < listaPaises.length; i++) {
+                driver.findElement(By.xpath("//*[@title='" + listaPaises[i] + "']")).click();
                 pausa(rapido);
             }
-            ((JavascriptExecutor)driver).executeScript("window.open()");
+            ((JavascriptExecutor) driver).executeScript("window.open()");
             ArrayList<String> tabsEle = new ArrayList<String>(driver.getWindowHandles());
-            driver.switchTo().window(tabsEle.get(tabs+1));
+            driver.switchTo().window(tabsEle.get(tabs + 1));
             driver.get("https://kingdomlikes.com/sites/add");
         }
     }
+
     /*
     *
     *
@@ -765,7 +915,11 @@ public class cControl {
     }
 
     public void cerrarNavegador() {
-        driver.quit();
+        try {
+            driver.quit();
+        } catch (Exception e) {
+        }
+
     }
 
     public void pausa(long sleeptime) {
