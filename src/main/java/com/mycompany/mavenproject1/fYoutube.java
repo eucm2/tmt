@@ -507,6 +507,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void compartirVideoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compartirVideoActionPerformed
+        c.inicializarWebdriver(path_drive);
         //COMPARTIMOS LOS ARTICULOS EN FB
         compartirPublicacion("manual");
 
@@ -603,6 +604,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
                     c.cerrarNavegador();
                     if(yaEstaActivoCronometro==false){
                         yaEstaActivoCronometro=true;
+                        c.inicializarWebdriver(path_drive);
                         //COMO ESTE ARTICULO YA ESTA COMPARTIDO REGRESAMOS AL PRINCIPIO A COMPARTIR EL SIGUIENTE
                         compartirPublicacion("cronometro");
                     }
@@ -1264,6 +1266,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
                     if (segundosFaltanParaEjecutar >= 0 && segundosFaltanParaEjecutar <= 10) {
                         temporalizador.cancel();
                         temporalizador.purge();
+                        c.inicializarWebdriver(path_drive);
                         compartirPublicacion("cronometro");
                         //ESPERAMOS 35 SEGUNDOS DESPUES DE HABER PUBLICADO LOS VIDEOS PARA DAR TIEMPO AL CRONOMETRO DE REINICIO A QUE TRABAJE
                         c.pausa(1000 * 35);
