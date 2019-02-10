@@ -705,18 +705,18 @@ public class cControl {
         //CICLO QUE BUSCA TODOS LOS BOTONES
         while (boton.hasNext()) {
             try {
+                //Si llegamos a limite de videos cerramos el navegador y nos salimos de la funcion
+                if (procesosExitoso == limite) {
+                    cerrarNavegador();
+                    return;
+                }
+                //Si el proceso fue exitoso contamos 1 mas
+                procesosExitoso++;
                 //JALAMOS EL CODIGO DEL CLICK
                 codigoOnClick = boton.next().getAttribute("onclick");
                 //SI EL TEXTO NO ESTA VACIO LO EJECUTAMOS
                 if (codigoOnClick.length() > 0) {
                     if (driver instanceof JavascriptExecutor) {
-                        //Si llegamos a limite de videos cerramos el navegador y nos salimos de la funcion
-                        if (procesosExitoso == limite) {
-                            cerrarNavegador();
-                            return;
-                        }
-                        //Si el proceso fue exitoso contamos 1 mas
-                        procesosExitoso++;
                         ((JavascriptExecutor) driver).executeScript(codigoOnClick);
                     } else {
                         throw new IllegalStateException("This driver does not support JavaScript!");

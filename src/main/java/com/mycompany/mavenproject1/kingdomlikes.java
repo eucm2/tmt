@@ -280,11 +280,10 @@ public class kingdomlikes extends javax.swing.JInternalFrame {
     private void checIntercambiarCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checIntercambiarCuentasActionPerformed
 
         if (checIntercambiarCuentas.isSelected()) {
-
+            // Bucle infinito
             while (true) {
                 //Variable que alamacena si ya se ejecuto el ganar puntos
                 boolean seEjecuto = false;
-                Iterator<Integer> it = accesosEjecutado.iterator();
                 //Bucle de todos los usuarios
                 for (int i = 0; i < accesosEjecutado.size(); i++) {
                     //Si este usuario no se ha ejecutado se ejecuta y se guarda
