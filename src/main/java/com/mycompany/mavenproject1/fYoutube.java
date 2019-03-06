@@ -617,11 +617,11 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 //MANDAMOS MAIL CON EL ARTICULO Y EL GRUPO DONDE SE COMPARTIO
                 c.mandaMail("eucm2g@gmail.com","En fb","tmt","Se publico este videos "+urlVideo.getText()+" </br> en estos grupos"+ errorYlistaGrupos[2] +" ");
                 //SI NO ESTA SELECCIONADO GP CERRAMOS EL NAVEGADOR
-                /*
+                
                 if (checkGP.isSelected()==false) {
                     c.cerrarNavegador();
                 }
-                */
+                
             }
             /*
             //SI EL CHECK DE G+ ESTA ACTIVO PUBLICAMOS EN G+ GGGG+++++++
@@ -657,6 +657,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 c.cerrarNavegador();
             }
             */
+            c.cerrarNavegador();
         }
 
         
