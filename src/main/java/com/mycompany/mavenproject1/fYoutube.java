@@ -423,6 +423,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
         getContentPane().add(passwordGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 10, 100, -1));
         getContentPane().add(passwordFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 10, 110, -1));
 
+        activar.setSelected(true);
         activar.setText("Activar");
         activar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

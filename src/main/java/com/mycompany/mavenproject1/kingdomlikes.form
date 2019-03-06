@@ -173,6 +173,7 @@
     </Component>
     <Component class="javax.swing.JCheckBox" name="checIntercambiarCuentas">
       <Properties>
+        <Property name="selected" type="boolean" value="true"/>
         <Property name="text" type="java.lang.String" value="Intercambiar cuentas"/>
       </Properties>
       <Events>

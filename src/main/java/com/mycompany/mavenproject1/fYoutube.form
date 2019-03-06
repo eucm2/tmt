@@ -419,6 +419,7 @@
     </Component>
     <Component class="javax.swing.JCheckBox" name="activar">
       <Properties>
+        <Property name="selected" type="boolean" value="true"/>
         <Property name="text" type="java.lang.String" value="Activar"/>
       </Properties>
       <Events>

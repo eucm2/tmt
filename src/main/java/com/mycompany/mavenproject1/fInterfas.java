@@ -1,5 +1,6 @@
 package com.mycompany.mavenproject1;
 
+import java.awt.Component;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -8,6 +9,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static javax.swing.JOptionPane.showMessageDialog;
+
 public class fInterfas extends javax.swing.JFrame {
 
     Connection connection = null;
@@ -26,7 +28,7 @@ public class fInterfas extends javax.swing.JFrame {
         t.setClosable(rootPaneCheckingEnabled);
         t.toFront();
         contenedor.add(t);
-        */
+         */
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException ex) {
@@ -77,7 +79,6 @@ public class fInterfas extends javax.swing.JFrame {
                 System.err.println(e);
             }
         }
-        
 
     }
 
@@ -270,6 +271,11 @@ public class fInterfas extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+
+        king();
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    public void king() {
         kingdomlikes v = new kingdomlikes();
         v.setResizable(rootPaneCheckingEnabled);
         v.setMaximizable(rootPaneCheckingEnabled);
@@ -280,9 +286,7 @@ public class fInterfas extends javax.swing.JFrame {
         v.toFront();
         v.requestFocus();
         v.repaint();
-
-
-    }//GEN-LAST:event_jMenuItem6ActionPerformed
+    }
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
         hitleap v = new hitleap();
@@ -305,6 +309,7 @@ public class fInterfas extends javax.swing.JFrame {
         v.setIconifiable(rootPaneCheckingEnabled);
         v.setVisible(rootPaneCheckingEnabled);
         v.setClosable(rootPaneCheckingEnabled);
+
         contenedor.add(v);
         v.toFront();
         v.requestFocus();
@@ -315,6 +320,8 @@ public class fInterfas extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
+    public static String accion = "";
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -339,13 +346,50 @@ public class fInterfas extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
-
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new fInterfas().setVisible(true);
+                fInterfas v = new fInterfas();
+                //new fInterfas().setVisible(true);
+                v.setVisible(true);
+                v.setTitle(accion);
             }
         });
+        fInterfas inter = new fInterfas();
+        
+        //Buccle que recibe todos los argumentos
+        for (int i = 0; i < args.length; i++) {
+            accion = args[i];
+            //Si el argumento es king ejecuta kingdomlikes
+            if (accion.equals("king")) {
+                kingdomlikes v = new kingdomlikes();
+                v.setResizable(true);
+                v.setMaximizable(true);
+                v.setIconifiable(true);
+                v.setVisible(true);
+                v.setClosable(true);
+                v.toFront();
+                v.requestFocus();
+                v.repaint();
+                v.intercambiarCuentas();
+            }
+            //Si el argumento es face ejecuta facebook
+            if (accion.equals("face")) {
+                
+                fYoutube v = new fYoutube();
+                v.setResizable(true);
+                v.setMaximizable(true);
+                v.setIconifiable(true);
+                v.setVisible(true);
+                v.setClosable(true);
+                //contenedor.add(v);
+                v.toFront();
+                v.requestFocus();
+                v.repaint();
+                v.reiniciarCronometro();
+                v.cronometroParaEjecutar();
+            }
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -364,4 +408,3 @@ public class fInterfas extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem8;
     // End of variables declaration//GEN-END:variables
 }
-

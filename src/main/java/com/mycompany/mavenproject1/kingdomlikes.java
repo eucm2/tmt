@@ -200,6 +200,7 @@ public class kingdomlikes extends javax.swing.JInternalFrame {
         faltanSegundos.setText("faltan");
         getContentPane().add(faltanSegundos, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 70, -1, -1));
 
+        checIntercambiarCuentas.setSelected(true);
         checIntercambiarCuentas.setText("Intercambiar cuentas");
         checIntercambiarCuentas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -279,6 +280,9 @@ public class kingdomlikes extends javax.swing.JInternalFrame {
 
     private void checIntercambiarCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checIntercambiarCuentasActionPerformed
 
+        intercambiarCuentas();
+    }//GEN-LAST:event_checIntercambiarCuentasActionPerformed
+    public void intercambiarCuentas(){
         if (checIntercambiarCuentas.isSelected()) {
             // Bucle infinito
             while (true) {
@@ -312,9 +316,9 @@ public class kingdomlikes extends javax.swing.JInternalFrame {
                     }
                 }
             }
-        }
-    }//GEN-LAST:event_checIntercambiarCuentasActionPerformed
-    //AGREGAMOS EN LA BD LA PUBLICACION
+        }        
+    }
+//AGREGAMOS EN LA BD LA PUBLICACION
     public void guardarUserPass(String SuserKL, String SpasswordKL, String redSocal) {
 
         String sql = "UPDATE accesos SET "
