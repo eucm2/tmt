@@ -22,6 +22,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Objects;
@@ -186,7 +187,69 @@ public class cControl {
         }
 
     }
+    /**
+     * Si ya esta publicado en todos los grupos se desactiva esta publicacion
+     *
+     * @param idPub id de la publicacion a revisar
+     * @param idsYaCompartidos lista dividida por comas de los ids de los grupos en donde ya se compartio esta publicacion
+     * @return boolean True si se desactivo, False si no se desactivo
+     */
+    public boolean publicacionYacompartida(String idPub, String idsYaCompartidos) {
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:tmt.db");
+            statement = connection.createStatement();
+            statement.setQueryTimeout(20);
+            //SACAMOS LA LISTA DE TODOS LOS GRUPOS DE FACEBOOK MENOS LOS GRUPOS EN LOS QUE YA SE COMPARTIO
+            String query = "  SELECT DISTINCT\n"
+                    + "grupos.id,\n"
+                    + "grupos.nombre,\n"
+                    + "grupos.url,\n"
+                    + "grupos.activo\n"
+                    + "FROM\n"
+                    + "grupos\n"
+                    + "INNER JOIN \"grup-cat\" ON \"grup-cat\".idGrup = grupos.id\n"
+                    + "INNER JOIN categoria ON \"grup-cat\".idCat = categoria.id\n"
+                    + "INNER JOIN \"pub-cat\" ON \"pub-cat\".idCat = categoria.id\n"
+                    + "INNER JOIN publicaciones ON \"pub-cat\".idPub = publicaciones.id\n"
+                    + "WHERE\n"
+                    + "grupos.activo = '1' \n"
+                    + "and publicaciones.id='" + idPub + "' "
+                    + "AND grupos.id not in (" + idsYaCompartidos + ")   "
+                    + "and grupos.tipo='FB';  ";
+            ResultSet rs = statement.executeQuery(query);
+            // Esta publicacion ya se compartio en todos los grupos
+            if (rs.isBeforeFirst() == false) {
+                // Desactivamos la publicacion
+                desactivaPublicacion(Integer.parseInt(idPub));
+                // Retornamos un true diciento que esta publicacion se desactivo
+                return true;
+            }
+            else{
+                return false;
+            }
+        } catch (NoSuchElementException e) {
+            int res = JOptionPane.showOptionDialog(null, "Desea continuar o detener? \n error= " + e, "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+            if (res == 1) {
+                driver.quit();
+            }
+        } catch (Exception e) {
+            int res = JOptionPane.showOptionDialog(null, "Desea continuar o detener? \n error= " + e, "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+            if (res == 1) {
+                driver.quit();
+            }
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                // connection close failed.
+                System.err.println(e);
+            }
+        }
 
+        return false;
+    }
     public String[] compartirFB(String urlVideo, String pathImagen, String titulo, String idPub, int numeroAcompartir, String idsYaCompartidos) {
         String grupoError = "";
         String grupoBien = "";
@@ -215,7 +278,11 @@ public class cControl {
                     + "and grupos.tipo='FB'  "
                     + "limit " + numeroAcompartir + " ;  ";
             ResultSet rs = statement.executeQuery(query);
+            // Esta publicacion ya se compartio en todos los grupos
             if (rs.isBeforeFirst() == false) {
+                desactivaPublicacion(Integer.parseInt(idPub));
+                // Cerramos navegador y nos salimos
+                cerrarNavegador();
                 return null;
             }
             //HACEMOS UN BLUCLE CON TODOS LOS GRUPOS DE FACEBOOK
@@ -239,30 +306,14 @@ public class cControl {
                             espacio = espacio + "1";
                             borrar = borrar + Keys.BACK_SPACE;
                         }
-                        boolean grupo = false;
-                        if (grupo == true) {
-                            //ESCRIBIMOS EL TITULO Y EL VIDEO DE LA PUBLICACION
-                            escribeTexto(driver.findElement(By.name("xhpc_message_text")),
-                                    titulo
-                                    + "\\r"
-                                    + urlVideo
-                                    + "\\r"
-                            );
-                        } else if (grupo == false) {
-                            //ESCRIBIMOS EL TITULO Y EL VIDEO DE LA PUBLICACION
-                            /*
-                            escribeTexto(driver.findElement(By.name("xhpc_message_text")),
-                                    titulo
-                                    + "\\r"
-                                    + urlVideo
-                                    + "\\r"
-                            );
-                             */
-                            driver.findElement(By.cssSelector("br[data-text=\"true\"]")).click();
-                            JavascriptExecutor js = (JavascriptExecutor) driver;
-                            js.executeScript("arguments[0].value='" + "\\r" + urlVideo + "\\r" + "';", driver.findElement(By.cssSelector("span[data-text=\"true\"]")));
-
-                        }
+                        //ESCRIBIMOS EL TITULO Y EL VIDEO DE LA PUBLICACION
+                        escribeTexto(driver.findElement(By.name("xhpc_message_text")),
+                                titulo
+                                + "\\r"
+                                + urlVideo
+                                + "\\r"
+                        );
+                        
                         grupoBien = grupoBien + " </br> " + rs.getString("nombre") + " </br>\n " + rs.getString("url") + " </br>\n ";
                         pausa(mlento);
                         driver.findElement(By.name("xhpc_message_text")).sendKeys(Keys.chord(espacio + borrar + Keys.CONTROL, Keys.ENTER));
@@ -1048,5 +1099,26 @@ public class cControl {
             }
         }
     }
+    // Decativamos la publicacion
+    public void desactivaPublicacion(int id) {
+        String sql = "UPDATE publicaciones SET activo = '0'  WHERE id = " + id;
+        try (Connection conn = this.connect();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            //EJECUTAMOS EL COMANDO
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    private Connection connect() {
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection("jdbc:sqlite:tmt.db");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return conn;
+    }
+
 
 }

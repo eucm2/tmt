@@ -512,10 +512,10 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 550, -1, -1));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 810, -1, -1));
 
         jTextField1.setText("https://web.facebook.com/ProgramadorNovatoOficial/?modal=admin_todo_tour");
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 550, 220, -1));
+        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 810, 220, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -557,20 +557,6 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 }
             }
         }
-        /*
-        //SI ESTA ACTIVO EL CHECKBOX DE COMPARTIR EN GOOGLE+ LO COMPARTIMOS EN FB
-        if (checkGP.isSelected()) {
-            numeroCompartidasGP = c.numeroCompartidasGP(idPubCompartir);
-            //SI EL ARTICULO NO TIENE GRUPOS DONDE COMPARTIRSE MANDAMOS UN MENAJE DE ERROR
-            if (numeroCompartidasGP == 0) {
-                int res = JOptionPane.showOptionDialog(null, "Este articulo no se compartio ninguna vez en G+\nDesea continuar con cancelar", "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-                //SI SE DIO CLICK EN DETENER NOS SALIMOS DE ESTA FUNCION
-                if (res != 0) {
-                    return;
-                }
-            }
-        }
-        */
         //SACAMOS LA FECHA DE HOY
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -599,18 +585,18 @@ public class fYoutube extends javax.swing.JInternalFrame {
             //c.inicializarWebdriver(path_drive);
             //SI EL CHECK DE FB ESTA ACTIVO PUBLICAMOS EN FB FFFFBBBBBB
             if (checkFB.isSelected()) {
-                //NOS LOGUEAMOS EN FB O
-                c.accedeFB(userFB.getText(), passwordFB.getText());
                 //SACAMOS LA LISTA DE LOS ID'S DE LOS GRUPOS QUE YA SE COMPARTIERON EN ESTE ARTICULO DE FB
                 String idsYaCompartidos=yaSeCompartioEn(idPubCompartir,"FB");
+                // Si esta publicacion ya esta compartida en todos los grupos cerramos el navegador y nos salimos
+                if(c.publicacionYacompartida(idPubCompartir, idsYaCompartidos)){
+                    carga_tabla_publicaciones(" where activo='1' ");
+                    c.cerrarNavegador();
+                    return;
+                }
+                //NOS LOGUEAMOS EN FB O
+                c.accedeFB(userFB.getText(), passwordFB.getText());
                 //COMENZAMOS A COMPARTIR EL VIDEO
-                String [] errorYlistaGrupos = c.compartirFB(
-                        urlVideo.getText(), 
-                        pathImagen.getText(), 
-                        titulo.getText(), 
-                        idPubCompartir,
-                        cantidad_comparir_fb,
-                        idsYaCompartidos);
+                String [] errorYlistaGrupos = c.compartirFB(urlVideo.getText(), pathImagen.getText(), titulo.getText(), idPubCompartir, cantidad_comparir_fb, idsYaCompartidos);
                 if (errorYlistaGrupos == null) {
                     //ACTUALIZAMOS ESTE ARTICULO Y LO MARCAMOS COMO YA COMPARTIDO
                     articuloYaCompartido(idPubCompartir,"FB");
@@ -636,40 +622,6 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 }
                 
             }
-            /*
-            //SI EL CHECK DE G+ ESTA ACTIVO PUBLICAMOS EN G+ GGGG+++++++
-            if (checkGP.isSelected()) {
-                //NOS LOGUEAMOS EN FB O ESPERAMOS A QUE EL USUARIO TERMINE DE LOGUEARSE
-                c.accedeGP(userGP.getText(), passwordGP.getText(),accesoManualGP);
-                //SACAMOS LA LISTA DE LOS ID'S DE LOS GRUPOS QUE YA SE COMPARTIERON EN ESTE ARTICULO DE FB
-                String idsYaCompartidos=yaSeCompartioEn(idPubCompartir,"GP");
-                //COMENZAMOS A COMPARTIR EL VIDEO
-                String [] errorYlistaGrupos = c.compartirGP(
-                        urlVideo.getText(), 
-                        pathImagen.getText(), 
-                        titulo.getText(), 
-                        idPubCompartir,
-                        cantidad_comparir_gp,
-                        idsYaCompartidos);
-                if (errorYlistaGrupos == null) {
-                    //ACTUALIZAMOS ESTE ARTICULO Y LO MARCAMOS COMO YA COMPARTIDO
-                    articuloYaCompartido(idPubCompartir,"GP");
-                    //CERRAMOS EL NAVEGADOR
-                    c.cerrarNavegador();
-                    if(yaEstaActivoCronometro==false){
-                        yaEstaActivoCronometro=true;
-                        //COMO ESTE ARTICULO YA ESTA COMPARTIDO REGRESAMOS AL PRINCIPIO A COMPARTIR EL SIGUIENTE
-                        compartirPublicacion("cronometro");
-                    }
-                }
-                grupoErrores.setText(grupoErrores.getText() + errorYlistaGrupos[0]);
-                numeroNoCompartidoGP = countLines(errorYlistaGrupos[0]);
-                actualizaYaPublicado(errorYlistaGrupos[1],idPubCompartir,"GP");
-                //MANDAMOS MAIL CON EL ARTICULO Y EL GRUPO DONDE SE COMPARTIO
-                c.mandaMail("eucm2g@gmail.com","En gp","tmt","Se publico este videos "+urlVideo.getText()+" </br> en estos grupos"+ errorYlistaGrupos[2] +" ");
-                c.cerrarNavegador();
-            }
-            */
             c.cerrarNavegador();
         }
 
