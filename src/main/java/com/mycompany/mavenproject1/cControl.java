@@ -187,11 +187,13 @@ public class cControl {
         }
 
     }
+
     /**
      * Si ya esta publicado en todos los grupos se desactiva esta publicacion
      *
      * @param idPub id de la publicacion a revisar
-     * @param idsYaCompartidos lista dividida por comas de los ids de los grupos en donde ya se compartio esta publicacion
+     * @param idsYaCompartidos lista dividida por comas de los ids de los grupos
+     * en donde ya se compartio esta publicacion
      * @return boolean True si se desactivo, False si no se desactivo
      */
     public boolean publicacionYacompartida(String idPub, String idsYaCompartidos) {
@@ -223,8 +225,7 @@ public class cControl {
                 desactivaPublicacion(Integer.parseInt(idPub));
                 // Retornamos un true diciento que esta publicacion se desactivo
                 return true;
-            }
-            else{
+            } else {
                 return false;
             }
         } catch (NoSuchElementException e) {
@@ -250,6 +251,7 @@ public class cControl {
 
         return false;
     }
+
     public String[] compartirFB(String urlVideo, String pathImagen, String titulo, String idPub, int numeroAcompartir, String idsYaCompartidos) {
         String grupoError = "";
         String grupoBien = "";
@@ -313,7 +315,7 @@ public class cControl {
                                 + urlVideo
                                 + "\\r"
                         );
-                        
+
                         grupoBien = grupoBien + " </br> " + rs.getString("nombre") + " </br>\n " + rs.getString("url") + " </br>\n ";
                         pausa(mlento);
                         driver.findElement(By.name("xhpc_message_text")).sendKeys(Keys.chord(espacio + borrar + Keys.CONTROL, Keys.ENTER));
@@ -596,15 +598,16 @@ public class cControl {
     *
     *
      */
-    String userKingdom="";
+    String userKingdom = "";
+
     public void accedeKL(String user, String password) {
         //Asignamos el nombre del usuario a esta variable global para que la pnga en el navegador
-        userKingdom=user;
+        userKingdom = user;
         try {
             driver.get("https://kingdomlikes.com");
             JavascriptExecutor js = (JavascriptExecutor) driver;
             js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>" + userKingdom + "</div>\");");
-            js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + "</div>\");");
+            js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos exitosos=" + intentos + "</div>\");");
             pausa(medio);
             if (user.length() > 0 && password.length() > 0) {
                 //driver.findElement(By.name("email")).sendKeys(user);
@@ -654,7 +657,7 @@ public class cControl {
         driver.get("https://kingdomlikes.com/free_points/youtube-views");
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>" + userKingdom + "</div>\");");
-        js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + "</div>\");");
+        js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos exitosos=" + intentos + "</div>\");");
         //ESPERAMOS UN RATO A QUE CARGUEN TODOS LOS VIDEOS
         pausa(lento);
         pausa(lento);
@@ -679,7 +682,7 @@ public class cControl {
                 } //SI EL TEXTO DEL CODIGO ESTA VACIO SUMAMOS UN INTENTO Y REINICIAMOS ESTA FUNCION
                 else {
                     intentos++;
-                    js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + "</div>\");");
+                    js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos exitosos=" + intentos + "</div>\");");
                     clickVideos();
                 }
                 //ACTIVAMOS LA BANDERA DICIENDO QUE SI DIMOS CLICK EN EL BOTON
@@ -689,7 +692,7 @@ public class cControl {
                 banderaEncontro = false;
                 //SUMA IN INTENTO MAS
                 intentos++;
-                js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + "</div>\");");
+                js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos exitosos=" + intentos + "</div>\");");
                 //REINICIA LA FUNCION
                 clickVideos();
             }
@@ -724,7 +727,7 @@ public class cControl {
                 } catch (Exception e) {
                     //SUMA IN INTENTO MAS
                     intentos++;
-                    js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + "</div>\");");
+                    js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos exitosos=" + intentos + "</div>\");");
                     //REINICIA LA FUNCION
                     clickVideos();
                 }
@@ -801,7 +804,7 @@ public class cControl {
         //Colocamos el nombre del usuario en la parte superior del navegador
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>" + userKingdom + "</div>\");");
-        js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + "</div>\");");
+        js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos exitosos=" + procesosExitoso + " Limite=" + limite + "</div>\");");
         //ESPERAMOS UN RATO A QUE CARGUEN TODOS LOS VIDEOS
         pausa(lento);
         pausa(lento);
@@ -814,13 +817,6 @@ public class cControl {
         //CICLO QUE BUSCA TODOS LOS BOTONES
         while (boton.hasNext()) {
             try {
-                //Si llegamos a limite de videos cerramos el navegador y nos salimos de la funcion
-                if (procesosExitoso == limite) {
-                    cerrarNavegador();
-                    return;
-                }
-                //Si el proceso fue exitoso contamos 1 mas
-                procesosExitoso++;
                 //JALAMOS EL CODIGO DEL CLICK
                 codigoOnClick = boton.next().getAttribute("onclick");
                 //SI EL TEXTO NO ESTA VACIO LO EJECUTAMOS
@@ -830,10 +826,11 @@ public class cControl {
                     } else {
                         throw new IllegalStateException("This driver does not support JavaScript!");
                     }
-                } //SI EL TEXTO DEL CODIGO ESTA VACIO SUMAMOS UN INTENTO Y REINICIAMOS ESTA FUNCION
+                } 
+                //SI EL TEXTO DEL CODIGO ESTA VACIO SUMAMOS UN INTENTO Y REINICIAMOS ESTA FUNCION
                 else {
                     intentos++;
-                    js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + "</div>\");");
+                    js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + " Limite=" + limite + "</div>\");");
                     clickVideosLimite(limite, procesosExitoso);
                 }
                 //ACTIVAMOS LA BANDERA DICIENDO QUE SI DIMOS CLICK EN EL BOTON
@@ -843,7 +840,7 @@ public class cControl {
                 banderaEncontro = false;
                 //SUMA IN INTENTO MAS
                 intentos++;
-                js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + "</div>\");");
+                js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + " Limite=" + limite + "</div>\");");
                 //REINICIA LA FUNCION
                 clickVideosLimite(limite, procesosExitoso);
             }
@@ -853,7 +850,6 @@ public class cControl {
         pausa(rapido);
         //SI SE ENCONTRO UN BOTON Y SE DIO CLICK EN EL SE HABRE UNA NUEVA VENTANA Y HAY QUE ESPERAR UN TIEMPO Y CERRARLA
         if (banderaEncontro) {
-
             /*   SEGUNDOS A CERRAR SUBVENTANA   */
             //HACEMOS UNA LISTA CON TODOS LOS BOTONES
             List<WebElement> todosCronometros = driver.findElements(By.className("containerbtn"));
@@ -878,11 +874,20 @@ public class cControl {
                 } catch (Exception e) {
                     //SUMA IN INTENTO MAS
                     intentos++;
-                    js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + "</div>\");");
+                    js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos exitosos=" + procesosExitoso + " Limite=" + limite + "</div>\");");
                     //REINICIA LA FUNCION
                     clickVideosLimite(limite, procesosExitoso);
                 }
             }
+            //Si llegamos a limite de videos cerramos el navegador y nos salimos de la funcion
+            if (procesosExitoso == limite) {
+                cerrarNavegador();
+                return;
+            }
+            //Si el proceso fue exitoso contamos 1 mas
+            procesosExitoso++;
+            js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos exitosos=" + procesosExitoso + " Limite=" + limite + "</div>\");");
+
             //OBTENEMOS UN NUMERO ENTRE 4 Y 11
             int numeroAleatorio = (int) (Math.random() * 4) + 7;
             //CONVERTIMOS LOS SEGUNDOS EN MILISEGUNDOS
@@ -920,6 +925,11 @@ public class cControl {
             clickVideosLimite(limite, procesosExitoso);
         } //SI NO ENCONTRO NINGUN VIDEO EN LA LISTA
         else {
+            //Si llegamos a limite de videos cerramos el navegador y nos salimos de la funcion
+            if (intentos == limite) {
+                cerrarNavegador();
+                return;
+            }
             //ESPERAMOS UN MINUTO
             pausa(60000);
             clickVideosLimite(limite, procesosExitoso);
@@ -935,7 +945,7 @@ public class cControl {
         //Colocamos el nombre del usuario en la parte superior del navegador
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>" + userKingdom + "</div>\");");
-        js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + "</div>\");");
+        js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos exitosos=" + intentos + "</div>\");");
         for (int tabs = 0; tabs < numeroTabs; tabs++) {
             Select drpCountry = new Select(driver.findElement(By.name("idtype")));
             drpCountry.selectByVisibleText("YouTube Views");
@@ -952,7 +962,7 @@ public class cControl {
             //Colocamos el nombre del usuario en la parte superior del navegador
             js = (JavascriptExecutor) driver;
             js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>" + userKingdom + "</div>\");");
-            js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + "</div>\");");
+            js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos exitosos=" + intentos + "</div>\");");
         }
     }
 
@@ -1126,6 +1136,7 @@ public class cControl {
             }
         }
     }
+
     // Decativamos la publicacion
     public void desactivaPublicacion(int id) {
         String sql = "UPDATE publicaciones SET activo = '0'  WHERE id = " + id;
@@ -1137,6 +1148,7 @@ public class cControl {
             System.out.println(e.getMessage());
         }
     }
+
     private Connection connect() {
         Connection conn = null;
         try {
@@ -1146,6 +1158,5 @@ public class cControl {
         }
         return conn;
     }
-
 
 }
