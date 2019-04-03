@@ -1,5 +1,11 @@
 package com.mycompany.mavenproject1;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -166,19 +172,19 @@ public class cControl {
         }
 
     }
-    
+
     public void ir(String url) {
         driver.get(url);
     }
+
     public void probarFB(String urlPrueba) {
         driver.get(urlPrueba);
         try {
-            driver.findElement(By.cssSelector( "//br[@data-text='true']" )).click();
+            driver.findElement(By.cssSelector("//br[@data-text='true']")).click();
         } catch (NoSuchElementException e) {
             //String grupoError = grupoError + rs.getString("nombre") + "\n" + rs.getString("url") + "\n";
         }
-        
-        
+
     }
 
     public String[] compartirFB(String urlVideo, String pathImagen, String titulo, String idPub, int numeroAcompartir, String idsYaCompartidos) {
@@ -544,8 +550,13 @@ public class cControl {
             driver.get("https://kingdomlikes.com");
             pausa(medio);
             if (user.length() > 0 && password.length() > 0) {
-                driver.findElement(By.name("email")).sendKeys(user);
+                //driver.findElement(By.name("email")).sendKeys(user);
+                escribeTextoJS(driver.findElement(By.name("email")), user);
+                //copy(user);
+                //driver.findElement(By.name("email")).click();
+                //paste();
                 driver.findElement(By.name("password")).sendKeys(password);
+                //driver.findElement(By.name("password")).click();
                 pausa(rapido);
                 driver.findElement(By.name("password")).sendKeys(Keys.ENTER);
             } else {
@@ -902,6 +913,11 @@ public class cControl {
         }
     }
 
+    public void escribeTextoJS(WebElement elementoWeb, String texto) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].value='" + texto + "';", elementoWeb);
+    }
+
     //PONEMOS LOS VIDEOS LE LOS SLOTS DE HITLEAP
     public boolean registraVideos(String listaPub) {
         pausa(lento);
@@ -1010,6 +1026,27 @@ public class cControl {
             Logger.getLogger(hitleap.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    private void copy(String texto) {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        StringSelection selection = new StringSelection(texto);
+        clipboard.setContents(selection, null);
+    }
+
+    private void paste() throws IOException {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        DataFlavor flavor = DataFlavor.stringFlavor;
+        if (clipboard.isDataFlavorAvailable(flavor)) {
+            try {
+                String text = (String) clipboard.getData(flavor);
+                System.out.println(text);
+            } catch (UnsupportedFlavorException e) {
+                System.out.println(e);
+            } catch (IOException e) {
+                System.out.println(e);
+            }
+        }
     }
 
 }
