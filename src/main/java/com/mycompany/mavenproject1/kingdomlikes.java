@@ -129,7 +129,6 @@ public class kingdomlikes extends javax.swing.JInternalFrame {
         jLabel14 = new javax.swing.JLabel();
         userKL = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
-        passwordKL = new javax.swing.JPasswordField();
         guardarFB = new javax.swing.JCheckBox();
         KLnumPaginas = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
@@ -145,6 +144,7 @@ public class kingdomlikes extends javax.swing.JInternalFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tabla_accesos = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
+        passwordKL = new javax.swing.JTextField();
 
         setTitle("Kingdomlikes");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -170,7 +170,6 @@ public class kingdomlikes extends javax.swing.JInternalFrame {
 
         jLabel12.setText("Password KL");
         getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 10, -1, -1));
-        getContentPane().add(passwordKL, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 30, 130, -1));
 
         guardarFB.setText("Guardar");
         guardarFB.addActionListener(new java.awt.event.ActionListener() {
@@ -258,6 +257,7 @@ public class kingdomlikes extends javax.swing.JInternalFrame {
 
         jLabel2.setText("jLabel2");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 600, -1, -1));
+        getContentPane().add(passwordKL, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 30, 230, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -467,7 +467,7 @@ public class kingdomlikes extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JPasswordField passwordKL;
+    private javax.swing.JTextField passwordKL;
     private javax.swing.JTable tabla_accesos;
     private javax.swing.JTextField txtCadaVideos;
     private javax.swing.JTextField userKL;

@@ -596,9 +596,14 @@ public class cControl {
     *
     *
      */
+    String userKingdom="";
     public void accedeKL(String user, String password) {
+        //Asignamos el nombre del usuario a esta variable global para que la pnga en el navegador
+        userKingdom=user;
         try {
             driver.get("https://kingdomlikes.com");
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>" + userKingdom + "</div>\");");
             pausa(medio);
             if (user.length() > 0 && password.length() > 0) {
                 //driver.findElement(By.name("email")).sendKeys(user);
@@ -646,6 +651,8 @@ public class cControl {
 
         //VAMOS A LA PAGINA DE LOS VIDEOS
         driver.get("https://kingdomlikes.com/free_points/youtube-views");
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>" + userKingdom + "</div>\");");
         //ESPERAMOS UN RATO A QUE CARGUEN TODOS LOS VIDEOS
         pausa(lento);
         pausa(lento);
@@ -670,6 +677,7 @@ public class cControl {
                 } //SI EL TEXTO DEL CODIGO ESTA VACIO SUMAMOS UN INTENTO Y REINICIAMOS ESTA FUNCION
                 else {
                     intentos++;
+                    js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + "</div>\");");
                     clickVideos();
                 }
                 //ACTIVAMOS LA BANDERA DICIENDO QUE SI DIMOS CLICK EN EL BOTON
@@ -679,6 +687,7 @@ public class cControl {
                 banderaEncontro = false;
                 //SUMA IN INTENTO MAS
                 intentos++;
+                js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + "</div>\");");
                 //REINICIA LA FUNCION
                 clickVideos();
             }
@@ -713,6 +722,7 @@ public class cControl {
                 } catch (Exception e) {
                     //SUMA IN INTENTO MAS
                     intentos++;
+                    js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + "</div>\");");
                     //REINICIA LA FUNCION
                     clickVideos();
                 }
@@ -786,6 +796,9 @@ public class cControl {
 
         //VAMOS A LA PAGINA DE LOS VIDEOS
         driver.get("https://kingdomlikes.com/free_points/youtube-views");
+        //Colocamos el nombre del usuario en la parte superior del navegador
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>" + userKingdom + "</div>\");");
         //ESPERAMOS UN RATO A QUE CARGUEN TODOS LOS VIDEOS
         pausa(lento);
         pausa(lento);
@@ -817,6 +830,7 @@ public class cControl {
                 } //SI EL TEXTO DEL CODIGO ESTA VACIO SUMAMOS UN INTENTO Y REINICIAMOS ESTA FUNCION
                 else {
                     intentos++;
+                    js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + "</div>\");");
                     clickVideosLimite(limite, procesosExitoso);
                 }
                 //ACTIVAMOS LA BANDERA DICIENDO QUE SI DIMOS CLICK EN EL BOTON
@@ -826,6 +840,7 @@ public class cControl {
                 banderaEncontro = false;
                 //SUMA IN INTENTO MAS
                 intentos++;
+                js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + "</div>\");");
                 //REINICIA LA FUNCION
                 clickVideosLimite(limite, procesosExitoso);
             }
@@ -860,6 +875,7 @@ public class cControl {
                 } catch (Exception e) {
                     //SUMA IN INTENTO MAS
                     intentos++;
+                    js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + "</div>\");");
                     //REINICIA LA FUNCION
                     clickVideosLimite(limite, procesosExitoso);
                 }
@@ -913,6 +929,10 @@ public class cControl {
         String listaPaises[] = paises.split("\\r?\\n");
         pausa(rapido);
         driver.get("https://kingdomlikes.com/sites/add");
+        //Colocamos el nombre del usuario en la parte superior del navegador
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>" + userKingdom + "</div>\");");
+
         for (int tabs = 0; tabs < numeroTabs; tabs++) {
             Select drpCountry = new Select(driver.findElement(By.name("idtype")));
             drpCountry.selectByVisibleText("YouTube Views");
@@ -926,6 +946,10 @@ public class cControl {
             ArrayList<String> tabsEle = new ArrayList<String>(driver.getWindowHandles());
             driver.switchTo().window(tabsEle.get(tabs + 1));
             driver.get("https://kingdomlikes.com/sites/add");
+            //Colocamos el nombre del usuario en la parte superior del navegador
+            js = (JavascriptExecutor) driver;
+            js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>" + userKingdom + "</div>\");");
+
         }
     }
 
