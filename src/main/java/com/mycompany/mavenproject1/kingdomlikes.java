@@ -76,8 +76,8 @@ public class kingdomlikes extends javax.swing.JInternalFrame {
                     + "password, "
                     + "redSocal "
                     + "FROM accesos "
-                    + "where redSocal='KL' "
-                    + "ORDER BY RANDOM(); ";
+                    + "where redSocal='KL' and  activo='1' "
+                    + "ORDER BY RANDOM() ; ";
 
             rsAccesos = statement.executeQuery(queryAccesos);
             //CICLO QUE LLENA TODO EL MODELO
