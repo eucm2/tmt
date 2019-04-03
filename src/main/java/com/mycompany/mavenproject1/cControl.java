@@ -604,6 +604,7 @@ public class cControl {
             driver.get("https://kingdomlikes.com");
             JavascriptExecutor js = (JavascriptExecutor) driver;
             js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>" + userKingdom + "</div>\");");
+            js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + "</div>\");");
             pausa(medio);
             if (user.length() > 0 && password.length() > 0) {
                 //driver.findElement(By.name("email")).sendKeys(user);
@@ -653,6 +654,7 @@ public class cControl {
         driver.get("https://kingdomlikes.com/free_points/youtube-views");
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>" + userKingdom + "</div>\");");
+        js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + "</div>\");");
         //ESPERAMOS UN RATO A QUE CARGUEN TODOS LOS VIDEOS
         pausa(lento);
         pausa(lento);
@@ -799,6 +801,7 @@ public class cControl {
         //Colocamos el nombre del usuario en la parte superior del navegador
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>" + userKingdom + "</div>\");");
+        js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + "</div>\");");
         //ESPERAMOS UN RATO A QUE CARGUEN TODOS LOS VIDEOS
         pausa(lento);
         pausa(lento);
@@ -932,7 +935,7 @@ public class cControl {
         //Colocamos el nombre del usuario en la parte superior del navegador
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>" + userKingdom + "</div>\");");
-
+        js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + "</div>\");");
         for (int tabs = 0; tabs < numeroTabs; tabs++) {
             Select drpCountry = new Select(driver.findElement(By.name("idtype")));
             drpCountry.selectByVisibleText("YouTube Views");
@@ -949,7 +952,7 @@ public class cControl {
             //Colocamos el nombre del usuario en la parte superior del navegador
             js = (JavascriptExecutor) driver;
             js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>" + userKingdom + "</div>\");");
-
+            js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + "</div>\");");
         }
     }
 
