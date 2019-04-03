@@ -166,6 +166,20 @@ public class cControl {
         }
 
     }
+    
+    public void ir(String url) {
+        driver.get(url);
+    }
+    public void probarFB(String urlPrueba) {
+        driver.get(urlPrueba);
+        try {
+            driver.findElement(By.cssSelector( "//br[@data-text='true']" )).click();
+        } catch (NoSuchElementException e) {
+            //String grupoError = grupoError + rs.getString("nombre") + "\n" + rs.getString("url") + "\n";
+        }
+        
+        
+    }
 
     public String[] compartirFB(String urlVideo, String pathImagen, String titulo, String idPub, int numeroAcompartir, String idsYaCompartidos) {
         String grupoError = "";
@@ -219,13 +233,30 @@ public class cControl {
                             espacio = espacio + "1";
                             borrar = borrar + Keys.BACK_SPACE;
                         }
-                        //ESCRIBIMOS EL TITULO Y EL VIDEO DE LA PUBLICACION
-                        escribeTexto(driver.findElement(By.name("xhpc_message_text")),
-                                titulo
-                                + "\\r"
-                                + urlVideo
-                                + "\\r"
-                        );
+                        boolean grupo = false;
+                        if (grupo == true) {
+                            //ESCRIBIMOS EL TITULO Y EL VIDEO DE LA PUBLICACION
+                            escribeTexto(driver.findElement(By.name("xhpc_message_text")),
+                                    titulo
+                                    + "\\r"
+                                    + urlVideo
+                                    + "\\r"
+                            );
+                        } else if (grupo == false) {
+                            //ESCRIBIMOS EL TITULO Y EL VIDEO DE LA PUBLICACION
+                            /*
+                            escribeTexto(driver.findElement(By.name("xhpc_message_text")),
+                                    titulo
+                                    + "\\r"
+                                    + urlVideo
+                                    + "\\r"
+                            );
+                             */
+                            driver.findElement(By.cssSelector("br[data-text=\"true\"]")).click();
+                            JavascriptExecutor js = (JavascriptExecutor) driver;
+                            js.executeScript("arguments[0].value='" + "\\r" + urlVideo + "\\r" + "';", driver.findElement(By.cssSelector("span[data-text=\"true\"]")));
+
+                        }
                         grupoBien = grupoBien + " </br> " + rs.getString("nombre") + " </br>\n " + rs.getString("url") + " </br>\n ";
                         pausa(mlento);
                         driver.findElement(By.name("xhpc_message_text")).sendKeys(Keys.chord(espacio + borrar + Keys.CONTROL, Keys.ENTER));
@@ -667,7 +698,7 @@ public class cControl {
         }
     }
 
-    public void clickVideosLimite(int limite,int procesosExitoso) {
+    public void clickVideosLimite(int limite, int procesosExitoso) {
         //DESPUES DE 3 INTENTOS Y NO FUNCIONA ES QUE HAY ALGO MAL Y SE SALE
         if (intentos > 3) {
             int res = JOptionPane.showOptionDialog(null, "Se han realizado 3 intentos fallidos desea intentar de nuevo o cerrar", "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);

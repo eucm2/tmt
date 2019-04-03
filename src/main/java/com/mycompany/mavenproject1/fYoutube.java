@@ -259,6 +259,8 @@ public class fYoutube extends javax.swing.JInternalFrame {
         jLabel9 = new javax.swing.JLabel();
         btnAbrirNav = new javax.swing.JButton();
         checkMostrarPassFB = new javax.swing.JCheckBox();
+        jButton1 = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
 
         setTitle("Publicar");
         setInheritsPopupMenu(true);
@@ -503,6 +505,17 @@ public class fYoutube extends javax.swing.JInternalFrame {
             }
         });
         getContentPane().add(checkMostrarPassFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 30, -1, -1));
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 550, -1, -1));
+
+        jTextField1.setText("https://web.facebook.com/ProgramadorNovatoOficial/?modal=admin_todo_tour");
+        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 550, 220, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -804,6 +817,15 @@ public class fYoutube extends javax.swing.JInternalFrame {
     private void checkMostrarPassFBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkMostrarPassFBActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_checkMostrarPassFBActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String urlPrueba=jTextField1.getText();
+        c.inicializarWebdriver(path_drive);
+        c.accedeFB(userFB.getText(), passwordFB.getText());
+        c.probarFB(urlPrueba);
+        
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
     //COLOCAMOS EL TEXTO DE LA TABLA EN CADA INPUT TEXT
     public void asigna_tabla_publicaciones_input_text() {
         try {
@@ -1305,6 +1327,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
     private javax.swing.JLabel horaActual;
     private javax.swing.JLabel horaFin;
     private javax.swing.JLabel horaIni;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -1326,6 +1349,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblHoraReiniciar;
     private javax.swing.JLabel lblModo;
     private javax.swing.JTable listaHorarios;

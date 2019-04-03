@@ -30,7 +30,10 @@ public class accesos extends javax.swing.JInternalFrame {
         initComponents();
         //CARGAMOS EL MODELO DE LA TABLA PUBLICACIONES
         modelo.addColumn("id");
-        modelo.addColumn("nombre");
+        modelo.addColumn("user");
+        modelo.addColumn("password");
+        modelo.addColumn("redSocal");
+        modelo.addColumn("activo");
         //CARGAMOS LA TABLA DE PUBLICACIONES
         carga_tabla();
     }
@@ -39,18 +42,24 @@ public class accesos extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        nombre = new javax.swing.JTextField();
+        user = new javax.swing.JTextField();
         agregar = new javax.swing.JButton();
         borrar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabla = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
+        password = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        redSocal = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        activo = new javax.swing.JTextField();
 
         setTitle("Accesos");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setText("Nombre");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
-        getContentPane().add(nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, 640, -1));
+        jLabel1.setText("password");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 30, -1, -1));
+        getContentPane().add(user, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 30, 230, -1));
 
         agregar.setText("Agregar");
         agregar.addActionListener(new java.awt.event.ActionListener() {
@@ -58,7 +67,7 @@ public class accesos extends javax.swing.JInternalFrame {
                 agregarActionPerformed(evt);
             }
         });
-        getContentPane().add(agregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
+        getContentPane().add(agregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, -1, -1));
 
         borrar.setText("Borrar");
         borrar.addActionListener(new java.awt.event.ActionListener() {
@@ -66,7 +75,7 @@ public class accesos extends javax.swing.JInternalFrame {
                 borrarActionPerformed(evt);
             }
         });
-        getContentPane().add(borrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, -1, -1));
+        getContentPane().add(borrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 160, -1, -1));
 
         tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -76,7 +85,7 @@ public class accesos extends javax.swing.JInternalFrame {
                 {null, null, null, null, null}
             },
             new String [] {
-                "id", "Titulo", "URL", "Imagen", "Palabras_plis"
+                "id", "user", "password", "redSocial", "activo"
             }
         ));
         tabla.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -99,7 +108,19 @@ public class accesos extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(tabla);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 740, 250));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 740, 250));
+
+        jLabel2.setText("User");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
+        getContentPane().add(password, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 30, 230, -1));
+
+        jLabel3.setText("Social");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
+        getContentPane().add(redSocal, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 70, 230, -1));
+
+        jLabel4.setText("activo");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 70, -1, -1));
+        getContentPane().add(activo, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 70, 230, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -107,13 +128,13 @@ public class accesos extends javax.swing.JInternalFrame {
     private void agregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarActionPerformed
         //VARIABLE QUE GUARDA TODOS LOS ERRORES QUE SURJAN
         String mensajeError="";
-        if(nombre.getText().length()==0){
+        if(user.getText().length()==0){
             mensajeError=mensajeError+"Campo Nombre es obligatorio\n";
         }
         //SI EL MENSAJE ERROR ESTA VACIO ES QUE NO HUBO NINGUN ERROR Y PROCEDE A INSERTAR LOS DATOS DE LA PUBLICACION
         int errorleng=mensajeError.length();
         if(mensajeError.length()==0){
-            agregar(nombre.getText());
+            agregar(user.getText(),password.getText(),redSocal.getText(),activo.getText());
         }
         //SI EL EMNSAJE DE ERROR TIENE CONTENIDO MANDAMOS UN MENSAJE DE ERROR
         else{
@@ -154,8 +175,11 @@ public class accesos extends javax.swing.JInternalFrame {
         int idPub= Integer.parseInt(tabla.getModel().getValueAt(row_index, 0).toString());
         if(cambiaTexto==1){
             //TOMAMOS EL ID DEL REGISTRO QUE SE EDITO
-            String Snombre = tabla.getModel().getValueAt(row_index, 1).toString();
-            this.editar(idPub,Snombre);
+            String Suser = tabla.getModel().getValueAt(row_index, 1).toString();
+            String Spassword = tabla.getModel().getValueAt(row_index, 2).toString();
+            String SredSocal = tabla.getModel().getValueAt(row_index, 3).toString();
+            String Sactivo = tabla.getModel().getValueAt(row_index, 4).toString();
+            this.editar(idPub,Suser,Spassword,SredSocal,Sactivo);
             //UNA VEZ QUE SE ACTUALIZARON LOS REGISTROS REGREAMOS LA BANDERA A 0 PARA QUE NO SE ACTUALICEN HASTA CAMBIAR EL TEXTO
             cambiaTexto=0;
         }
@@ -179,7 +203,7 @@ public class accesos extends javax.swing.JInternalFrame {
     */
     //FUNCION QUE RESIBE EL ID A BORRAR
     public void borrar(int id) {
-        String sql = "DELETE FROM categoria WHERE id='"+id+"';";
+        String sql = "DELETE FROM accesos WHERE id='"+id+"';";
         //SI LA CONEXION ES EXITOSA
         try (Connection conn = this.connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -190,9 +214,12 @@ public class accesos extends javax.swing.JInternalFrame {
         }
     }
     //FUNCION EDITAR
-    public void editar(int id, String nombre) {
-        String sql = "UPDATE categoria SET "
-                + "nombre = '"+ nombre +"'  "
+    public void editar(int id, String user, String password, String redSocal, String activo) {
+        String sql = "UPDATE accesos SET "
+                + "user = '"+ user +"',  "
+                + "password = '"+ password +"',  "
+                + "redSocal = '"+ redSocal +"',  "
+                + "activo = '"+ activo +"'  "
                 + "WHERE id = "+id;
         try (Connection conn = this.connect();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -203,12 +230,12 @@ public class accesos extends javax.swing.JInternalFrame {
         }
     }
     //FUNCION AGREGAR
-    public void agregar(String nombre) {
-        String sql = "INSERT INTO categoria "
-                + "(    nombre) values "
-                + "('"+ nombre +"')";
+    public void agregar(String user,String password,String redSocal,String activo) {
+        String sql = "INSERT INTO accesos "
+                + "(    user,       password      ,redSocal       ,    activo) values "
+                + "('"+ user +"','"+ password +"','"+ redSocal +"','"+ activo +"')";
         try (Connection conn = this.connect();
-                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
             //EJECUTAMOS EL COMANDO
             pstmt.executeUpdate();
             //BORRAR EL MODELO Y CARGARLO DE NUEVO
@@ -219,7 +246,7 @@ public class accesos extends javax.swing.JInternalFrame {
     }
     //CARGA LA TABLA CATEGORIAS
     public void carga_tabla() {
-        String Dato[]=new String[2];
+        String Dato[]=new String[5];
         modelo.setRowCount(0);
         try {
             //CONECTA A LA BD
@@ -229,20 +256,29 @@ public class accesos extends javax.swing.JInternalFrame {
             //QUERY QUE JALA TODAS LAS PUBLICACIONES
             String query = "SELECT "
                     + "id, "
-                    + "nombre "
-                    + "FROM categoria;";
+                    + "user, "
+                    + "password, "
+                    + "redSocal, "
+                    + "activo "
+                    + "FROM accesos;";
             ResultSet rs = statement.executeQuery(query);
             //CICLO QUE LLENA TODO EL MODELO
             while (rs.next()) {
                 Dato[0]=rs.getString("id");
-                Dato[1]=rs.getString("nombre");
+                Dato[1]=rs.getString("user");
+                Dato[2]=rs.getString("password");
+                Dato[3]=rs.getString("redSocal");
+                Dato[4]=rs.getString("activo");
                 modelo.addRow(Dato);
             }
             //LLENAMOS LA TABLA CON EL MODELO
             tabla.setModel(modelo);
             //OCULTAMOS EL ID EN LA TABLA
             //tabla.getColumn("id").setMaxWidth(0);
-            nombre.setText("");
+            user.setText("");
+            password.setText("");
+            redSocal.setText("");
+            activo.setText("");
         } catch (SQLException e) {
             System.err.println(e.getMessage());
         } finally {
@@ -259,11 +295,17 @@ public class accesos extends javax.swing.JInternalFrame {
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField activo;
     private javax.swing.JButton agregar;
     private javax.swing.JButton borrar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField nombre;
+    private javax.swing.JTextField password;
+    private javax.swing.JTextField redSocal;
     private javax.swing.JTable tabla;
+    private javax.swing.JTextField user;
     // End of variables declaration//GEN-END:variables
 }

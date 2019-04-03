@@ -99,6 +99,7 @@ public class fInterfas extends javax.swing.JFrame {
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
+        jMenuItem9 = new javax.swing.JMenuItem();
 
         jMenu4.setText("jMenu4");
 
@@ -194,6 +195,15 @@ public class fInterfas extends javax.swing.JFrame {
             }
         });
         jMenu3.add(jMenuItem8);
+
+        jMenuItem9.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.ALT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem9.setText("Accesos");
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem9);
 
         jMenuBar1.add(jMenu3);
 
@@ -317,6 +327,21 @@ public class fInterfas extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
+    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+        accesos v = new accesos();
+        v.setResizable(rootPaneCheckingEnabled);
+        v.setMaximizable(rootPaneCheckingEnabled);
+        v.setIconifiable(rootPaneCheckingEnabled);
+        v.setVisible(rootPaneCheckingEnabled);
+        v.setClosable(rootPaneCheckingEnabled);
+
+        contenedor.add(v);
+        v.toFront();
+        v.requestFocus();
+        v.repaint();
+
+    }//GEN-LAST:event_jMenuItem9ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -406,5 +431,6 @@ public class fInterfas extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JMenuItem jMenuItem9;
     // End of variables declaration//GEN-END:variables
 }
