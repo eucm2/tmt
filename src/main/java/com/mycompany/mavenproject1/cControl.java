@@ -918,7 +918,7 @@ public class cControl {
             }
             intentosFallidos++;
             //ESPERAMOS UN MINUTO
-            pausa(6000);
+            pausa(60000);
             clickVideosLimite(limite, procesosExitoso,intentosFallidos);
 
         }
