@@ -775,17 +775,7 @@ public class cControl {
         }
     }
 
-    public void clickVideosLimite(int limite, int procesosExitoso) {
-        //DESPUES DE 3 INTENTOS Y NO FUNCIONA ES QUE HAY ALGO MAL Y SE SALE
-        if (intentos > 3) {
-            int res = JOptionPane.showOptionDialog(null, "Se han realizado 3 intentos fallidos desea intentar de nuevo o cerrar", "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
-            if (res == 1) {
-                driver.quit();
-            } //SI DESEA CONTINUA RESETEAMOS LOS INTENTO A 0 PARA PROBAR DE NUEVO
-            else {
-                intentos = 0;
-            }
-        }
+    public void clickVideosLimite(int limite, int procesosExitoso, int intentosFallidos) {
         //ESTA BANDERA MARCA SI ENCONTRO UN BOTON PARA ABRIR LA VENTANA SECUNDARIA
         boolean banderaEncontro = false;
         //ESTE ES EL CODIGO DE LA VENTANA A ABRIR
@@ -805,6 +795,7 @@ public class cControl {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>" + userKingdom + "</div>\");");
         js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos exitosos=" + procesosExitoso + " Limite=" + limite + "</div>\");");
+        js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentosFallidos + " Limite=" + limite + "</div>\");");
         //ESPERAMOS UN RATO A QUE CARGUEN TODOS LOS VIDEOS
         pausa(lento);
         pausa(lento);
@@ -829,9 +820,9 @@ public class cControl {
                 } 
                 //SI EL TEXTO DEL CODIGO ESTA VACIO SUMAMOS UN INTENTO Y REINICIAMOS ESTA FUNCION
                 else {
-                    intentos++;
-                    js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + " Limite=" + limite + "</div>\");");
-                    clickVideosLimite(limite, procesosExitoso);
+                    intentosFallidos++;
+                    js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentosFallidos + " Limite=" + limite + "</div>\");");
+                    clickVideosLimite(limite, procesosExitoso,intentosFallidos);
                 }
                 //ACTIVAMOS LA BANDERA DICIENDO QUE SI DIMOS CLICK EN EL BOTON
                 banderaEncontro = true;
@@ -839,10 +830,10 @@ public class cControl {
                 //LA BANDERA ES FALSA PORQUE REALMENTE NO ENCONTRO NINGUN BOTON
                 banderaEncontro = false;
                 //SUMA IN INTENTO MAS
-                intentos++;
-                js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentos + " Limite=" + limite + "</div>\");");
+                intentosFallidos++;
+                js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentosFallidos + " Limite=" + limite + "</div>\");");
                 //REINICIA LA FUNCION
-                clickVideosLimite(limite, procesosExitoso);
+                clickVideosLimite(limite, procesosExitoso,intentosFallidos);
             }
             //CERRAMOS EL CICLO
             break;
@@ -873,10 +864,11 @@ public class cControl {
                     break;
                 } catch (Exception e) {
                     //SUMA IN INTENTO MAS
-                    intentos++;
+                    intentosFallidos++;
                     js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos exitosos=" + procesosExitoso + " Limite=" + limite + "</div>\");");
+                    js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentosFallidos + " Limite=" + limite + "</div>\");");
                     //REINICIA LA FUNCION
-                    clickVideosLimite(limite, procesosExitoso);
+                    clickVideosLimite(limite, procesosExitoso,intentosFallidos);
                 }
             }
             //Si llegamos a limite de videos cerramos el navegador y nos salimos de la funcion
@@ -887,6 +879,7 @@ public class cControl {
             //Si el proceso fue exitoso contamos 1 mas
             procesosExitoso++;
             js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos exitosos=" + procesosExitoso + " Limite=" + limite + "</div>\");");
+            js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos exitosos=" + intentosFallidos + " Limite=" + limite + "</div>\");");
 
             //OBTENEMOS UN NUMERO ENTRE 4 Y 11
             int numeroAleatorio = (int) (Math.random() * 4) + 7;
@@ -916,23 +909,23 @@ public class cControl {
                 System.out.println(" Error de índice en un array");
             }
             //COMO EL PROCESO FUE EXISTOSO REINICIAMOS LOS INTENTOS
-            intentos = 0;
+            //intentos = 0;
 
             //ESPERAMOS 3 SEGUNDOS EN LO SE CARGAN NUESTROS PUNTOS
             pausa(lento);
             pausa(lento);
             //REINICIAMOS LA FUNCION
-            clickVideosLimite(limite, procesosExitoso);
+            clickVideosLimite(limite, procesosExitoso,intentosFallidos);
         } //SI NO ENCONTRO NINGUN VIDEO EN LA LISTA
         else {
             //Si llegamos a limite de videos cerramos el navegador y nos salimos de la funcion
-            if (intentos == limite) {
+            if (intentosFallidos == limite) {
                 cerrarNavegador();
                 return;
             }
             //ESPERAMOS UN MINUTO
             pausa(60000);
-            clickVideosLimite(limite, procesosExitoso);
+            clickVideosLimite(limite, procesosExitoso,intentosFallidos);
 
         }
     }
