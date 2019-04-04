@@ -784,10 +784,6 @@ public class cControl {
         int totSeg = 0;
         pausa(mlento);
         pausa(mlento);
-        pausa(mlento);
-        pausa(mlento);
-        pausa(mlento);
-        pausa(mlento);
 
         //VAMOS A LA PAGINA DE LOS VIDEOS
         driver.get("https://kingdomlikes.com/free_points/youtube-views");
@@ -797,9 +793,6 @@ public class cControl {
         js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos exitosos=" + procesosExitoso + " Limite=" + limite + "</div>\");");
         js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentosFallidos + " Limite=" + limite + "</div>\");");
         //ESPERAMOS UN RATO A QUE CARGUEN TODOS LOS VIDEOS
-        pausa(lento);
-        pausa(lento);
-        pausa(lento);
         pausa(lento);
         pausa(lento);
         //HACEMOS UNA LISTA CON TODOS LOS BOTONES
@@ -923,8 +916,9 @@ public class cControl {
                 cerrarNavegador();
                 return;
             }
+            intentosFallidos++;
             //ESPERAMOS UN MINUTO
-            pausa(60000);
+            pausa(6000);
             clickVideosLimite(limite, procesosExitoso,intentosFallidos);
 
         }
