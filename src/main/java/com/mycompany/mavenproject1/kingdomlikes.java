@@ -370,7 +370,7 @@ public class kingdomlikes extends javax.swing.JInternalFrame {
                         c.inicializarWebdriver(path_drive);
                         c.accedeKL(userKL.getText(), passwordKL.getText());
                         //Ganamos punto con un limite de videos a ver
-                        c.clickVideosLimite(Integer.parseInt(txtCadaVideos.getText()),0);
+                        c.clickVideosLimite(Integer.parseInt(txtCadaVideos.getText()),0,0);
                         //c.pausa(2000);
                     }
                 }
