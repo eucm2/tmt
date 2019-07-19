@@ -32,6 +32,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
     long medio;
     long lento;
     long mlento;
+    DefaultTableModel modelo_accesos=new DefaultTableModel();
     WebDriver driver;
     Connection connection = null;
     Statement statement = null;
@@ -70,6 +71,15 @@ public class fYoutube extends javax.swing.JInternalFrame {
     public fYoutube() {
 
         initComponents();
+        //CARGAMOS EL MODELO DE LA TABLA PUBLICACIONES
+        modelo_accesos.addColumn("id");
+        modelo_accesos.addColumn("user");
+        modelo_accesos.addColumn("password");
+        modelo_accesos.addColumn("redSocal");
+        modelo_accesos.addColumn("activo");
+        carga_tabla();
+        // Seleccionamos el primer registro
+        tabla_accesos.setRowSelectionInterval(0, 0);
         listaHorarios.getColumn("No").setMaxWidth(40);
         modelo_publicaciones.addColumn("id");
         modelo_publicaciones.addColumn("url");
@@ -201,6 +211,54 @@ public class fYoutube extends javax.swing.JInternalFrame {
         carga_tabla_publicaciones(" where activo='1' ");
 
     }
+    public void carga_tabla() {
+        String Dato[]=new String[5];
+        modelo_accesos.setRowCount(0);
+        try {
+            //CONECTA A LA BD
+            connection = this.connect();
+            statement = connection.createStatement();
+            statement.setQueryTimeout(20);
+            //QUERY QUE JALA TODAS LAS PUBLICACIONES
+            String query = "SELECT "
+                    + "id, "
+                    + "user, "
+                    + "password, "
+                    + "redSocal, "
+                    + "activo "
+                    + "FROM accesos "
+                    + "WHERE redSocal='FB' and activo='1';";
+            ResultSet rs = statement.executeQuery(query);
+            //CICLO QUE LLENA TODO EL MODELO
+            while (rs.next()) {
+                Dato[0]=rs.getString("id");
+                Dato[1]=rs.getString("user");
+                Dato[2]=rs.getString("password");
+                Dato[3]=rs.getString("redSocal");
+                Dato[4]=rs.getString("activo");
+                modelo_accesos.addRow(Dato);
+            }
+            //LLENAMOS LA TABLA CON EL MODELO
+            tabla_accesos.setModel(modelo_accesos);
+            //OCULTAMOS EL ID EN LA TABLA
+            //tabla.getColumn("id").setMaxWidth(0);
+            userFB.setText("");
+            passwordFB.setText("");
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        } finally {
+
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                // connection close failed.
+                System.err.println(e);
+            }
+
+        }
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -261,6 +319,12 @@ public class fYoutube extends javax.swing.JInternalFrame {
         checkMostrarPassFB = new javax.swing.JCheckBox();
         jButton1 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tabla_accesos = new javax.swing.JTable();
+        moverPrimero = new javax.swing.JButton();
+        moverUltimo = new javax.swing.JButton();
+        moverArriba = new javax.swing.JButton();
+        moverAbajo = new javax.swing.JButton();
 
         setTitle("Publicar");
         setInheritsPopupMenu(true);
@@ -272,12 +336,12 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 compartirVideoActionPerformed(evt);
             }
         });
-        getContentPane().add(compartirVideo, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 420, -1, -1));
+        getContentPane().add(compartirVideo, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 490, -1, -1));
 
         jLabel1.setText("URL");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, -1, -1));
-        getContentPane().add(urlVideo, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 270, 900, -1));
-        getContentPane().add(pathImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 330, 770, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, -1, -1));
+        getContentPane().add(urlVideo, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 340, 900, -1));
+        getContentPane().add(pathImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 400, 770, -1));
 
         buscarImagen.setText("Buscar imagen");
         buscarImagen.addActionListener(new java.awt.event.ActionListener() {
@@ -285,21 +349,21 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 buscarImagenActionPerformed(evt);
             }
         });
-        getContentPane().add(buscarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 330, -1, -1));
+        getContentPane().add(buscarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 400, -1, -1));
 
         jLabel2.setText("Path imagen");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 400, -1, -1));
 
         jScrollPane1.setViewportView(grupoErrores);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 460, 910, 60));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 530, 910, 60));
 
         jLabel3.setText("Grupos con errores");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 470, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 540, -1, -1));
 
         jLabel4.setText("Titulo");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 300, -1, -1));
-        getContentPane().add(titulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 300, 900, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, -1, -1));
+        getContentPane().add(titulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 370, 900, -1));
 
         tabla_publicaciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -330,48 +394,48 @@ public class fYoutube extends javax.swing.JInternalFrame {
         });
         jScrollPane2.setViewportView(tabla_publicaciones);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 1060, 150));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, 1060, 90));
 
         jLabel5.setText("numero_veces_compartido");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 360, -1, -1));
-        getContentPane().add(numero_veces_compartido, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 360, 900, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 430, -1, -1));
+        getContentPane().add(numero_veces_compartido, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 430, 900, -1));
 
         jLabel6.setText("Compartir en");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 430, -1, -1));
-        getContentPane().add(ultima_vez_compartida, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 390, 900, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 500, -1, -1));
+        getContentPane().add(ultima_vez_compartida, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 460, 900, -1));
 
         jLabel7.setText("Ultima vez compartido");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 390, -1, -1));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 460, -1, -1));
 
         checkTW.setText("Twitter");
-        getContentPane().add(checkTW, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 430, -1, -1));
+        getContentPane().add(checkTW, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 500, -1, -1));
 
         checkFB.setSelected(true);
         checkFB.setText("Facebook");
-        getContentPane().add(checkFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 430, -1, -1));
+        getContentPane().add(checkFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 500, -1, -1));
 
         checkGP.setText("Google +");
-        getContentPane().add(checkGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 430, -1, -1));
+        getContentPane().add(checkGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 500, -1, -1));
 
         jLabel11.setText("Buscar por titulo");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, -1, -1));
 
         busca_titulo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 busca_tituloKeyPressed(evt);
             }
         });
-        getContentPane().add(busca_titulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 70, 380, -1));
+        getContentPane().add(busca_titulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 200, 330, -1));
 
         jLabel8.setText("Buscar por url");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 60, -1, -1));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 210, -1, -1));
 
         busca_url.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 busca_urlKeyPressed(evt);
             }
         });
-        getContentPane().add(busca_url, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 60, 340, -1));
+        getContentPane().add(busca_url, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 200, 300, -1));
 
         Buscar.setText("Buscar");
         Buscar.addActionListener(new java.awt.event.ActionListener() {
@@ -379,27 +443,27 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 BuscarActionPerformed(evt);
             }
         });
-        getContentPane().add(Buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 60, -1, -1));
+        getContentPane().add(Buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 190, -1, -1));
 
         jLabel12.setText("Pass FB");
-        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 10, -1, -1));
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 10, -1, -1));
 
         userFB.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 userFBKeyPressed(evt);
             }
         });
-        getContentPane().add(userFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, 110, -1));
+        getContentPane().add(userFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 190, -1));
 
         jLabel13.setText("Pass G+");
-        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 10, -1, -1));
+        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 10, -1, -1));
 
         userGP.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 userGPKeyPressed(evt);
             }
         });
-        getContentPane().add(userGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 10, 110, -1));
+        getContentPane().add(userGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 10, 110, -1));
 
         guardarGP.setText("Guardar G+");
         guardarGP.addActionListener(new java.awt.event.ActionListener() {
@@ -407,7 +471,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 guardarGPActionPerformed(evt);
             }
         });
-        getContentPane().add(guardarGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 10, -1, -1));
+        getContentPane().add(guardarGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 10, -1, -1));
 
         guardarFB.setText("Guardar FB");
         guardarFB.addActionListener(new java.awt.event.ActionListener() {
@@ -415,15 +479,15 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 guardarFBActionPerformed(evt);
             }
         });
-        getContentPane().add(guardarFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 10, -1, -1));
+        getContentPane().add(guardarFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 10, -1, -1));
 
         jLabel14.setText("User FB");
         getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
         jLabel15.setText("User G+");
-        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 10, -1, -1));
-        getContentPane().add(passwordGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 10, 100, -1));
-        getContentPane().add(passwordFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 10, 110, -1));
+        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 10, -1, -1));
+        getContentPane().add(passwordGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 10, 100, -1));
+        getContentPane().add(passwordFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 10, 120, -1));
 
         activar.setSelected(true);
         activar.setText("Activar");
@@ -432,10 +496,10 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 activarActionPerformed(evt);
             }
         });
-        getContentPane().add(activar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 550, 70, 20));
+        getContentPane().add(activar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 620, 70, 20));
 
         lblHoraReiniciar.setText("horaReiniciar");
-        getContentPane().add(lblHoraReiniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 550, 360, 20));
+        getContentPane().add(lblHoraReiniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 620, 360, 20));
 
         btnGanarPuntos.setText("Ejecutar ahora");
         btnGanarPuntos.addActionListener(new java.awt.event.ActionListener() {
@@ -443,25 +507,25 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 btnGanarPuntosActionPerformed(evt);
             }
         });
-        getContentPane().add(btnGanarPuntos, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 550, -1, -1));
+        getContentPane().add(btnGanarPuntos, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 620, -1, -1));
 
         horaActual.setText("Hora actual");
-        getContentPane().add(horaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 590, -1, -1));
+        getContentPane().add(horaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 660, -1, -1));
 
         jLabel16.setText("Hora actual.............");
-        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 590, -1, -1));
+        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 660, -1, -1));
 
         horaIni.setText("Hora Inicial");
-        getContentPane().add(horaIni, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 620, -1, -1));
+        getContentPane().add(horaIni, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 690, -1, -1));
 
         jLabel17.setText("Hora Inicial.............");
-        getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 620, -1, -1));
+        getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 690, -1, -1));
 
         jLabel20.setText("Hora Final.......................................");
-        getContentPane().add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 590, -1, -1));
+        getContentPane().add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 660, -1, -1));
 
         horaFin.setText("Hora Final");
-        getContentPane().add(horaFin, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 590, -1, -1));
+        getContentPane().add(horaFin, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 660, -1, -1));
 
         listaHorarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -474,21 +538,21 @@ public class fYoutube extends javax.swing.JInternalFrame {
         listaHorarios.setName("listaHorarios"); // NOI18N
         jScrollPane3.setViewportView(listaHorarios);
 
-        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 590, 310, 130));
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 660, 310, 130));
 
         jLabel21.setText("Segundos que faltan para ejeuitar");
-        getContentPane().add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 620, -1, -1));
+        getContentPane().add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 690, -1, -1));
 
         tiempoFaltaEjecutar.setText("Tiempo a ajecutar");
-        getContentPane().add(tiempoFaltaEjecutar, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 620, -1, -1));
+        getContentPane().add(tiempoFaltaEjecutar, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 690, -1, -1));
 
         lblModo.setBackground(new java.awt.Color(102, 102, 255));
         lblModo.setText("modo");
         lblModo.setOpaque(true);
-        getContentPane().add(lblModo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 660, -1, -1));
+        getContentPane().add(lblModo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 730, -1, -1));
 
         jLabel9.setText("jLabel9");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 760, -1, -1));
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 830, -1, -1));
 
         btnAbrirNav.setText("Abrir nav");
         btnAbrirNav.addActionListener(new java.awt.event.ActionListener() {
@@ -496,7 +560,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 btnAbrirNavActionPerformed(evt);
             }
         });
-        getContentPane().add(btnAbrirNav, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 10, -1, -1));
+        getContentPane().add(btnAbrirNav, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 10, -1, -1));
 
         checkMostrarPassFB.setText("Mostrar password");
         checkMostrarPassFB.addActionListener(new java.awt.event.ActionListener() {
@@ -504,7 +568,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 checkMostrarPassFBActionPerformed(evt);
             }
         });
-        getContentPane().add(checkMostrarPassFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 30, -1, -1));
+        getContentPane().add(checkMostrarPassFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, -1, -1));
 
         jButton1.setText("jButton1");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -512,10 +576,68 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 810, -1, -1));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 880, -1, -1));
 
         jTextField1.setText("https://web.facebook.com/ProgramadorNovatoOficial/?modal=admin_todo_tour");
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 810, 220, -1));
+        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 880, 220, -1));
+
+        tabla_accesos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "id", "user", "password", "redSocial", "activo"
+            }
+        ));
+        tabla_accesos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                tabla_accesosMouseReleased(evt);
+            }
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabla_accesosMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                tabla_accesosMouseEntered(evt);
+            }
+        });
+        jScrollPane4.setViewportView(tabla_accesos);
+
+        getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 780, 120));
+
+        moverPrimero.setText("Primero");
+        moverPrimero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                moverPrimeroActionPerformed(evt);
+            }
+        });
+        getContentPane().add(moverPrimero, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 50, -1, -1));
+
+        moverUltimo.setText("Ultimo");
+        moverUltimo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                moverUltimoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(moverUltimo, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 150, -1, -1));
+
+        moverArriba.setText("Arriba");
+        moverArriba.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                moverArribaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(moverArriba, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 80, -1, -1));
+
+        moverAbajo.setText("Abajo");
+        moverAbajo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                moverAbajoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(moverAbajo, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 110, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -767,7 +889,11 @@ public class fYoutube extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnAbrirNavActionPerformed
 
     private void checkMostrarPassFBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkMostrarPassFBActionPerformed
-        // TODO add your handling code here:
+        if (checkMostrarPassFB.isSelected()==true ) {
+            passwordFB.setEchoChar((char) 0);
+        } else {
+            passwordFB.setEchoChar('*');
+        }
     }//GEN-LAST:event_checkMostrarPassFBActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -778,6 +904,76 @@ public class fYoutube extends javax.swing.JInternalFrame {
         
         
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void tabla_accesosMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_accesosMouseReleased
+        asigna_tabla_accesos_input_text();
+    }//GEN-LAST:event_tabla_accesosMouseReleased
+
+    private void tabla_accesosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_accesosMouseClicked
+        asigna_tabla_accesos_input_text();
+    }//GEN-LAST:event_tabla_accesosMouseClicked
+
+    private void tabla_accesosMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_accesosMouseEntered
+        asigna_tabla_accesos_input_text();
+    }//GEN-LAST:event_tabla_accesosMouseEntered
+
+    private void moverPrimeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moverPrimeroActionPerformed
+        
+        // Mover al primer registro
+        tabla_accesos.setRowSelectionInterval(0, 0);
+        
+        int registroSel=tabla_accesos.getSelectedRow();
+        
+    }//GEN-LAST:event_moverPrimeroActionPerformed
+
+    private void moverUltimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moverUltimoActionPerformed
+        
+        //Mover al ultimo registro
+        tabla_accesos.setRowSelectionInterval(modelo_accesos.getRowCount() - 1, modelo_accesos.getRowCount() - 1);
+        
+        int registroSel=tabla_accesos.getSelectedRow();
+        
+        
+        
+    }//GEN-LAST:event_moverUltimoActionPerformed
+
+    private void moverArribaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moverArribaActionPerformed
+        int totalRegistros=modelo_accesos.getRowCount();
+        int registroSel=tabla_accesos.getSelectedRow();
+        if(registroSel==0){
+            tabla_accesos.setRowSelectionInterval(totalRegistros-1, totalRegistros-1);
+        }
+        else{
+            tabla_accesos.setRowSelectionInterval(registroSel-1, registroSel-1);
+            registroSel=tabla_accesos.getSelectedRow();
+        }
+    }//GEN-LAST:event_moverArribaActionPerformed
+
+    private void moverAbajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moverAbajoActionPerformed
+        int totalRegistros=modelo_accesos.getRowCount();
+        int registroSel=tabla_accesos.getSelectedRow();
+        if( (totalRegistros-1) == registroSel ){
+            tabla_accesos.setRowSelectionInterval(0, 0);
+        }
+        else{
+            tabla_accesos.setRowSelectionInterval(registroSel+1, registroSel+1);
+        }
+        
+        
+        registroSel=tabla_accesos.getSelectedRow();
+    }//GEN-LAST:event_moverAbajoActionPerformed
+    
+
+    //COLOCAMOS EL TEXTO DE LA TABLA EN CADA INPUT TEXT
+    public void asigna_tabla_accesos_input_text() {
+        try {
+            userFB.setText(tabla_accesos.getValueAt(tabla_accesos.getSelectedRow(), 1).toString());
+            passwordFB.setText(tabla_accesos.getValueAt(tabla_accesos.getSelectedRow(), 2).toString());
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+    }
+
     //COLOCAMOS EL TEXTO DE LA TABLA EN CADA INPUT TEXT
     public void asigna_tabla_publicaciones_input_text() {
         try {
@@ -1301,14 +1497,20 @@ public class fYoutube extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblHoraReiniciar;
     private javax.swing.JLabel lblModo;
     private javax.swing.JTable listaHorarios;
+    private javax.swing.JButton moverAbajo;
+    private javax.swing.JButton moverArriba;
+    private javax.swing.JButton moverPrimero;
+    private javax.swing.JButton moverUltimo;
     private javax.swing.JTextField numero_veces_compartido;
     private javax.swing.JPasswordField passwordFB;
     private javax.swing.JPasswordField passwordGP;
     private javax.swing.JTextField pathImagen;
+    private javax.swing.JTable tabla_accesos;
     private javax.swing.JTable tabla_publicaciones;
     private javax.swing.JLabel tiempoFaltaEjecutar;
     private javax.swing.JTextField titulo;

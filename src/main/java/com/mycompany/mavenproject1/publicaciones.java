@@ -93,6 +93,7 @@ public class publicaciones extends javax.swing.JInternalFrame {
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         activo = new javax.swing.JCheckBox();
+        jLabel4 = new javax.swing.JLabel();
 
         setTitle("Publicaciones");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -206,7 +207,7 @@ public class publicaciones extends javax.swing.JInternalFrame {
         ));
         jScrollPane2.setViewportView(tabla_cat_exist);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 500, 430, 160));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 500, 430, 240));
 
         jLabel7.setText("Buscar por url");
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 230, -1, -1));
@@ -274,6 +275,9 @@ public class publicaciones extends javax.swing.JInternalFrame {
         activo.setText("Activo");
         activo.setEnabled(false);
         getContentPane().add(activo, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 160, -1, -1));
+
+        jLabel4.setText("jLabel4");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 740, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -775,6 +779,7 @@ public class publicaciones extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;

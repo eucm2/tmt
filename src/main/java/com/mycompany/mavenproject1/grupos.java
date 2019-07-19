@@ -79,6 +79,7 @@ public class grupos extends javax.swing.JInternalFrame {
         tipo = new javax.swing.JList<>();
         nuevo = new javax.swing.JButton();
         editar = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
 
         setTitle("Grupos");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -148,7 +149,7 @@ public class grupos extends javax.swing.JInternalFrame {
         ));
         jScrollPane3.setViewportView(tabla_cat_grup);
 
-        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 520, 300, 190));
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 520, 300, 240));
 
         jLabel5.setText("Categorias existentes");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 490, -1, -1));
@@ -185,7 +186,7 @@ public class grupos extends javax.swing.JInternalFrame {
         ));
         jScrollPane2.setViewportView(tabla_cat_exist);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 510, 270, 200));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 510, 270, 250));
 
         activo.setSelected(true);
         activo.setText("Activo");
@@ -222,6 +223,9 @@ public class grupos extends javax.swing.JInternalFrame {
             }
         });
         getContentPane().add(editar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 200, -1, -1));
+
+        jLabel8.setText("jLabel8");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 770, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -646,6 +650,7 @@ public class grupos extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
