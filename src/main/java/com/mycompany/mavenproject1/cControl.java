@@ -5,6 +5,9 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -22,8 +25,11 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.sql.PreparedStatement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
@@ -1068,8 +1074,8 @@ public class cControl {
         int PORT = 465;
         String TEXT_PLAIN = "text/plain";
 
-        String correoEnvia = "eugenio@onefocusdigital.com";
-        String password = "Demo4231#@64";
+        String correoEnvia = "eucm2g@gmail.com";
+        String password = "O2e20314#@64";
 
         HtmlEmail email = new HtmlEmail();
         email.setHostName(HOST_NAME);
@@ -1100,9 +1106,34 @@ public class cControl {
         } catch (EmailException ex) {
             Logger.getLogger(hitleap.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
-
+    public void escribeLog(String texto) throws IOException{
+        String ruta = "tmt.log";
+        
+        /*
+        File archivo = new File(ruta);
+        BufferedWriter bw;
+        if(archivo.exists()) {
+            bw = new BufferedWriter(new FileWriter(archivo));
+            bw.write("El fichero de texto ya estaba creado.");
+        } else {
+            bw = new BufferedWriter(new FileWriter(archivo));
+            bw.write("Acabo de crear el fichero de texto.");
+        }
+        bw.close();
+        */
+        
+        File archivo = new File(ruta);
+        BufferedWriter bw;
+        Date date = new Date();  
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String strDate= formatter.format(date);  
+        bw = new BufferedWriter(new FileWriter(archivo,true));
+        bw.write(strDate + "    " +  texto+"\r");
+        bw.close();
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+    }
     private void copy(String texto) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         StringSelection selection = new StringSelection(texto);

@@ -5,6 +5,7 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -325,6 +326,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
         moverUltimo = new javax.swing.JButton();
         moverArriba = new javax.swing.JButton();
         moverAbajo = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setTitle("Publicar");
         setInheritsPopupMenu(true);
@@ -639,6 +641,14 @@ public class fYoutube extends javax.swing.JInternalFrame {
         });
         getContentPane().add(moverAbajo, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 110, -1, -1));
 
+        jButton2.setText("jButton2");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 620, -1, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -737,7 +747,12 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 actualizaYaPublicado(errorYlistaGrupos[1],idPubCompartir,"FB");
                 //MANDAMOS MAIL CON EL ARTICULO Y EL GRUPO DONDE SE COMPARTIO
                 c.mandaMail("eucm2g@gmail.com","En fb","tmt","Se publico este videos "+urlVideo.getText()+" </br> en estos grupos"+ errorYlistaGrupos[2] +" ");
-                //SI NO ESTA SELECCIONADO GP CERRAMOS EL NAVEGADOR
+                try {
+                    c.escribeLog("Se publico este videos "+urlVideo.getText()+" en estos grupos"+ errorYlistaGrupos[2].replace("\n", "").replace("\r", "") +" ");
+                    //SI NO ESTA SELECCIONADO GP CERRAMOS EL NAVEGADOR
+                } catch (IOException ex) {
+                    Logger.getLogger(fYoutube.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 
                 if (checkGP.isSelected()==false) {
                     c.cerrarNavegador();
@@ -871,9 +886,11 @@ public class fYoutube extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_guardarGPActionPerformed
 
     private void activarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activarActionPerformed
-        reiniciarCronometro();
-        if (modo_prueba_rs == 0) {
-            cronometroParaEjecutar();
+        if(activar.isSelected()==true){
+            reiniciarCronometro();
+            if (modo_prueba_rs == 0) {
+                cronometroParaEjecutar();
+            }
         }
     }//GEN-LAST:event_activarActionPerformed
 
@@ -962,6 +979,14 @@ public class fYoutube extends javax.swing.JInternalFrame {
         
         registroSel=tabla_accesos.getSelectedRow();
     }//GEN-LAST:event_moverAbajoActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            c.escribeLog("Se publico este videos ");
+        } catch (IOException ex) {
+            Logger.getLogger(fYoutube.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
     
 
     //COLOCAMOS EL TEXTO DE LA TABLA EN CADA INPUT TEXT
@@ -1476,6 +1501,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
     private javax.swing.JLabel horaFin;
     private javax.swing.JLabel horaIni;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
