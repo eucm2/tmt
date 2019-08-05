@@ -2,6 +2,7 @@ package com.mycompany.mavenproject1;
 
 import java.awt.Color;
 import java.io.File;
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -39,9 +40,11 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
         jLabel6 = new javax.swing.JLabel();
         mlento = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        pathbd = new javax.swing.JLabel();
         pathDrive = new javax.swing.JTextField();
         seleccionarImagen = new javax.swing.JButton();
+        jLabel30 = new javax.swing.JLabel();
+        pathBase = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -138,8 +141,8 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
         jLabel1.setText("Velocidad en milisegundos");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, -1, -1));
 
-        jLabel7.setText("Path drive chromedrive");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+        pathbd.setText("path bd");
+        jPanel1.add(pathbd, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 560, -1));
         jPanel1.add(pathDrive, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 510, -1));
 
         seleccionarImagen.setText("Seleccionar chromedriver");
@@ -149,6 +152,10 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
             }
         });
         jPanel1.add(seleccionarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 70, -1, -1));
+
+        jLabel30.setText("Path drive chromedrive");
+        jPanel1.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+        jPanel1.add(pathBase, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 520, -1));
 
         jTabbedPane4.addTab("General", jPanel1);
 
@@ -334,6 +341,13 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
     public fConfiguracion() {
         initComponents();
         
+        try {
+            //return new File(fConfiguracion.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getPath();
+            //pathbd.setText(fConfiguracion.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+            pathBase.setText(fConfiguracion.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(fConfiguracion.class.getName()).log(Level.SEVERE, null, ex);
+        }
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException ex) {
@@ -683,10 +697,10 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -709,7 +723,9 @@ public class fConfiguracion extends javax.swing.JInternalFrame {
     private javax.swing.JCheckBox modo_prueba;
     private javax.swing.JCheckBox modo_prueba_rs;
     private javax.swing.JTextField numLetrasEsperar;
+    private javax.swing.JTextField pathBase;
     private javax.swing.JTextField pathDrive;
+    private javax.swing.JLabel pathbd;
     private javax.swing.JList<String> publicacionConsecutiva;
     private javax.swing.JTextField rapido;
     private javax.swing.JButton seleccionarImagen;
