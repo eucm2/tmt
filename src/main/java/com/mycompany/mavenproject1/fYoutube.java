@@ -16,12 +16,15 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.PauseTransition;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -78,7 +81,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
         modelo_accesos.addColumn("password");
         modelo_accesos.addColumn("redSocal");
         modelo_accesos.addColumn("activo");
-        carga_tabla();
+        int cantidadUsuarios=carga_tabla();
         // Seleccionamos el primer registro
         tabla_accesos.setRowSelectionInterval(0, 0);
         listaHorarios.getColumn("No").setMaxWidth(40);
@@ -166,24 +169,29 @@ public class fYoutube extends javax.swing.JInternalFrame {
 
             //INICIALIZAMOS E CONTROLADOR CON LA FORMA DE ESCRIBIR QUE ESTA EN LA BD
             c.cControl(escribirCon_rs);
-            //CARGAMOS LOS DATOS DE CONFIGURACION COMO LA VELOCIDAD ENTRE ECCIONES Y LA URL DEL PATH DRIVER
             String queryAccesos = "SELECT "
                     + "id,"
                     + "user,"
                     + "password,"
                     + "redSocal "
-                    + "FROM accesos;";
+                    + "FROM accesos where activo='1';";
 
             ResultSet rsAccesos = statement.executeQuery(queryAccesos);
+            int numeroUsuario=1;
+            //int diaMes=Integer.parseInt(JOptionPane.showInputDialog("diaMes"));
             //CICLO QUE LLENA TODO EL MODELO
             while (rsAccesos.next()) {
                 String redSocal = rsAccesos.getString("redSocal");
                 if (redSocal.equals("FB")) {
-                    userFB.setText(rsAccesos.getString("user"));
-                    passwordFB.setText(rsAccesos.getString("password"));
-                    if(rsAccesos.getString("user").length()>0 && rsAccesos.getString("password").length()>0 ){
-                        guardarFB.setSelected(true);
+                    //VALIDAMOS SI A ESTE USUARIO LE TOCA EL DIA DE HOY
+                    if(activoPorDia(0, cantidadUsuarios, numeroUsuario)==true){
+                        userFB.setText(rsAccesos.getString("user"));
+                        passwordFB.setText(rsAccesos.getString("password"));
+                        if(rsAccesos.getString("user").length()>0 && rsAccesos.getString("password").length()>0 ){
+                            guardarFB.setSelected(true);
+                        }
                     }
+                    numeroUsuario++;
                 }
                 if (redSocal.equals("GP")) {
                     userGP.setText(rsAccesos.getString("user"));
@@ -212,7 +220,22 @@ public class fYoutube extends javax.swing.JInternalFrame {
         carga_tabla_publicaciones(" where activo='1' ");
 
     }
-    public void carga_tabla() {
+    //DEPENDIENDO DEL DIA DE LA SEMANA SE ACTIVA O NO
+    public boolean activoPorDia(int diaMes,int cantidadUsuarios,int usuario){
+        if(diaMes==0){
+            Calendar c = Calendar.getInstance();
+            diaMes=c.get(Calendar.DATE);
+        }
+        int modular=(diaMes%cantidadUsuarios)+1;
+        if(modular==usuario){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    public int carga_tabla() {
+        int cantidad=0;
         String Dato[]=new String[5];
         modelo_accesos.setRowCount(0);
         try {
@@ -238,6 +261,7 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 Dato[3]=rs.getString("redSocal");
                 Dato[4]=rs.getString("activo");
                 modelo_accesos.addRow(Dato);
+                cantidad++;
             }
             //LLENAMOS LA TABLA CON EL MODELO
             tabla_accesos.setModel(modelo_accesos);
@@ -257,8 +281,8 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 // connection close failed.
                 System.err.println(e);
             }
-
         }
+        return cantidad;
     }
 
     @SuppressWarnings("unchecked")
@@ -727,6 +751,9 @@ public class fYoutube extends javax.swing.JInternalFrame {
                 }
                 //NOS LOGUEAMOS EN FB O
                 c.accedeFB(userFB.getText(), passwordFB.getText());
+                c.pausa(lento);
+                c.pausa(lento);
+                c.pausa(lento);
                 //COMENZAMOS A COMPARTIR EL VIDEO
                 String [] errorYlistaGrupos = c.compartirFB(urlVideo.getText(), pathImagen.getText(), titulo.getText(), idPubCompartir, cantidad_comparir_fb, idsYaCompartidos);
                 if (errorYlistaGrupos == null) {
@@ -981,13 +1008,14 @@ public class fYoutube extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_moverAbajoActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        try {
-            c.escribeLog("Se publico este videos ");
-        } catch (IOException ex) {
-            Logger.getLogger(fYoutube.class.getName()).log(Level.SEVERE, null, ex);
+        String diaString="";
+        int usuario=Integer.parseInt(JOptionPane.showInputDialog("Usuario"));
+        int cantidadUsuario=Integer.parseInt(JOptionPane.showInputDialog("cantidadUsuario"));
+        for (int dia = 1; dia < 30; dia++) {
+            diaString=diaString+"dia="+dia+" le toca="+activoPorDia(dia, cantidadUsuario, usuario)+"\n";
         }
+        JOptionPane.showMessageDialog(null, diaString);
     }//GEN-LAST:event_jButton2ActionPerformed
-    
 
     //COLOCAMOS EL TEXTO DE LA TABLA EN CADA INPUT TEXT
     public void asigna_tabla_accesos_input_text() {
