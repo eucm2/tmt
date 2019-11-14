@@ -174,8 +174,8 @@ public class fYoutube extends javax.swing.JInternalFrame {
                     + "user,"
                     + "password,"
                     + "redSocal "
-                    + "FROM accesos where activo='1';";
-
+                    + "FROM accesos where activo='1' and redSocal='FB';";
+            grupoErrores.setText(queryAccesos);
             ResultSet rsAccesos = statement.executeQuery(queryAccesos);
             int numeroUsuario=1;
             //int diaMes=Integer.parseInt(JOptionPane.showInputDialog("diaMes"));
