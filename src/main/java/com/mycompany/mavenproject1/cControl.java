@@ -795,9 +795,9 @@ public class cControl {
         driver.get("https://kingdomlikes.com/free_points/youtube-views");
         //Colocamos el nombre del usuario en la parte superior del navegador
         JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>" + userKingdom + "</div>\");");
-        js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos exitosos=" + procesosExitoso + " Limite=" + limite + "</div>\");");
-        js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentosFallidos + " Limite=" + limite + "</div>\");");
+        js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;    position: absolute;z-index: 20000;top: 100px;color: red;'>" + userKingdom + "</div>\");");
+        js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;    position: absolute;z-index: 20000;top: 150px;color: red;'>Intentos exitosos=" + procesosExitoso + " Limite=" + limite + "</div>\");");
+        js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;    position: absolute;z-index: 20000;top: 200px;color: red;'>Intentos fallidos=" + intentosFallidos + " Limite=" + limite + "</div>\");");
         //ESPERAMOS UN RATO A QUE CARGUEN TODOS LOS VIDEOS
         pausa(lento);
         pausa(lento);
@@ -820,7 +820,7 @@ public class cControl {
                 //SI EL TEXTO DEL CODIGO ESTA VACIO SUMAMOS UN INTENTO Y REINICIAMOS ESTA FUNCION
                 else {
                     intentosFallidos++;
-                    js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentosFallidos + " Limite=" + limite + "</div>\");");
+                    js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;    position: absolute;z-index: 20000;top: 250px;color: red;'>Intentos fallidos=" + intentosFallidos + " Limite=" + limite + "</div>\");");
                     clickVideosLimite(limite, procesosExitoso,intentosFallidos);
                 }
                 //ACTIVAMOS LA BANDERA DICIENDO QUE SI DIMOS CLICK EN EL BOTON
@@ -830,7 +830,7 @@ public class cControl {
                 banderaEncontro = false;
                 //SUMA IN INTENTO MAS
                 intentosFallidos++;
-                js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentosFallidos + " Limite=" + limite + "</div>\");");
+                js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;    position: absolute;z-index: 20000;top: 300px;color: red;'>Intentos fallidos=" + intentosFallidos + " Limite=" + limite + "</div>\");");
                 //REINICIA LA FUNCION
                 clickVideosLimite(limite, procesosExitoso,intentosFallidos);
             }
@@ -864,8 +864,8 @@ public class cControl {
                 } catch (Exception e) {
                     //SUMA IN INTENTO MAS
                     intentosFallidos++;
-                    js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos exitosos=" + procesosExitoso + " Limite=" + limite + "</div>\");");
-                    js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos fallidos=" + intentosFallidos + " Limite=" + limite + "</div>\");");
+                    js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;    position: absolute;z-index: 20000;top: 350px;color: red;'>Intentos exitosos=" + procesosExitoso + " Limite=" + limite + "</div>\");");
+                    js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;    position: absolute;z-index: 20000;top: 400px;color: red;'>Intentos fallidos=" + intentosFallidos + " Limite=" + limite + "</div>\");");
                     //REINICIA LA FUNCION
                     clickVideosLimite(limite, procesosExitoso,intentosFallidos);
                 }
@@ -877,8 +877,8 @@ public class cControl {
             }
             //Si el proceso fue exitoso contamos 1 mas
             procesosExitoso++;
-            js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos exitosos=" + procesosExitoso + " Limite=" + limite + "</div>\");");
-            js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos exitosos=" + intentosFallidos + " Limite=" + limite + "</div>\");");
+            js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;    position: absolute;z-index: 20000;top: 450px;color: red;'>Intentos exitosos=" + procesosExitoso + " Limite=" + limite + "</div>\");");
+            js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;    position: absolute;z-index: 20000;top: 500px;color: red;'>Intentos exitosos=" + intentosFallidos + " Limite=" + limite + "</div>\");");
 
             //OBTENEMOS UN NUMERO ENTRE 4 Y 11
             int numeroAleatorio = (int) (Math.random() * 4) + 7;
@@ -924,7 +924,7 @@ public class cControl {
             }
             intentosFallidos++;
             //ESPERAMOS UN MINUTO
-            pausa(60000);
+            pausa(6000);
             clickVideosLimite(limite, procesosExitoso,intentosFallidos);
 
         }
