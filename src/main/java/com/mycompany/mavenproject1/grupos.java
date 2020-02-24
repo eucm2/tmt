@@ -200,13 +200,13 @@ public class grupos extends javax.swing.JInternalFrame {
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, -1, -1));
 
         tipo.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "FB", "GP" };
+            String[] strings = { "FB", "GP", "LK", "TW" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
         jScrollPane4.setViewportView(tipo);
 
-        getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 110, 200, 40));
+        getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 110, 200, 50));
 
         nuevo.setText("Nuevo");
         nuevo.addActionListener(new java.awt.event.ActionListener() {

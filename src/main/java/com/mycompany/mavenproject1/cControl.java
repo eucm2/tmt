@@ -595,6 +595,228 @@ public class cControl {
             }
         }
     }
+/*
+
+
+
+LINKEDIN    
+    
+    
+*/
+    public void accedeLK(String user, String password) {
+        driver.get("https://www.linkedin.com/login?fromSignIn=true&trk=guest_homepage-basic_nav-header-signin");
+        if (user.length() > 0 && password.length() > 0) {
+            escribeTexto(driver.findElement(By.xpath("//*[@id=\"username\"]")), user);
+            escribeTexto(driver.findElement(By.xpath("//*[@id=\"password\"]")), password);
+            //driver.findElement(By.xpath("//*[@id=\"email\"]")).sendKeys(user);
+            //driver.findElement(By.xpath("//*[@id=\"pass\"]")).sendKeys(password);
+            pausa(rapido);
+            driver.findElement(By.xpath("//*[@id=\"password\"]")).sendKeys(Keys.ENTER);
+            //JOptionPane.showMessageDialog(null, "Elimine todos los popups de facebook y haga click en aceptar en este mensaje para continuar");
+        } else {
+            //PEDIMOS AL USUARIO QUE PONGA SU USUARIO Y CONTRASEÑA PARA PODER CONTINUAR
+            JOptionPane.showMessageDialog(null, "Favor de loguearse en su cuenta y despues hacer click en aceptar");
+        }
+
+    }
+
+    public String[] compartirLK(String urlVideo, String pathImagen, String titulo, String idPub, int numeroAcompartir, String idsYaCompartidos) {
+        String grupoError = "";
+        String grupoBien = "";
+        int vecesCompartido = 0;
+        String listaIdsDeGrupos = "";
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:tmt.db");
+            statement = connection.createStatement();
+            statement.setQueryTimeout(20);
+            //SACAMOS LA LISTA DE TODOS LOS GRUPOS DE FACEBOOK MENOS LOS GRUPOS EN LOS QUE YA SE COMPARTIO
+            String query = "  SELECT DISTINCT\n"
+                    + "grupos.id,\n"
+                    + "grupos.nombre,\n"
+                    + "grupos.url,\n"
+                    + "grupos.activo\n"
+                    + "FROM\n"
+                    + "grupos\n"
+                    + "INNER JOIN \"grup-cat\" ON \"grup-cat\".idGrup = grupos.id\n"
+                    + "INNER JOIN categoria ON \"grup-cat\".idCat = categoria.id\n"
+                    + "INNER JOIN \"pub-cat\" ON \"pub-cat\".idCat = categoria.id\n"
+                    + "INNER JOIN publicaciones ON \"pub-cat\".idPub = publicaciones.id\n"
+                    + "WHERE\n"
+                    + "grupos.activo = '1' \n"
+                    + "and publicaciones.id='" + idPub + "' "
+                    + "AND grupos.id not in (" + idsYaCompartidos + ")   "
+                    + "and grupos.tipo='LK'  "
+                    + "limit " + numeroAcompartir + " ;  ";
+            ResultSet rs = statement.executeQuery(query);
+            
+            // Esta publicacion ya se compartio en todos los grupos
+            if (rs.isBeforeFirst() == false) {
+                desactivaPublicacion(Integer.parseInt(idPub));
+                // Cerramos navegador y nos salimos
+                cerrarNavegador();
+                return null;
+            }
+            //HACEMOS UN BLUCLE CON TODOS LOS GRUPOS DE FACEBOOK
+            while (rs.next()) {
+                try {
+                    //PONEMOS LA URL DEL GRUPO QUE SACAMOS DE LA BD
+                    driver.get(rs.getString("url"));
+                    //DETECTAMOS SI HAY UN ALERT Y SI APARECE LA ALERTA DAMOS CLICK EN ACEPTAR(A VECES FACEBOOK PONE ALERTAS QUE NO DEJAN CONTINUAR)
+                    try {
+                        Alert alert = driver.switchTo().alert();
+                        alert.accept();
+                    } //SI NO HAY ALERT PROCEDEMOS A ECRIBIR EL ARTICULO
+                    catch (NoAlertPresentException e) {
+                        //AGREGAMOS LOS GRUPOS QUE SE VAN A GUARDAR EN GRUPOS YA PUBLICADOS
+                        listaIdsDeGrupos = listaIdsDeGrupos + "," + rs.getString("id");
+                        pausa(mlento);
+                        driver.findElement(By.className("share-box__open")).click();
+                        driver.findElement(By.cssSelector(".mentions-texteditor__contenteditable")).click();
+                        pausa(rapido);
+                        //ESCRIBIMOS EL TITULO Y EL VIDEO DE LA PUBLICACION
+                        JavascriptExecutor js = (JavascriptExecutor) driver;
+                        js.executeScript("arguments[0].innerHTML='"+ titulo +"<br>"+ urlVideo + "';", driver.findElement(By.cssSelector(".mentions-texteditor__contenteditable")));
+
+                        grupoBien = grupoBien + " </br> " + rs.getString("nombre") + " </br>\n " + rs.getString("url") + " </br>\n ";
+                        pausa(mlento);
+                        pausa(mlento);
+                        driver.findElement(By.className("share-actions__primary-action")).click();
+                        pausa(mlento);
+                        pausa(mlento);
+                        vecesCompartido++;
+                    }
+                } catch (NoSuchElementException e) {
+                    grupoError = grupoError + rs.getString("nombre") + "\n" + rs.getString("url") + "\n";
+                } catch (Exception e) {
+                    grupoError = grupoError + rs.getString("nombre") + "\n" + rs.getString("url") + "\n";
+                }
+
+            }
+            
+        } catch (NoSuchElementException e) {
+            int res = JOptionPane.showOptionDialog(null, "Desea continuar o detener? \n error= " + e, "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+            if (res == 1) {
+                driver.quit();
+            }
+        } catch (Exception e) {
+            int res = JOptionPane.showOptionDialog(null, "Desea continuar o detener? \n error= " + e, "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+            if (res == 1) {
+                driver.quit();
+            }
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                // connection close failed.
+                System.err.println(e);
+            }
+        }
+        return new String[]{grupoError, listaIdsDeGrupos, grupoBien};
+    }
+
+    public int numeroCompartidasLK(String idPub) {
+        int vecesCompartido = 0;
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:tmt.db");
+            statement = connection.createStatement();
+            statement.setQueryTimeout(20);
+            //SACAMOS LA LISTA DE TODOS LOS GRUPOS DE FACEBOOK
+            String query = "  SELECT DISTINCT\n"
+                    + "count(grupos.id) as numeroCompartidasLK "
+                    + "FROM\n"
+                    + "grupos\n"
+                    + "INNER JOIN \"grup-cat\" ON \"grup-cat\".idGrup = grupos.id\n"
+                    + "INNER JOIN categoria ON \"grup-cat\".idCat = categoria.id\n"
+                    + "INNER JOIN \"pub-cat\" ON \"pub-cat\".idCat = categoria.id\n"
+                    + "INNER JOIN publicaciones ON \"pub-cat\".idPub = publicaciones.id\n"
+                    + "WHERE\n"
+                    + "grupos.activo = '1' \n"
+                    + "and publicaciones.id='" + idPub + "' "
+                    + "and grupos.tipo='LK';  ";
+            ResultSet rs = statement.executeQuery(query);
+            return Integer.parseInt(rs.getString("numeroCompartidasLK"));
+
+        } catch (Exception e) {
+            return 0;
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                // connection close failed.
+                System.err.println(e);
+            }
+        }
+    }
+    public boolean publicacionYacompartidaLK(String idPub, String idsYaCompartidos) {
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:tmt.db");
+            statement = connection.createStatement();
+            statement.setQueryTimeout(20);
+            //SACAMOS LA LISTA DE TODOS LOS GRUPOS DE FACEBOOK MENOS LOS GRUPOS EN LOS QUE YA SE COMPARTIO
+            String query = "  SELECT DISTINCT\n"
+                    + "grupos.id,\n"
+                    + "grupos.nombre,\n"
+                    + "grupos.url,\n"
+                    + "grupos.activo\n"
+                    + "FROM\n"
+                    + "grupos\n"
+                    + "INNER JOIN \"grup-cat\" ON \"grup-cat\".idGrup = grupos.id\n"
+                    + "INNER JOIN categoria ON \"grup-cat\".idCat = categoria.id\n"
+                    + "INNER JOIN \"pub-cat\" ON \"pub-cat\".idCat = categoria.id\n"
+                    + "INNER JOIN publicaciones ON \"pub-cat\".idPub = publicaciones.id\n"
+                    + "WHERE\n"
+                    + "grupos.activo = '1' \n"
+                    + "and publicaciones.id='" + idPub + "' "
+                    + "AND grupos.id not in (" + idsYaCompartidos + ")   "
+                    + "and grupos.tipo='FB';  ";
+            ResultSet rs = statement.executeQuery(query);
+            // Esta publicacion ya se compartio en todos los grupos
+            if (rs.isBeforeFirst() == false) {
+                // Desactivamos la publicacion
+                desactivaPublicacionLK(Integer.parseInt(idPub));
+                // Retornamos un true diciento que esta publicacion se desactivo
+                return true;
+            } else {
+                return false;
+            }
+        } catch (NoSuchElementException e) {
+            int res = JOptionPane.showOptionDialog(null, "Desea continuar o detener? \n error= " + e, "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+            if (res == 1) {
+                driver.quit();
+            }
+        } catch (Exception e) {
+            int res = JOptionPane.showOptionDialog(null, "Desea continuar o detener? \n error= " + e, "Warning", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+            if (res == 1) {
+                driver.quit();
+            }
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                // connection close failed.
+                System.err.println(e);
+            }
+        }
+
+        return false;
+    }
+    // Decativamos la publicacion
+    public void desactivaPublicacionLK(int id) {
+        String sql = "UPDATE publicaciones SET terminado_compartir_lk = '1'  WHERE id = " + id;
+        try (Connection conn = this.connect();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            //EJECUTAMOS EL COMANDO
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     /*
     *
