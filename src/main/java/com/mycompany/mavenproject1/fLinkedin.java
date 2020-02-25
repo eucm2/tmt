@@ -24,7 +24,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.animation.PauseTransition;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -351,12 +350,12 @@ public class fLinkedin extends javax.swing.JInternalFrame {
                 compartirVideoActionPerformed(evt);
             }
         });
-        getContentPane().add(compartirVideo, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 490, -1, -1));
+        getContentPane().add(compartirVideo, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 660, -1, -1));
 
         jLabel1.setText("URL");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, -1, -1));
-        getContentPane().add(urlVideo, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 340, 900, -1));
-        getContentPane().add(pathImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 400, 770, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 510, -1, -1));
+        getContentPane().add(urlVideo, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 510, 900, -1));
+        getContentPane().add(pathImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 570, 770, -1));
 
         buscarImagen.setText("Buscar imagen");
         buscarImagen.addActionListener(new java.awt.event.ActionListener() {
@@ -364,21 +363,21 @@ public class fLinkedin extends javax.swing.JInternalFrame {
                 buscarImagenActionPerformed(evt);
             }
         });
-        getContentPane().add(buscarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 400, -1, -1));
+        getContentPane().add(buscarImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 570, -1, -1));
 
         jLabel2.setText("Path imagen");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 400, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 570, -1, -1));
 
         jScrollPane1.setViewportView(grupoErrores);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 530, 910, 60));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 700, 910, 40));
 
         jLabel3.setText("Grupos con errores");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 540, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 710, -1, -1));
 
         jLabel4.setText("Titulo");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 370, -1, -1));
-        getContentPane().add(titulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 370, 900, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 540, -1, -1));
+        getContentPane().add(titulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 540, 900, -1));
 
         tabla_publicaciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -409,48 +408,48 @@ public class fLinkedin extends javax.swing.JInternalFrame {
         });
         jScrollPane2.setViewportView(tabla_publicaciones);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, 1060, 90));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 1060, 270));
 
         jLabel5.setText("numero_veces_compartido");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 430, -1, -1));
-        getContentPane().add(numero_veces_compartido, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 430, 900, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 600, -1, -1));
+        getContentPane().add(numero_veces_compartido, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 600, 900, -1));
 
         jLabel6.setText("Compartir en");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 500, -1, -1));
-        getContentPane().add(ultima_vez_compartida, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 460, 900, -1));
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 670, -1, -1));
+        getContentPane().add(ultima_vez_compartida, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 630, 900, -1));
 
         jLabel7.setText("Ultima vez compartido");
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 460, -1, -1));
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 630, -1, -1));
 
         checkTW.setText("Twitter");
-        getContentPane().add(checkTW, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 500, -1, -1));
+        getContentPane().add(checkTW, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 670, -1, -1));
 
         checkFB.setSelected(true);
         checkFB.setText("Facebook");
-        getContentPane().add(checkFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 500, -1, -1));
+        getContentPane().add(checkFB, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 670, -1, -1));
 
         checkGP.setText("Google +");
-        getContentPane().add(checkGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 500, -1, -1));
+        getContentPane().add(checkGP, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 670, -1, -1));
 
         jLabel11.setText("Buscar por titulo");
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, -1, -1));
+        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, -1, -1));
 
         busca_titulo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 busca_tituloKeyPressed(evt);
             }
         });
-        getContentPane().add(busca_titulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 200, 330, -1));
+        getContentPane().add(busca_titulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 180, 330, -1));
 
         jLabel8.setText("Buscar por url");
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 210, -1, -1));
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 190, -1, -1));
 
         busca_url.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 busca_urlKeyPressed(evt);
             }
         });
-        getContentPane().add(busca_url, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 200, 300, -1));
+        getContentPane().add(busca_url, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 180, 300, -1));
 
         Buscar.setText("Buscar");
         Buscar.addActionListener(new java.awt.event.ActionListener() {
@@ -458,7 +457,7 @@ public class fLinkedin extends javax.swing.JInternalFrame {
                 BuscarActionPerformed(evt);
             }
         });
-        getContentPane().add(Buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 190, -1, -1));
+        getContentPane().add(Buscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 170, -1, -1));
 
         jLabel12.setText("Pass LK");
         getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 10, -1, -1));
@@ -511,10 +510,10 @@ public class fLinkedin extends javax.swing.JInternalFrame {
                 activarActionPerformed(evt);
             }
         });
-        getContentPane().add(activar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 620, 70, 20));
+        getContentPane().add(activar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 760, 70, 20));
 
         lblHoraReiniciar.setText("horaReiniciar");
-        getContentPane().add(lblHoraReiniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 620, 360, 20));
+        getContentPane().add(lblHoraReiniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 760, 360, 20));
 
         btnGanarPuntos.setText("Ejecutar ahora");
         btnGanarPuntos.addActionListener(new java.awt.event.ActionListener() {
@@ -522,25 +521,25 @@ public class fLinkedin extends javax.swing.JInternalFrame {
                 btnGanarPuntosActionPerformed(evt);
             }
         });
-        getContentPane().add(btnGanarPuntos, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 620, -1, -1));
+        getContentPane().add(btnGanarPuntos, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 760, -1, -1));
 
         horaActual.setText("Hora actual");
-        getContentPane().add(horaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 660, -1, -1));
+        getContentPane().add(horaActual, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 800, -1, -1));
 
         jLabel16.setText("Hora actual.............");
-        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 660, -1, -1));
+        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 800, -1, -1));
 
         horaIni.setText("Hora Inicial");
-        getContentPane().add(horaIni, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 690, -1, -1));
+        getContentPane().add(horaIni, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 830, -1, -1));
 
         jLabel17.setText("Hora Inicial.............");
-        getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 690, -1, -1));
+        getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 830, -1, -1));
 
         jLabel20.setText("Hora Final.......................................");
-        getContentPane().add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 660, -1, -1));
+        getContentPane().add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 800, -1, -1));
 
         horaFin.setText("Hora Final");
-        getContentPane().add(horaFin, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 660, -1, -1));
+        getContentPane().add(horaFin, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 800, -1, -1));
 
         listaHorarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -553,21 +552,21 @@ public class fLinkedin extends javax.swing.JInternalFrame {
         listaHorarios.setName("listaHorarios"); // NOI18N
         jScrollPane3.setViewportView(listaHorarios);
 
-        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 660, 310, 130));
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 800, 310, 130));
 
         jLabel21.setText("Segundos que faltan para ejeuitar");
-        getContentPane().add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 690, -1, -1));
+        getContentPane().add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 830, -1, -1));
 
         tiempoFaltaEjecutar.setText("Tiempo a ajecutar");
-        getContentPane().add(tiempoFaltaEjecutar, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 690, -1, -1));
+        getContentPane().add(tiempoFaltaEjecutar, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 830, -1, -1));
 
         lblModo.setBackground(new java.awt.Color(102, 102, 255));
         lblModo.setText("modo");
         lblModo.setOpaque(true);
-        getContentPane().add(lblModo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 730, -1, -1));
+        getContentPane().add(lblModo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 870, -1, -1));
 
         jLabel9.setText("jLabel9");
-        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 830, -1, -1));
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 1070, -1, -1));
 
         btnAbrirNav.setText("Abrir nav");
         btnAbrirNav.addActionListener(new java.awt.event.ActionListener() {
@@ -591,10 +590,10 @@ public class fLinkedin extends javax.swing.JInternalFrame {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 880, -1, -1));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 1070, -1, -1));
 
         jTextField1.setText("https://web.facebook.com/ProgramadorNovatoOficial/?modal=admin_todo_tour");
-        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 880, 220, -1));
+        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 1060, 220, -1));
 
         tabla_accesos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -620,7 +619,7 @@ public class fLinkedin extends javax.swing.JInternalFrame {
         });
         jScrollPane4.setViewportView(tabla_accesos);
 
-        getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 780, 120));
+        getContentPane().add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 780, 100));
 
         moverPrimero.setText("Primero");
         moverPrimero.addActionListener(new java.awt.event.ActionListener() {
@@ -636,7 +635,7 @@ public class fLinkedin extends javax.swing.JInternalFrame {
                 moverUltimoActionPerformed(evt);
             }
         });
-        getContentPane().add(moverUltimo, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 150, -1, -1));
+        getContentPane().add(moverUltimo, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 140, -1, -1));
 
         moverArriba.setText("Arriba");
         moverArriba.addActionListener(new java.awt.event.ActionListener() {
@@ -660,7 +659,7 @@ public class fLinkedin extends javax.swing.JInternalFrame {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 620, -1, -1));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 760, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -754,7 +753,7 @@ public class fLinkedin extends javax.swing.JInternalFrame {
                         yaEstaActivoCronometro=true;
                         c.inicializarWebdriver(path_drive);
                         //COMO ESTE ARTICULO YA ESTA COMPARTIDO REGRESAMOS AL PRINCIPIO A COMPARTIR EL SIGUIENTE
-                        compartirPublicacion("cronometro");
+                        //compartirPublicacion("cronometro");
                     }
                 }
                 grupoErrores.setText(grupoErrores.getText() + errorYlistaGrupos[0]);
