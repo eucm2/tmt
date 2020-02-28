@@ -314,8 +314,16 @@ public class cControl {
                             espacio = espacio + "1";
                             borrar = borrar + Keys.BACK_SPACE;
                         }
+                        String nombreInput="";
+                        //SI EL GRUPO ES PROGRAMADOR NOVATO
+                        if(rs.getString("id").compareTo("120")==0){
+                            nombreInput="xhpc_message";
+                        }
+                        else{
+                            nombreInput="xhpc_message_text";
+                        }
                         //ESCRIBIMOS EL TITULO Y EL VIDEO DE LA PUBLICACION
-                        escribeTexto(driver.findElement(By.name("xhpc_message_text")),
+                        escribeTexto(driver.findElement(By.name(nombreInput)),
                                 titulo
                                 + "\\r"
                                 + urlVideo
@@ -324,7 +332,7 @@ public class cControl {
 
                         grupoBien = grupoBien + " </br> " + rs.getString("nombre") + " </br>\n " + rs.getString("url") + " </br>\n ";
                         pausa(mlento);
-                        driver.findElement(By.name("xhpc_message_text")).sendKeys(Keys.chord(espacio + borrar + Keys.CONTROL, Keys.ENTER));
+                        driver.findElement(By.name(nombreInput)).sendKeys(Keys.chord(espacio + borrar + Keys.CONTROL, Keys.ENTER));
                         pausa(mlento);
                         pausa(mlento);
                         pausa(mlento);
