@@ -661,6 +661,7 @@ LINKEDIN
                 try {
                     //PONEMOS LA URL DEL GRUPO QUE SACAMOS DE LA BD
                     driver.get(rs.getString("url"));
+                    driver.manage().window().maximize();
                     //DETECTAMOS SI HAY UN ALERT Y SI APARECE LA ALERTA DAMOS CLICK EN ACEPTAR(A VECES FACEBOOK PONE ALERTAS QUE NO DEJAN CONTINUAR)
                     try {
                         Alert alert = driver.switchTo().alert();
@@ -671,11 +672,11 @@ LINKEDIN
                         listaIdsDeGrupos = listaIdsDeGrupos + "," + rs.getString("id");
                         pausa(mlento);
                         driver.findElement(By.className("share-box__open")).click();
-                        driver.findElement(By.cssSelector(".mentions-texteditor__contenteditable")).click();
+                        //driver.findElement(By.cssSelector(".mentions-texteditor__contenteditable")).click();
                         pausa(rapido);
                         //ESCRIBIMOS EL TITULO Y EL VIDEO DE LA PUBLICACION
                         JavascriptExecutor js = (JavascriptExecutor) driver;
-                        js.executeScript("arguments[0].innerHTML='"+ titulo +"<br>"+ urlVideo + "';", driver.findElement(By.cssSelector(".mentions-texteditor__contenteditable")));
+                        js.executeScript("arguments[0].innerHTML='"+ titulo +"<br>"+ urlVideo + "';", driver.findElement(By.cssSelector(".ql-editor")));
 
                         grupoBien = grupoBien + " </br> " + rs.getString("nombre") + " </br>\n " + rs.getString("url") + " </br>\n ";
                         pausa(mlento);
