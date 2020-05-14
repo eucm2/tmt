@@ -325,16 +325,20 @@ public class cControl {
                         //ESCRIBIMOS EL TITULO Y EL VIDEO DE LA PUBLICACION
                         escribeTexto(driver.findElement(By.name(nombreInput)),
                                 titulo
-                                + "\\r"
+                                + "\n"
                                 + urlVideo
-                                + "\\r"
+                                + "\n"
                         );
 
                         grupoBien = grupoBien + " </br> " + rs.getString("nombre") + " </br>\n " + rs.getString("url") + " </br>\n ";
                         pausa(mlento);
-                        driver.findElement(By.name(nombreInput)).sendKeys(Keys.chord(espacio + borrar + Keys.CONTROL, Keys.ENTER));
+                        //AGREGAMOS 1111 Y LOS BORRAMOS PARA HACER QUE FB JALE LA MINIATURA Y FINALMENTE PRESIONAMOS 
+                        //driver.findElement(By.name(nombreInput)).sendKeys(Keys.chord(espacio + borrar + Keys.CONTROL, Keys.ENTER));
                         pausa(mlento);
                         pausa(mlento);
+                        pausa(mlento);
+                        pausa(mlento);
+                        driver.findElement(By.xpath("//*[text()='Publicar']")).click();
                         pausa(mlento);
                         pausa(mlento);
                         vecesCompartido++;
