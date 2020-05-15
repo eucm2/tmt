@@ -340,18 +340,20 @@ public class publicaciones extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tablaMouseClicked
 
     private void agrega_catActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agrega_catActionPerformed
-        for (int row : tabla_cat_exist.getSelectedRows()) {
+        int idPub = Integer.parseInt(tabla.getModel().getValueAt(tabla.getSelectedRow(), 0).toString());
+        int registros[]=tabla_cat_exist.getSelectedRows();
+        for ( int row : registros ) {
             try {
+                String num=tabla_cat_exist.getValueAt(row, 1).toString();
                 int idCat = Integer.parseInt(tabla_cat_exist.getValueAt(row, 0).toString());
                 //int idCat = Integer.parseInt(tabla_cat_exist.getValueAt(tabla_cat_exist.getSelectedRow(), 0).toString());
-                int idPub = Integer.parseInt(tabla.getModel().getValueAt(tabla.getSelectedRow(), 0).toString());
                 agrega_cat(idCat, idPub);
-                carga_tabla_cat_pub(idPub);
-                carga_tabla_cat(idPub);
             } catch (Exception e) {
                 System.err.println(e);
             }
         }
+        carga_tabla_cat_pub(idPub);
+        carga_tabla_cat(idPub);
     }//GEN-LAST:event_agrega_catActionPerformed
 
     private void quita_catActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quita_catActionPerformed
@@ -361,14 +363,14 @@ public class publicaciones extends javax.swing.JInternalFrame {
                 int idCat = Integer.parseInt(tabla_cat_pub.getValueAt(row, 1).toString());
                 int idPubCat = Integer.parseInt(tabla_cat_pub.getValueAt(row, 2).toString());
                 quita_cat(idCat, idPubCat);
-                //SACAMOS EL ID DE LA PUCLICACION DE LA PRIMER TABLA
-                int idPub = Integer.parseInt(tabla.getModel().getValueAt(tabla.getSelectedRow(), 0).toString());
-                carga_tabla_cat_pub(idPub);
-                carga_tabla_cat(idPub);
             } catch (Exception e) {
                 System.err.println(e);
             }
         }
+        //SACAMOS EL ID DE LA PUCLICACION DE LA PRIMER TABLA
+        int idPub = Integer.parseInt(tabla.getModel().getValueAt(tabla.getSelectedRow(), 0).toString());
+        carga_tabla_cat_pub(idPub);
+        carga_tabla_cat(idPub);
     }//GEN-LAST:event_quita_catActionPerformed
     //LIBERAR LA TECLA DE LA TABLA SE ACTUALIZAN LOS INPUTTEXT Y LAS CATEGORIAS
     private void tablaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tablaKeyReleased
