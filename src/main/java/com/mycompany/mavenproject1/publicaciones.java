@@ -340,30 +340,34 @@ public class publicaciones extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tablaMouseClicked
 
     private void agrega_catActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agrega_catActionPerformed
-        try {
-            //SACAMOS EL ID DE CATEGORIA Y EL ID DE PUBLICACION DE ESTA PUBLICACION
-            int idCat = Integer.parseInt(tabla_cat_exist.getValueAt(tabla_cat_exist.getSelectedRow(), 0).toString());
-            int idPub = Integer.parseInt(tabla.getModel().getValueAt(tabla.getSelectedRow(), 0).toString());
-            agrega_cat(idCat, idPub);
-            carga_tabla_cat_pub(idPub);
-            carga_tabla_cat(idPub);
-        } catch (Exception e) {
-            System.err.println(e);
+        for (int row : tabla_cat_exist.getSelectedRows()) {
+            try {
+                int idCat = Integer.parseInt(tabla_cat_exist.getValueAt(row, 0).toString());
+                //int idCat = Integer.parseInt(tabla_cat_exist.getValueAt(tabla_cat_exist.getSelectedRow(), 0).toString());
+                int idPub = Integer.parseInt(tabla.getModel().getValueAt(tabla.getSelectedRow(), 0).toString());
+                agrega_cat(idCat, idPub);
+                carga_tabla_cat_pub(idPub);
+                carga_tabla_cat(idPub);
+            } catch (Exception e) {
+                System.err.println(e);
+            }
         }
     }//GEN-LAST:event_agrega_catActionPerformed
 
     private void quita_catActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quita_catActionPerformed
-        try {
-            //SACAMOS EL ID DE CATEGORIA Y EL ID DE PUBLICACION DE ESTA PUBLICACION
-            int idCat = Integer.parseInt(tabla_cat_pub.getValueAt(tabla_cat_pub.getSelectedRow(), 1).toString());
-            int idPubCat = Integer.parseInt(tabla_cat_pub.getValueAt(tabla_cat_pub.getSelectedRow(), 2).toString());
-            quita_cat(idCat, idPubCat);
-            //SACAMOS EL ID DE LA PUCLICACION DE LA PRIMER TABLA
-            int idPub = Integer.parseInt(tabla.getModel().getValueAt(tabla.getSelectedRow(), 0).toString());
-            carga_tabla_cat_pub(idPub);
-            carga_tabla_cat(idPub);
-        } catch (Exception e) {
-            System.err.println(e);
+        for (int row : tabla_cat_pub.getSelectedRows()) {
+            try {
+                //SACAMOS EL ID DE CATEGORIA Y EL ID DE PUBLICACION DE ESTA PUBLICACION
+                int idCat = Integer.parseInt(tabla_cat_pub.getValueAt(row, 1).toString());
+                int idPubCat = Integer.parseInt(tabla_cat_pub.getValueAt(row, 2).toString());
+                quita_cat(idCat, idPubCat);
+                //SACAMOS EL ID DE LA PUCLICACION DE LA PRIMER TABLA
+                int idPub = Integer.parseInt(tabla.getModel().getValueAt(tabla.getSelectedRow(), 0).toString());
+                carga_tabla_cat_pub(idPub);
+                carga_tabla_cat(idPub);
+            } catch (Exception e) {
+                System.err.println(e);
+            }
         }
     }//GEN-LAST:event_quita_catActionPerformed
     //LIBERAR LA TECLA DE LA TABLA SE ACTUALIZAN LOS INPUTTEXT Y LAS CATEGORIAS
