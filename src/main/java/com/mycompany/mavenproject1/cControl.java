@@ -322,28 +322,17 @@ public class cControl {
                         else{
                             nombreInput="xhpc_message_text";
                         }
-                        /*
-                        //ESCRIBIMOS EL TITULO Y EL VIDEO DE LA PUBLICACION
-                        escribeTexto(driver.findElement(By.name(nombreInput)),
-                                titulo
-                                + "\n"
-                                + urlVideo
-                                + "\n"
-                        );
-                        */
-                        //elementoWeb.sendKeys(texto);
-                        driver.findElement(By.name(nombreInput)).sendKeys(titulo + "\n" + urlVideo + "\n" + Keys.chord(espacio + borrar));
+                        //ESCRIBIMOS EL TITULO Y EL VIDEO DE LA PUBLICACION Y 111 LOS BORRAMOS Y ENTER
+                        driver.findElement(By.name(nombreInput)).sendKeys(titulo + "\n" + urlVideo + "\n" + Keys.chord(espacio + borrar + Keys.CONTROL, Keys.ENTER));
+                        //ESCRIBIMOS EL TEXTO QUE MOSTRARA LOS GRUPOS DONDE SI Y DONDE NO SE PUBLICO
                         grupoBien = grupoBien + " </br> " + rs.getString("nombre") + " </br>\n " + rs.getString("url") + " </br>\n ";
+                        //Buscamos el boton publicar
+                        //WebElement myElement = driver.findElement(By.xpath("//*[text()='Publicar']"));
+                        //BUSCAMOS EL PADRE DEL BOTON PUBLICAR Y DAMOS ENTER
+                        //WebElement parent = myElement.findElement(By.xpath(".."));
+                        //parent.click();
                         pausa(mlento);
-                        //AGREGAMOS 1111 Y LOS BORRAMOS PARA HACER QUE FB JALE LA MINIATURA Y FINALMENTE PRESIONAMOS 
-                        //driver.findElement(By.name(nombreInput)).sendKeys(Keys.chord(espacio + borrar));
                         pausa(mlento);
-                        pausa(mlento);
-                        pausa(mlento);
-                        WebElement myElement = driver.findElement(By.xpath("//*[text()='Publicar']"));
-                        WebElement parent = myElement.findElement(By.xpath(".."));
-                        parent.click();
-                        //WebElement parent = driver.findElement(By.xpath("//*[text()='Publicar']")).click();
                         pausa(mlento);
                         pausa(mlento);
                         pausa(mlento);
