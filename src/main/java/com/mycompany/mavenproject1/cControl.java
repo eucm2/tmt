@@ -326,11 +326,16 @@ public class cControl {
                         driver.findElement(By.name(nombreInput)).sendKeys(titulo + "\n" + urlVideo + "\n" + Keys.chord(espacio + borrar + Keys.CONTROL, Keys.ENTER));
                         //ESCRIBIMOS EL TEXTO QUE MOSTRARA LOS GRUPOS DONDE SI Y DONDE NO SE PUBLICO
                         grupoBien = grupoBien + " </br> " + rs.getString("nombre") + " </br>\n " + rs.getString("url") + " </br>\n ";
-                        //Buscamos el boton publicar
-                        //WebElement myElement = driver.findElement(By.xpath("//*[text()='Publicar']"));
-                        //BUSCAMOS EL PADRE DEL BOTON PUBLICAR Y DAMOS ENTER
-                        //WebElement parent = myElement.findElement(By.xpath(".."));
-                        //parent.click();
+                        //SI NO FUNCIONO PUBLICAR VIA ENTER PUBLICAMOS DANDO CLICK EN EL BOTON PUBLICAR
+                        try {
+                            //Buscamos el boton publicar
+                            WebElement myElement = driver.findElement(By.xpath("//*[text()='Publicar']"));
+                            //BUSCAMOS EL PADRE DEL BOTON PUBLICAR Y DAMOS ENTER
+                            WebElement parent = myElement.findElement(By.xpath(".."));
+                            parent.click();
+                        } catch (Exception er) {
+                        }
+                        
                         pausa(mlento);
                         pausa(mlento);
                         pausa(mlento);
