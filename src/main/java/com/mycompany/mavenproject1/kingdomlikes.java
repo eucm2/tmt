@@ -1,5 +1,6 @@
 package com.mycompany.mavenproject1;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -14,6 +15,8 @@ import javax.swing.JOptionPane;
 import org.openqa.selenium.WebDriver;
 import java.util.TimerTask;
 import java.util.Timer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 //INICIO CLASE
 
 public class kingdomlikes extends javax.swing.JInternalFrame {
@@ -352,6 +355,9 @@ public class kingdomlikes extends javax.swing.JInternalFrame {
         if (checIntercambiarCuentas.isSelected()) {
             // Bucle infinito
             while (true) {
+                
+                c.escribeLog("\\n\\rSe inicio kl\\n\\r","tmtkl.log");
+                
                 //Variable que alamacena si ya se ejecuto el ganar puntos
                 boolean seEjecuto = false;
                 //Bucle de todos los usuarios
@@ -371,6 +377,7 @@ public class kingdomlikes extends javax.swing.JInternalFrame {
                         c.accedeKL(userKL.getText(), passwordKL.getText());
                         //Ganamos punto con un limite de videos a ver
                         c.clickVideosLimite(Integer.parseInt(txtCadaVideos.getText()),0,0);
+                        c.escribeLog("\\n\\rFin usuario "+userKL.getText()+" kl\\n\\r","tmtkl.log");
                         //c.pausa(2000);
                     }
                 }

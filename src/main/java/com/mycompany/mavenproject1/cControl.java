@@ -1369,6 +1369,22 @@ LINKEDIN
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         
     }
+    public void escribeLog(String texto,String ruta){
+        try {
+            File archivo = new File(ruta);
+            BufferedWriter bw;
+            Date date = new Date();  
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String strDate= formatter.format(date);  
+            bw = new BufferedWriter(new FileWriter(archivo,true));
+            bw.write(strDate + "    " +  texto+"\r");
+            bw.close();
+        } catch (IOException ex) {
+            Logger.getLogger(fLinkedin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+
     private void copy(String texto) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         StringSelection selection = new StringSelection(texto);
