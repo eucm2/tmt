@@ -148,6 +148,9 @@ public class kingdomlikes extends javax.swing.JInternalFrame {
         tabla_accesos = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         passwordKL = new javax.swing.JTextField();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        listYoutubeWeb = new javax.swing.JList<>();
+        jLabel19 = new javax.swing.JLabel();
 
         setTitle("Kingdomlikes");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -161,8 +164,8 @@ public class kingdomlikes extends javax.swing.JInternalFrame {
         });
         getContentPane().add(btnGanarPuntos, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 250, -1, -1));
 
-        jLabel14.setText("Paises");
-        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 350, -1, -1));
+        jLabel14.setText("Youtube/Web");
+        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 350, -1, -1));
 
         userKL.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -262,6 +265,19 @@ public class kingdomlikes extends javax.swing.JInternalFrame {
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 600, -1, -1));
         getContentPane().add(passwordKL, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 30, 230, -1));
 
+        listYoutubeWeb.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "YouTube Views", "Web Traffic" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        listYoutubeWeb.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane3.setViewportView(listYoutubeWeb);
+
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 370, 140, 70));
+
+        jLabel19.setText("Paises");
+        getContentPane().add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 350, -1, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -319,7 +335,8 @@ public class kingdomlikes extends javax.swing.JInternalFrame {
         c.inicializarWebdriver(path_drive);
         c.accedeKL(userKL.getText(), passwordKL.getText());
         int tabs = Integer.parseInt(KLnumPaginas.getText());
-        c.creaVideos(KLPaises.getText(), tabs);
+        String tipo=listYoutubeWeb.getSelectedValue();
+        c.creaVideos(KLPaises.getText(), tabs,tipo);
     }//GEN-LAST:event_btnKLCrearPaginasActionPerformed
 
     private void checIntercambiarCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checIntercambiarCuentasActionPerformed
@@ -471,9 +488,12 @@ public class kingdomlikes extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JList<String> listYoutubeWeb;
     private javax.swing.JTextField passwordKL;
     private javax.swing.JTable tabla_accesos;
     private javax.swing.JTextField txtCadaVideos;

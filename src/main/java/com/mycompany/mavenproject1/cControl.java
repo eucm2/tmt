@@ -1166,7 +1166,7 @@ LINKEDIN
     }
 
     //Funcion que prepara el dar de alta lo video de youtube en kindomlikes
-    public void creaVideos(String paises, int numeroTabs) {
+    public void creaVideos(String paises, int numeroTabs,String tipo) {
         String listaPaises[] = paises.split("\\r?\\n");
         pausa(rapido);
         driver.get("https://kingdomlikes.com/sites/add");
@@ -1176,7 +1176,7 @@ LINKEDIN
         js.executeScript("jQuery('body').prepend(\"<div style='font-size: 20pt;'>Intentos exitosos=" + intentos + "</div>\");");
         for (int tabs = 0; tabs < numeroTabs; tabs++) {
             Select drpCountry = new Select(driver.findElement(By.name("idtype")));
-            drpCountry.selectByVisibleText("YouTube Views");
+            drpCountry.selectByVisibleText(tipo);
             driver.findElement(By.id("checkcountries")).click();
             driver.findElement(By.xpath("//*[@id=\"add\"]/div[4]/div[2]/button")).click();
             for (int i = 0; i < listaPaises.length; i++) {
