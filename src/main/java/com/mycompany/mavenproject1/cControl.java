@@ -683,7 +683,7 @@ LINKEDIN
                         //AGREGAMOS LOS GRUPOS QUE SE VAN A GUARDAR EN GRUPOS YA PUBLICADOS
                         listaIdsDeGrupos = listaIdsDeGrupos + "," + rs.getString("id");
                         pausa(mlento);
-                        driver.findElement(By.className("share-box__open")).click();
+                        driver.findElement(By.className("share-box-feed-entry__trigger")).click();
                         //driver.findElement(By.cssSelector(".mentions-texteditor__contenteditable")).click();
                         pausa(rapido);
                         //ESCRIBIMOS EL TITULO Y EL VIDEO DE LA PUBLICACION
